@@ -1,0 +1,7 @@
+#!/bin/bash
+
+git remote add upstream https://github.com/gelatinous-toboggan/gelatinous-toboggan
+git remote add tasio https://github.com/gelatinous-toboggan/gelatinous-toboggan
+git remote add griffin https://github.com/gm758/gelatinous-toboggan
+git remote add maryam https://github.com/mjimaz/gelatinous-toboggan
+git remote add josh https://github.com/JoshSheller/gelatinous-toboggan
