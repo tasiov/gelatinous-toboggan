@@ -19,7 +19,8 @@
     "express": "^4.13.4",
     "mocha": "^2.4.5",
     "morgan": "^1.7.0",
-    "nodemon": "^1.9.1"
+    "nodemon": "^1.9.1",
+    "sequelize": "^3.19.3"
   },
   "devDependencies": {
     "babel-eslint": "^5.0.0",
