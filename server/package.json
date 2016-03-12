@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "babel-node": "./node_modules/.bin/babel-node",
-    "test-server": "mocha --compilers js:babel-core/register",
+    "test": "mocha --compilers js:babel-core/register",
     "lint": "./node_modules/.bin/eslint .",
     "start": "./node_modules/.bin/nodemon --exec npm run babel-node server.js"
   },
@@ -19,7 +19,9 @@
     "express": "^4.13.4",
     "mocha": "^2.4.5",
     "morgan": "^1.7.0",
-    "nodemon": "^1.9.1"
+    "nodemon": "^1.9.1",
+    "sequelize": "^3.19.3",
+    "sqlite3": "^3.1.1"
   },
   "devDependencies": {
     "babel-eslint": "^5.0.0",
