@@ -1,3 +1,5 @@
+/* eslint no-unused-vars: [2, { "varsIgnorePattern": "UserQuilt" }] */
+
 /*
 This application uses a sqlite db with sequelize orm (http://docs.sequelizejs.com/en/latest/).
 The database schema: schema_mvp.png.
@@ -52,5 +54,4 @@ module.exports = {
   User,
   Quilt,
   sequelize,
-  UserQuilt, // delete export UserQuilt
 };
