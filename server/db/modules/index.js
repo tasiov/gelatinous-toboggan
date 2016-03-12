@@ -13,32 +13,31 @@ The following relationships exist within the db:
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize('quilt', null, null, {
   dialect: 'sqlite',
-  storage: 'quilt.sqlite'
+  storage: 'quilt.sqlite',
 });
 
 const User = sequelize.define('user', {
   username: {
-  	type: Sequelize.STRING,
-  	allowNull: false,
-  	unique: true
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true,
   },
-  token: Sequelize.STRING
 });
 
 const Quilt = sequelize.define('quilt', {
   filename: Sequelize.STRING,
   status: {
-  	type: Sequelize.INTEGER,
-    values: [0, 1] // 0 - stitching, 1 - done
-  }
+    type: Sequelize.INTEGER,
+    values: [0, 1], // 0 - stitching, 1 - done
+  },
 });
 
 const UserQuilt = sequelize.define('userQuilt', {
-    status: {
-  	type: Sequelize.INTEGER,
-    values: [0, 1] // 0 - pending, 1 - submitted
-  }
-})
+  status: {
+    type: Sequelize.INTEGER,
+    values: [0, 1], // 0 - pending, 1 - submitted
+  },
+});
 
 // user - user m-n relationship (friends)
 // create the self reference
@@ -46,11 +45,12 @@ const UserQuilt = sequelize.define('userQuilt', {
 User.belongsToMany(User, { as: 'friends', through: 'friends' });
 
 // user - quilt m-n relationship (user-quilt)
-User.belongsToMany(Quilt, {through: 'userQuilt'});
-Quilt.belongsToMany(User, {through: 'userQuilt'});
+User.belongsToMany(Quilt, { through: 'userQuilt' });
+Quilt.belongsToMany(User, { through: 'userQuilt' });
 
 module.exports = {
   User,
   Quilt,
   sequelize,
+  UserQuilt, // delete export UserQuilt
 };
