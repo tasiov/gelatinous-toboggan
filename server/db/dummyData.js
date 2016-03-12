@@ -1,4 +1,5 @@
-const db = require('./index.js');
+'use strict'
+const db = require('../modules/index.js');
 const Sequelize = require('sequelize');
 
 const user1 = {
@@ -26,12 +27,12 @@ const allUsers = [
 
 const quilt1 = {
   filename: 'quilt1',
-  status: 1,
+  status: 1
 };
 
 const quilt2 = {
   filename: 'quilt2',
-  status: 0,
+  status: 0
 };
 
 const allQuilts = [
@@ -52,7 +53,7 @@ function initializeData() {
       return Sequelize.Promise.map(allQuilts, quilt => db.Quilt.create(quilt));
     }).then((quilts) => {
       createdQuilts = quilts;
-      
+
       return Sequelize.Promise.all([
         createdUsers[0].addQuilt(createdQuilts[0], {status: 1}),
         createdUsers[1].addQuilt(createdQuilts[0], {status: 1}),

@@ -2,7 +2,7 @@
 This application uses a sqlite db with sequelize orm (http://docs.sequelizejs.com/en/latest/).
 The database schema: schema_mvp.png.
 There are two primary tables:
-* users: 
+* users:
 * quilt:
 
 The following relationships exist within the db:
@@ -18,7 +18,7 @@ const sequelize = new Sequelize('quilt', null, null, {
 
 const User = sequelize.define('user', {
   username: {
-  	type: Sequelize.STRING, 
+  	type: Sequelize.STRING,
   	allowNull: false,
   	unique: true
   },
@@ -29,21 +29,21 @@ const Quilt = sequelize.define('quilt', {
   filename: Sequelize.STRING,
   status: {
   	type: Sequelize.INTEGER,
-    values: [0, 1] // 0 - stitching, 1 - done 
+    values: [0, 1] // 0 - stitching, 1 - done
   }
 });
 
 const UserQuilt = sequelize.define('userQuilt', {
     status: {
   	type: Sequelize.INTEGER,
-    values: [0, 1] // 0 - pending, 1 - submitted 
+    values: [0, 1] // 0 - pending, 1 - submitted
   }
 })
 
 // user - user m-n relationship (friends)
+// create the self reference
 // TODO: add status field (cancel - 0, pending - 1, accepted - 2) to friends model
-User.belongsToMany(User, {through: 'friends'});
-User.belongsToMany(User, {through: 'friends'});
+User.belongsToMany(User, { as: 'friends', through: 'friends' });
 
 // user - quilt m-n relationship (user-quilt)
 User.belongsToMany(Quilt, {through: 'userQuilt'});
