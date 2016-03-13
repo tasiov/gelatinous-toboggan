@@ -1,8 +1,6 @@
-'use strict';
-
 const db = require('./index.js');
 const modules = require('./modules/index.js');
-const controllers = require('./controllers/index.js');
+// const controllers = require('./controllers/index.js');
 const Sequelize = require('sequelize');
 
 const user1 = {
