@@ -6,7 +6,7 @@
 
 * **Use**: user information
 * **Fields**:
-..+username: unique identifier
+  - username: unique identifier
 
 ####Quilt Modules
 
@@ -14,10 +14,10 @@
 
 * **Use**: quilt resulting from all the stitched up videos
 * **Fields**:
-..+filename: quilt filename
-..+status:
-....- 0 - quilt not finished. Waiting for videos from contributors
-....- 1 - quilt is complete. All contributors submitted a video
+  - filename: quilt filename
+  - status:
+    - 0: quilt not finished. Waiting for videos from contributors
+    - 1:quilt is complete. All contributors submitted a video
 
 ####Relationship Modules
 
