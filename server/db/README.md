@@ -67,7 +67,7 @@
 * **Parameters**:
   {
     username: username,
-    friends: [],
+    friends: [ ],
     quilt: {
       title: quiltTitle,
       theme: quiltTheme,
@@ -78,4 +78,4 @@
 
 ###TODO:
 -----------------------------
-* Add status field (cancel - 0, pending - 1, accepted - 2) to friends model
+* Add status field (0 - cancel, 1 - pending, 2 - accepted) to friends model
