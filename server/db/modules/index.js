@@ -12,10 +12,12 @@ The following relationships exist within the db:
 * users to quilts: m-n (users can have multiple quilts and quilts can have multiple users)
 */
 
-const Sequelize = require('sequelize');
+import Sequelize from 'sequelize';
+import path from 'path';
+
 const sequelize = new Sequelize('quilt', null, null, {
   dialect: 'sqlite',
-  storage: 'quilt.sqlite',
+  storage: path.join(__dirname, 'quilt.sqlite'),
 });
 
 const User = sequelize.define('user', {
