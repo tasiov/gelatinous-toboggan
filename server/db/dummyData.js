@@ -1,4 +1,6 @@
-const db = require('../modules/index.js');
+const db = require('./index.js');
+const modules = require('./modules/index.js');
+// const controllers = require('./controllers/index.js');
 const Sequelize = require('sequelize');
 
 const user1 = {
@@ -17,11 +19,16 @@ const user4 = {
   username: 'griffin',
 };
 
+const user5 = {
+  username: 'xyz',
+};
+
 const allUsers = [
   user1,
   user2,
   user3,
   user4,
+  user5,
 ];
 
 const quilt1 = {
@@ -42,9 +49,9 @@ const allQuilts = [
 function initializeData() {
   return db.sequelize.sync({ force: true })
     .then(() =>
-      Sequelize.Promise.map(allUsers, user => db.User.create(user))
+      Sequelize.Promise.map(allUsers, user => modules.User.create(user))
     ).then((users) =>
-      [Sequelize.Promise.map(allQuilts, quilt => db.Quilt.create(quilt)), users]
+      [Sequelize.Promise.map(allQuilts, quilt => modules.Quilt.create(quilt)), users]
     ).then((data) => {
       const createdQuilts = data[0];
       const createdUsers = data[1];

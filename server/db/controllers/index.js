@@ -1,5 +1,4 @@
 /* eslint no-console: [2, { allow: ["log", "warn", "error"] }] */
-
 const db = require('../modules/index.js');
 
 const getAllUsers = () =>
