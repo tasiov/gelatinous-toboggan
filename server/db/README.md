@@ -4,17 +4,20 @@
 
 `User`
 
-* **Use**:
-* **Parameters**:
-* **Return**:
+* **Use**: user information
+* **Fields**:
+..+username: unique identifier
 
 ####Quilt Modules
 
 `Quilt`
 
-* **Use**:
-* **Parameters**:
-* **Return**:
+* **Use**: quilt resulting from all the stitched up videos
+* **Fields**:
+..+filename: quilt filename
+..+status:
+....- 0 - quilt not finished. Waiting for videos from contributors
+....- 1 - quilt is complete. All contributors submitted a video
 
 ####Relationship Modules
 
