@@ -1,4 +1,5 @@
 /* eslint no-console: [2, { allow: ["log", "warn", "error"] }] */
+'use strict';
 
 const db = require('../modules/index.js');
 
