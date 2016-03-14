@@ -32,7 +32,7 @@ const getAllUserQuilts = (options) =>
 
 const getQuilt = (options) =>
   db.Quilt.findOne({ where: options })
-    .then((quilt) => quilt )
+    .then((quilt) => quilt)
     .catch((error) => console.error('Error retreiving quilt: ', error)
     );
 
@@ -57,8 +57,8 @@ const postQuilt = (options) =>
             username: {
               $in: options.friends,
             },
-          }}),
-        getUser({ username: options.username})])
+          } }),
+        getUser({ username: options.username })]);
     })
     .then((data) =>
       Sequelize.Promise.all([
@@ -66,7 +66,7 @@ const postQuilt = (options) =>
         newQuilt.setUsers(data[1], { status: 1 }),
       ]))
     .then((data) => data[0][0].concat(data[1][0]))
-    .catch((error) => console.error('Error posting a quilt. ', error))
+    .catch((error) => console.error('Error posting a quilt. ', error));
 
 // let test_getAllUsers = () =>
 //   getAllUsers().then(function(users){
