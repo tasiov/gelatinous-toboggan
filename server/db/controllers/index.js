@@ -1,17 +1,24 @@
 /* eslint no-console: [2, { allow: ["log", "warn", "error"] }] */
 const db = require('../modules/index.js');
 
+// options = {username: username}
+const createUser = (options) =>
+  db.User.create(options)
+    .then((user) => user
+    ).catch((error) => console.log('Error creating user: ', error)
+    );
+
 const getAllUsers = () =>
   db.User.findAll()
     .then((users) => users
-    ).catch((error) => console.error('Error retreiving users. ', error)
+    ).catch((error) => console.error('Error retreiving users: ', error)
     );
 
 // options = {username: username}
 const getUser = (options) =>
   db.User.findOne({ where: options })
     .then((user) => user
-    ).catch((error) => console.error('Error retreiving user. ', error)
+    ).catch((error) => console.error('Error retreiving user: ', error)
     );
 
 // options = {username: username}
@@ -19,7 +26,13 @@ const getAllUserQuilts = (options) =>
   getUser(options)
     .then((user) => user.getQuilts({ order: [['status', 'DESC']] })
     ).then((quilts) => quilts
-    ).catch((error) => console.error('Error retreiving user\'s quilts. ', error)
+    ).catch((error) => console.error('Error retreiving user\'s quilts: ', error)
+    );
+
+const getQuilt = (options) =>
+  db.Quilt.findOne({ where: options })
+    .then((quilt) => quilt
+    ).catch((error) => console.error('Error retreiving quilt: ', error)
     );
 
 /* options = {
@@ -37,7 +50,7 @@ const postQuilt = (options) =>
   db.Quilt.create(options.quilt)
     .then((quilt) => {
       newQuilt = quilt;
-      const friends = (options.friends).concat([options.username]);
+      const friends = (options.quilt.friends).concat([options.username]);
       return db.User.findAll(
         { where: {
           username: {
@@ -47,10 +60,6 @@ const postQuilt = (options) =>
       );
       // TODO: update status of username to {status: 1}
     }).then((friends) => newQuilt.setUsers(friends, { status: 0 })
-    ).then((data) =>
-      console.log('successfully associated quilts with users:', data)
-    ).catch((error) =>
-      console.error('Error creating a quilt. ', error)
     );
 
 
@@ -78,10 +87,11 @@ const postQuilt = (options) =>
 // let test_postQuilt = (options) => {
 //   let q = {
 //     username: 'tasio',
-//     friends: ['josh', 'griffin'],
 //     quilt: {
 //       filename: 'quilt4',
-//       status: 0    }
+//       status: 0,
+//       friends: ['josh', 'griffin']
+//     }
 //   }
 //   postQuilt(q).then(function(quilt){
 //       console.log('inside test:', JSON.stringify(quilt));
@@ -91,12 +101,13 @@ const postQuilt = (options) =>
 // }
 
 module.exports = {
+  createUser,
   getAllUsers,
   getUser,
   getAllUserQuilts,
   postQuilt,
+  getQuilt,
   // test_getAllUsers,
   // test_getUser,
-  // test_getAllUserQuilts,
   // test_postQuilt
 };

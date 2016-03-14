@@ -1,7 +1,7 @@
 const db = require('./index.js');
 const modules = require('./modules/index.js');
-// const controllers = require('./controllers/index.js');
 const Sequelize = require('sequelize');
+// const controllers = require('./controllers/index.js');
 
 const user1 = {
   username: 'maryam',
@@ -47,23 +47,25 @@ const allQuilts = [
 ];
 
 function initializeData() {
+  // remove force for production
   return db.sequelize.sync({ force: true })
     .then(() =>
-      Sequelize.Promise.map(allUsers, user => modules.User.create(user))
-    ).then((users) =>
-      [Sequelize.Promise.map(allQuilts, quilt => modules.Quilt.create(quilt)), users]
+      Sequelize.Promise.all([
+        Sequelize.Promise.map(allUsers, user => modules.User.create(user)),
+        Sequelize.Promise.map(allQuilts, quilt => modules.Quilt.create(quilt)),
+      ])
     ).then((data) => {
-      const createdQuilts = data[0];
-      const createdUsers = data[1];
-
-      return Sequelize.Promise.all([
-        createdUsers[0].addQuilt(createdQuilts[0], { status: 1 }),
-        createdUsers[1].addQuilt(createdQuilts[0], { status: 1 }),
-        createdUsers[1].addQuilt(createdQuilts[1], { status: 0 }),
-        createdUsers[2].addQuilt(createdQuilts[1], { status: 1 }),
-        createdUsers[3].addQuilt(createdQuilts[1], { status: 1 }),
-      ]);
+      const createdUsers = data[0];
+      const createdQuilts = data[1];
+      createdUsers[0].addQuilt(createdQuilts[0], { status: 1 });
+      createdUsers[1].addQuilt(createdQuilts[0], { status: 1 });
+      createdUsers[1].addQuilt(createdQuilts[1], { status: 0 });
+      createdUsers[2].addQuilt(createdQuilts[1], { status: 1 });
+      createdUsers[3].addQuilt(createdQuilts[1], { status: 1 });
     });
 }
+
+// for development only, remove in production
+initializeData();
 
 module.exports = initializeData;

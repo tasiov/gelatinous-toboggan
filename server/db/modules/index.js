@@ -28,7 +28,7 @@ const Quilt = sequelize.define('quilt', {
   },
 });
 
-const UserQuilt = sequelize.define('userQuilt', {
+const UserQuilt = sequelize.define('UserQuilt', {
   status: {
     type: Sequelize.INTEGER,
     values: [0, 1], // 0 - pending, 1 - submitted
@@ -41,8 +41,8 @@ const UserQuilt = sequelize.define('userQuilt', {
 User.belongsToMany(User, { as: 'friends', through: 'friends' });
 
 // user - quilt m-n relationship (user-quilt)
-User.belongsToMany(Quilt, { through: 'userQuilt' });
-Quilt.belongsToMany(User, { through: 'userQuilt' });
+User.belongsToMany(Quilt, { through: 'UserQuilt' });
+Quilt.belongsToMany(User, { through: 'UserQuilt' });
 
 module.exports = {
   User,
