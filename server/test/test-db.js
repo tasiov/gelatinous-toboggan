@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import Sequelize from 'sequelize';
 import db from '../db/index.js';
 import modules from '../db/modules/index.js';
-// import controllers from '../db/controllers/index.js';
+import controllers from '../db/controllers/index.js';
 
 // testing the modules
 
@@ -56,4 +56,39 @@ describe('UserQuilt Model', () => {
     .catch((error) => console.error('Assign Quilt Error:', error))
   );
 });
+
 // testing the controllers
+describe('postQuilt Controller', () => {
+  before((done) =>
+    db.sequelize.sync({ force: true }) // drops table and re-creates it
+      .then(() => done(null))
+      .catch((error) => done(error))
+    );
+
+  it('should be able to create quilt and associate users with it', () =>
+    Sequelize.Promise.all([
+      modules.User.create({ username: 'tasio' }),
+      modules.User.create({ username: 'griffin' }),
+      modules.User.create({ username: 'josh' }) ])
+    .then((data) => {
+      let quilt = {
+        username: 'tasio',
+        friends: ['josh', 'griffin'],
+        quilt: { filename: 'quilt1', status: 0 },
+      }
+      return controllers.postQuilt(quilt)
+    })
+    .then((data) => {
+      for( var i = 0 ; i < data.length ; i++) {
+        if(data[i]['userId'] === 1) { // tasio
+          expect(data[i]['status']).to.equal(1)
+        } else if(data[i]['userId'] === 1) { // griffin
+          expect(data[i]['status']).to.equal(0)
+        } else if(data[i]['userId'] === 2) { // josh
+          expect(data[i]['status']).to.equal(0)
+        }
+      }
+    })
+    .catch((error) => console.error('Assign Quilt Error:', error))
+  );
+});
