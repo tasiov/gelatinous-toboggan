@@ -37,21 +37,13 @@ class ShowCamera extends Component {
       isCapturing: true,
     });
     this.camera.capture().then((file) => {
+      console.log('reading file')
       return RNFS.readFile(file, 'base64');
     }).then((data) => {
-      this.postQuilt(Object.assign(this.props.currentQuilt, {
+      console.log('sending data');
+      this.props.postQuilt(Object.assign(this.props.currentQuilt, {
         vid: data,
       }));
-      // return fetch('https://thawing-ravine-43717.herokuapp.com/api/quilt', {
-      //   method: 'POST',
-      //   headers: {
-      //     "Content-type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     img: data,
-      //   }),
-      // })
-      // .then(res => console.log(res));
     });
   }
 
