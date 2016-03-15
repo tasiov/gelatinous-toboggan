@@ -1,6 +1,10 @@
 /* eslint no-console: [2, { allow: ["log", "warn", "error"] }] */
 const Sequelize = require('sequelize');
 const db = require('../modules/index.js');
+const fs = require('fs');
+const path = require('path');
+const CombinedStream = require('combined-stream');
+const Promise = require("bluebird");
 
 // options = {username: username}
 const createUser = (options) =>
@@ -12,14 +16,14 @@ const createUser = (options) =>
 const getAllUsers = () =>
   db.User.findAll()
     .then((users) => users)
-    .catch((error) => console.error('Error retreiving users. ', error)
+    .catch((error) => console.error('Error retrieving users. ', error)
     );
 
 // options = {username: username}
 const getUser = (options) =>
   db.User.findOne({ where: options })
     .then((user) => user)
-    .catch((error) => console.error('Error retreiving user. ', error)
+    .catch((error) => console.error('Error retrieving user. ', error)
     );
 
 // options = {username: username}
@@ -27,13 +31,13 @@ const getAllUserQuilts = (options) =>
   getUser(options)
     .then((user) => user.getQuilts({ order: [['status', 'DESC']] }))
     .then((quilts) => quilts)
-    .catch((error) => console.error('Error retreiving user\'s quilts: ', error)
+    .catch((error) => console.error('Error retrieving user\'s quilts: ', error)
     );
 
 const getQuilt = (options) =>
   db.Quilt.findOne({ where: options })
     .then((quilt) => quilt)
-    .catch((error) => console.error('Error retreiving quilt: ', error)
+    .catch((error) => console.error('Error retrieving quilt: ', error)
     );
 
 /* options = {
@@ -51,6 +55,10 @@ const postQuilt = (options) =>
   db.Quilt.create(options.quilt)
     .then((quilt) => {
       newQuilt = quilt;
+
+      // add video to quilt
+      quiltVideos(newQuilt);
+
       return Sequelize.Promise.all([
         db.User.findAll(
           { where: {
@@ -68,42 +76,41 @@ const postQuilt = (options) =>
     .then((data) => data[0][0].concat(data[1][0]))
     .catch((error) => console.error('Error posting a quilt. ', error));
 
-// let test_getAllUsers = () =>
-//   getAllUsers().then(function(users){
-//     console.log('users:', users);
-//   }).catch(function(error){
-//     console.log('error:', error);
-//   });
+const updateUserQuiltStatus = (options) => {
+  const quilt = options.quilt; // quilt module. Can use getQuilt({ filename:quiltname }) to get quilt module
+  const user = options.user; // user module. Can use getUser({username:username}) to get user module
+  return quilt.setUsers(user, { status: 1 });
+}
+/************************************************************
+                    Helper functions
+************************************************************/
+
+const quiltVideos = (quilt) => {
+  const quiltName = quilt.get('filename');
+  // check if quilt exists
+    // create a file named 'quiltName' and append the video to it
+    // append new video to existing quiltName
+  // const rstream = fs.createReadStream(path.join(__dirname, '../videos/video1.mp4'));
+  // // const rstream = fs.createReadStream(path.join(__dirname, '../videos/video3.mp4'));
+  // const wstream = fs.createWriteStream(path.join(__dirname, '../videos/video2.mp4'));
+  // rstream.pipe(wstream);
+  // rstream.pipe(z).pipe(w);
+
+
+const combinedStream = CombinedStream.create();
+// combinedStream.append(fs.createReadStream(path.join(__dirname, '../videos/video1.mp4')));
+// combinedStream.append(fs.createReadStream(path.join(__dirname, '../videos/video2.mp4')));
+// const wstream = fs.createWriteStream(path.join(__dirname, '../videos/combined.mp4'))
+// combinedStream.append(function(next) {
+//   next(fs.createReadStream(path.join(__dirname, '../videos/video1.mp4')));
+// });
+// combinedStream.append(function(next) {
+//   next(fs.createReadStream(path.join(__dirname, '../videos/video2.mp4')));
+// });
 //
-// let test_getUser = (options) =>
-//   getUser(options).then(function(user){
-//     console.log('user:', JSON.stringify(user));
-//   }).catch(function(error){
-//     console.log('error:', error);
-//   })
-//
-// let test_getAllUserQuilts = (options) =>
-//   getAllUserQuilts(options).then(function(user){
-//     console.log('user:', JSON.stringify(user));
-//   }).catch(function(error){
-//     console.log('error:', error);
-//   })
-//
-// let test_postQuilt = (options) => {
-//   let q = {
-//     username: 'tasio',
-//     quilt: {
-//       filename: 'quilt4',
-//       status: 0,
-//       friends: ['josh', 'griffin']
-//     }
-//   }
-//   postQuilt(q).then(function(quilt){
-//       console.log('inside test:', JSON.stringify(quilt));
-//   }).catch(function(error){
-//     console.log('error:', error);
-//   })
-// }
+// combinedStream.pipe(wstream);
+
+}
 
 module.exports = {
   createUser,
@@ -112,7 +119,4 @@ module.exports = {
   getAllUserQuilts,
   postQuilt,
   getQuilt,
-  // test_getAllUsers,
-  // test_getUser,
-  // test_postQuilt
 };
