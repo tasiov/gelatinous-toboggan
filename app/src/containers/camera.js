@@ -37,8 +37,10 @@ class ShowCamera extends Component {
       isCapturing: true,
     });
     this.camera.capture().then((file) => {
+      console.log('reading file')
       return RNFS.readFile(file, 'base64');
     }).then((data) => {
+      console.log('sending data')
       this.postQuilt(Object.assign(this.props.currentQuilt, {
         vid: data,
       }));

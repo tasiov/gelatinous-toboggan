@@ -54,7 +54,7 @@ export function postQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
 
-    return fetch('/api/quilt', {
+    return fetch('https://thawing-ravine-43717.herokuapp.com/api/quilt', {
       method: 'POST',
       body: JSON.stringify(data),
     }).then(response => response.json())
