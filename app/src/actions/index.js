@@ -5,6 +5,8 @@ import {
   // RECEIVE_FRIENDS,
   // RECEIVE_QUILTS,
   REQUEST_QUILTS,
+  RESPONSE_POST_QUILT,
+  REQUEST_POST_QUILT
 } from '../constants/ActionTypes';
 
 let userId = 0; // for development, should be deleted once server implemented
@@ -18,11 +20,40 @@ export const setUser = (username) => ({
   },
 });
 
+// todo: make action creators more semantic
+
 // dispatched when quilt initially started
 export const startQuilt = (data) => ({
   type: START_QUILT,
   payload: data,
 });
+
+// begin post request to send quilt to server
+const requestPostQuilt = () => ({
+  type: REQUEST_POST_QUILT,
+});
+
+// receive response from the server relating to post request
+// todo: format response data so that status code passed
+const responsePostQuilt = (data) => ({
+  type: RESPONSE_POST_QUILT,
+  payload: data,
+});
+
+// todo: catch post request errors with additional action creator
+// todo: ensure friends, title, theme data in post request
+export function postQuilt(data) {
+  return (dispatch) => {
+    dispatch(requestPostQuilt());
+
+    return fetch('/api/quilt', {
+      method: 'POST',
+      body: JSON.stringify(data), // stringify unnecessary?
+    }).then(response => response.json())
+      .then(data => dispatch(responsePostQuilt(data)));
+  }
+}
+
 
 // get all users from server
 const requestFriends = () => ({

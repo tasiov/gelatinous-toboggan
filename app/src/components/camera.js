@@ -15,12 +15,46 @@ class ShowCamera extends Component {
     super(props);
     this.takePicture = this.takePicture.bind(this);
     this.cameraRef = this.cameraRef.bind(this);
+
+    // refactor into redux?
+    this.state = {
+      isCapturing: false,
+    }
   }
 
+  // testing video posting, should be moved into action creator in future
+  // also, add spinners, etc
   takePicture() {
-    this.camera.capture()
-      .then(data => console.log(data))
-      .catch(err => console.error(err));
+    if (!this.state.isCapturing) {
+      console.log('start capturing');
+      this.setState({
+        isCapturing: true,
+      })
+      this.camera.capture().then((a) => {
+        console.log(a)
+      })
+    } else {
+      console.log('stop capturing');
+      this.setState({
+        isCapturing: false,
+      });
+      this.camera.stopCapture()
+      //   .then(data => {
+      //     console.log('send data')
+      //     return fetch('https://thawing-ravine-43717.herokuapp.com/api/quilt', {
+      //       method: 'POST',
+      //       headers: {
+      //         "Content-type": "application/json",
+      //       },
+      //       body: JSON.stringify({
+      //         test: 'test',
+      //         img: data,
+      //       }),
+      //     })
+      //   .then(res => console.log(res));
+      // })
+      // .catch(err => console.error(err));
+    }
   }
 
   cameraRef(cam) {
@@ -35,6 +69,7 @@ class ShowCamera extends Component {
           ref={this.cameraRef}
           style={styles.preview}
           aspect={'fill'}
+          captureMode={Camera.constants.CaptureMode.video}
         >
           <Text style={styles.capture} onPress={this.takePicture}>
             [CAPTURE]

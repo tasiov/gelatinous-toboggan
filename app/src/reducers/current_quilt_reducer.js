@@ -7,7 +7,7 @@ const initialState = Map({
   theme: '',
   users: List(),
   video: null,
-  isLoading: false,
+  isSending: false,
 });
 
 export default function (state = initialState, action) {
