@@ -54,14 +54,20 @@ data = {
 export function postQuilt(quilt) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
-    return fetch('http://10.6.30.48:8000/api/quilt', {
+    console.log('dispatching request')
+    return fetch('http://10.6.30.77:8000/api/quilt', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(quilt) })
-    .then(response => response.json())
-    .then(data => dispatch(responsePostQuilt(data)))
-    .catch(err => console.error('error', err));
-  };
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then(response => {
+        console.log('response received', response)
+        return response.json()
+      })
+      .then(data => dispatch(responsePostQuilt(data)))
+      .catch(err => console.log('error', err))
+  }
 }
 
 // get all users from server
