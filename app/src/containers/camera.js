@@ -2,6 +2,7 @@
 import React from 'react-native';
 import Camera from 'react-native-camera';
 import RNFS from 'react-native-fs';
+import { postQuilt } from '../actions/index';
 
 const {
   Component,
@@ -14,8 +15,10 @@ const {
 class ShowCamera extends Component {
   constructor(props) {
     super(props);
-    this.takePicture = this.takePicture.bind(this);
     this.cameraRef = this.cameraRef.bind(this);
+    this._onStartCapture = this._onStartCapture.bind(this);
+    this._onStopCapture = this._onStopCapture.bind(this);
+    this.onCapturePress = this.onCapturePress.bind(this);
 
     // refactor into redux?
     this.state = {
@@ -26,32 +29,42 @@ class ShowCamera extends Component {
   // testing video posting, should be moved into action creator in future
   // also, add spinners,
   // add catches
-  takePicture() {
+
+  _onStartCapture() {
+    console.log('start capturing');
+    this.setState({
+      isCapturing: true,
+    })
+    this.camera.capture().then((file) => {
+      return RNFS.readFile(file, 'base64');
+    }).then((data) => {
+      return fetch('https://thawing-ravine-43717.herokuapp.com/api/quilt', {
+        method: 'POST',
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          img: data,
+        }),
+      })
+    .then(res => console.log(res));
+    })
+  }
+
+  _onStopCapture() {
+    console.log('stop capturing');
+    this.setState({
+      isCapturing: false,
+    });
+    this.camera.stopCapture()
+  }
+
+
+  onCapturePress() {
     if (!this.state.isCapturing) {
-      console.log('start capturing');
-      this.setState({
-        isCapturing: true,
-      })
-      this.camera.capture().then((file) => {
-        return RNFS.readFile(file, 'base64');
-      }).then((data) => {
-        return fetch('https://thawing-ravine-43717.herokuapp.com/api/quilt', {
-          method: 'POST',
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify({
-            img: data,
-          }),
-        })
-      .then(res => console.log(res));
-      })
+      this._onStartCapture();
     } else {
-      console.log('stop capturing');
-      this.setState({
-        isCapturing: false,
-      });
-      this.camera.stopCapture()
+      this._onStopCapture();
     }
   }
 
@@ -70,7 +83,7 @@ class ShowCamera extends Component {
           captureTarget={Camera.constants.CaptureTarget.temp}
           captureMode={Camera.constants.CaptureMode.video}
         >
-          <Text style={styles.capture} onPress={this.takePicture}>
+          <Text style={styles.capture} onPress={this.onCapturePress}>
             [CAPTURE]
           </Text>
         </Camera>
@@ -99,5 +112,12 @@ const styles = StyleSheet.create({
     margin: 40,
   },
 });
+
+function mapDispatchToProps (dispatch) {
+  return {
+    on
+  }
+}
+
 
 export default ShowCamera;
