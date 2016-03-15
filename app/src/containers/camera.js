@@ -2,6 +2,7 @@
 import React from 'react-native';
 import Camera from 'react-native-camera';
 import RNFS from 'react-native-fs';
+import { connect } from 'react-redux';
 import { postQuilt } from '../actions/index';
 
 const {
@@ -34,21 +35,24 @@ class ShowCamera extends Component {
     console.log('start capturing');
     this.setState({
       isCapturing: true,
-    })
+    });
     this.camera.capture().then((file) => {
       return RNFS.readFile(file, 'base64');
     }).then((data) => {
-      return fetch('https://thawing-ravine-43717.herokuapp.com/api/quilt', {
-        method: 'POST',
-        headers: {
-          "Content-type": "application/json",
-        },
-        body: JSON.stringify({
-          img: data,
-        }),
-      })
-    .then(res => console.log(res));
-    })
+      this.postQuilt(Object.assign(this.props.currentQuilt, {
+        vid: data,
+      }));
+      // return fetch('https://thawing-ravine-43717.herokuapp.com/api/quilt', {
+      //   method: 'POST',
+      //   headers: {
+      //     "Content-type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     img: data,
+      //   }),
+      // })
+      // .then(res => console.log(res));
+    });
   }
 
   _onStopCapture() {
@@ -113,11 +117,24 @@ const styles = StyleSheet.create({
   },
 });
 
+// get the state of the current quilt
+// which will be passed with the video
+// to action creator to post data
+function mapStateToProps (state) {
+  const currentQuilt = state.get('currentQuilt');
+  return {
+    currentQuilt: currentQuilt.toObject(),
+  };
+}
+
+// dispatch postQuilt with previous current quilt state plus video data
 function mapDispatchToProps (dispatch) {
   return {
-    on
-  }
+    postQuilt: (data) => {
+      dispatch(postQuilt(data));
+    },
+  };
 }
 
 
-export default ShowCamera;
+export default connect(mapStateToProps, mapDispatchToProps)(ShowCamera);

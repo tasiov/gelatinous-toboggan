@@ -42,13 +42,21 @@ const responsePostQuilt = (data) => ({
 
 // todo: catch post request errors with additional action creator
 // todo: ensure friends, title, theme data in post request
+/*
+data = {
+  title: STRING,
+  theme: STRING,
+  friends: ARRAY,
+  vid: STRING (base64 encoding),
+}
+*/
 export function postQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
 
     return fetch('/api/quilt', {
       method: 'POST',
-      body: JSON.stringify(data), // stringify unnecessary?
+      body: JSON.stringify(data),
     }).then(response => response.json())
       .then(data => dispatch(responsePostQuilt(data)));
   }
