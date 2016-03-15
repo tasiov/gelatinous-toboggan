@@ -1,6 +1,7 @@
 /* eslint-disable no-use-before-define */
 import React from 'react-native';
 import Camera from 'react-native-camera';
+import RNFS from 'react-native-fs';
 
 const {
   Component,
@@ -23,15 +24,27 @@ class ShowCamera extends Component {
   }
 
   // testing video posting, should be moved into action creator in future
-  // also, add spinners, etc
+  // also, add spinners,
+  // add catches
   takePicture() {
     if (!this.state.isCapturing) {
       console.log('start capturing');
       this.setState({
         isCapturing: true,
       })
-      this.camera.capture().then((a) => {
-        console.log(a)
+      this.camera.capture().then((file) => {
+        return RNFS.readFile(file, 'base64');
+      }).then((data) => {
+        return fetch('https://thawing-ravine-43717.herokuapp.com/api/quilt', {
+          method: 'POST',
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify({
+            img: data,
+          }),
+        })
+      .then(res => console.log(res));
       })
     } else {
       console.log('stop capturing');
@@ -39,21 +52,6 @@ class ShowCamera extends Component {
         isCapturing: false,
       });
       this.camera.stopCapture()
-      //   .then(data => {
-      //     console.log('send data')
-      //     return fetch('https://thawing-ravine-43717.herokuapp.com/api/quilt', {
-      //       method: 'POST',
-      //       headers: {
-      //         "Content-type": "application/json",
-      //       },
-      //       body: JSON.stringify({
-      //         test: 'test',
-      //         img: data,
-      //       }),
-      //     })
-      //   .then(res => console.log(res));
-      // })
-      // .catch(err => console.error(err));
     }
   }
 
@@ -69,6 +67,7 @@ class ShowCamera extends Component {
           ref={this.cameraRef}
           style={styles.preview}
           aspect={'fill'}
+          captureTarget={Camera.constants.CaptureTarget.temp}
           captureMode={Camera.constants.CaptureMode.video}
         >
           <Text style={styles.capture} onPress={this.takePicture}>
