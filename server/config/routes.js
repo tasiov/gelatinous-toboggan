@@ -88,7 +88,16 @@ export default (app) => {
     }
   });
 
-  // app.get('/api/friends/:id', (req, res) => {
-  //   res.send('Coming Soon');
-  // });
+  app.get('/api/friends/:id', (req, res) => {
+    if (_.isEmpty(req.params.id)) {
+      res.status(400).send('Failed to retrieve user');
+    } else {
+      controller.getAllOtherUsers(req.params.id)
+      .then((data) =>
+        // let friends = Object.assign(data);
+        res.status(200).send(data)
+      ).catch((error) => res.status(500).send(`Failed request: ${error}`)
+      );
+    }
+  });
 };

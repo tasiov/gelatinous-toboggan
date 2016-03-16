@@ -15,6 +15,17 @@ const getAllUsers = () =>
     .catch((error) => console.error('Error retreiving users. ', error)
     );
 
+const getAllOtherUsers = (id) =>
+  db.User.findAll({
+    where: {
+      $not: {
+        id: id
+      }
+    }
+  }).then((users) => users)
+    .catch((error) => console.error('Error retreiving users. ', error)
+    );
+
 // options = {username: username}
 const getUser = (options) =>
   db.User.findOne({ where: options })
@@ -108,6 +119,7 @@ const postQuilt = (options) =>
 module.exports = {
   createUser,
   getAllUsers,
+  getAllOtherUsers,
   getUser,
   getAllUserQuilts,
   postQuilt,
