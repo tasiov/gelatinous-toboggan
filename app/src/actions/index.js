@@ -1,3 +1,4 @@
+/* eslint no-console: [2, { allow: ["warn", "error"] }] */
 import {
   SET_USER,
   START_QUILT,
@@ -40,11 +41,6 @@ const responsePostQuilt = (data) => ({
   payload: data,
 });
 
-const userQuilts = (quilts) => ({
-  type: GET_USER_QUILTS,
-  payload: quilts,
-});
-
 // todo: catch post request errors with additional action creator
 // todo: ensure friends, title, theme data in post request
 /*
@@ -55,16 +51,16 @@ data = {
   vid: STRING (base64 encoding),
 }
 */
-export function postQuilt(data) {
+export function postQuilt(quilt) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
     return fetch('http://10.6.30.48:8000/api/quilt', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', },
-      body: JSON.stringify(data),})
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(quilt) })
     .then(response => response.json())
     .then(data => dispatch(responsePostQuilt(data)))
-    .catch(err => console.log('error', err))
+    .catch(err => console.error('error', err));
   };
 }
 
@@ -111,7 +107,7 @@ export function fetchQuilts(options) {
     dispatch(requestQuilts());
     return fetch(`http://10.6.30.48:8000/api/quilt?username=${options.username}`)
       .then((response) => response.json())
-      .then(data => dispatch(receiveQuilts(data)))
-      .catch((error) => console.log('Error in getting user\'s quilts', error))
+      .then((data) => dispatch(receiveQuilts(data)))
+      .catch((error) => console.error('Error in getting user\'s quilts', error));
   };
 }

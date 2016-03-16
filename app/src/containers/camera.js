@@ -1,4 +1,6 @@
 /* eslint-disable no-use-before-define */
+/* eslint no-console: [2, { allow: ["log", "warn", "error"] }] */
+
 import React from 'react-native';
 import Camera from 'react-native-camera';
 import RNFS from 'react-native-fs';
@@ -11,6 +13,7 @@ const {
   StyleSheet,
   Text,
   View,
+  PropTypes,
 } = React;
 
 class ShowCamera extends Component {
@@ -24,12 +27,19 @@ class ShowCamera extends Component {
     // refactor into redux?
     this.state = {
       isCapturing: false,
-    }
+    };
   }
 
   // testing video posting, should be moved into action creator in future
   // also, add spinners,
   // add catches
+  onCapturePress() {
+    if (!this.state.isCapturing) {
+      this._onStartCapture();
+    } else {
+      this._onStopCapture();
+    }
+  }
 
   _onStartCapture() {
     console.log('start capturing');
@@ -37,7 +47,7 @@ class ShowCamera extends Component {
       isCapturing: true,
     });
     this.camera.capture().then((file) => {
-      console.log('reading file')
+      console.log('reading file');
       return RNFS.readFile(file, 'base64');
     }).then((data) => {
       console.log('sending data');
@@ -66,16 +76,7 @@ class ShowCamera extends Component {
     this.setState({
       isCapturing: false,
     });
-    this.camera.stopCapture()
-  }
-
-
-  onCapturePress() {
-    if (!this.state.isCapturing) {
-      this._onStartCapture();
-    } else {
-      this._onStopCapture();
-    }
+    this.camera.stopCapture();
   }
 
   cameraRef(cam) {
@@ -102,6 +103,11 @@ class ShowCamera extends Component {
   }
 }
 
+ShowCamera.propTypes = {
+  postQuilt: PropTypes.func,
+  currentQuilt: PropTypes.object,
+};
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -126,7 +132,7 @@ const styles = StyleSheet.create({
 // get the state of the current quilt
 // which will be passed with the video
 // to action creator to post data
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   const currentQuilt = state.get('currentQuilt');
   return {
     currentQuilt: currentQuilt.toObject(),
@@ -134,7 +140,7 @@ function mapStateToProps (state) {
 }
 
 // dispatch postQuilt with previous current quilt state plus video data
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps(dispatch) {
   return {
     postQuilt: (data) => {
       dispatch(postQuilt(data));
