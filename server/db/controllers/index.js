@@ -19,9 +19,9 @@ const getAllOtherUsers = (id) =>
   db.User.findAll({
     where: {
       $not: {
-        id: id
-      }
-    }
+        id,
+      },
+    },
   }).then((users) => users)
     .catch((error) => console.error('Error retreiving users. ', error)
     );

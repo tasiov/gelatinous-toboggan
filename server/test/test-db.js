@@ -34,7 +34,7 @@ describe('Quilt Model', () => {
   it('should be able to create a new quilt', () =>
     modules.Quilt.create({ filename: 'quilt1', status: 1 })
     .then((quilt) => {
-      expect(quilt).to.exist;
+      // expect(quilt).to.exist;
       expect(quilt.get('filename')).to.equal('quilt1');
     })
   );

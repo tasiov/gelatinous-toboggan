@@ -2,14 +2,14 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import server from '../server';
 
-// const should = chai.should();
+const should = chai.should();
 
 chai.use(chaiHttp);
 
 describe('Routes', () => {
   it('should get 200 response from /api/auth GET', (done) => {
     chai.request(server)
-    .get('/blobs')
+    .get('/api/auth')
     .end((err, res) => {
       res.should.have.status(200);
       done();

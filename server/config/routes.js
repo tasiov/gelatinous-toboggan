@@ -41,7 +41,6 @@ export default (app) => {
 
   // accepts urlencoded form data
   app.post('/api/quilt', (req, res) => {
-    console.log('quilt post request received')
     if (_.isEmpty(req.body)) {
       res.status(400).send('Failed to retrieve video data');
     } else {
