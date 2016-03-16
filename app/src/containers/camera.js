@@ -42,18 +42,22 @@ class ShowCamera extends Component {
     }).then((data) => {
       console.log('sending data');
 
-      let options = {
-        username: 'tasiov',
-        friends: ['josh', 'griffin'],
-        quilt: {
-          filename: 'quilt43',
-          title: 'quiltTitle',
-          theme: 'quiltTheme',
-          video: data,
-        },
-      }
+      this.props.postQuilt(Object.assign(this.props.currentQuilt, {
+        vid: data,
+      }));
 
-      this.props.postQuilt(options);
+      // let options = {
+      //   username: 'tasiov',
+      //   friends: ['josh', 'griffin'],
+      //   quilt: {
+      //     filename: 'quilt43',
+      //     title: 'quiltTitle',
+      //     theme: 'quiltTheme',
+      //     video: data,
+      //   },
+      // }
+      //
+      // this.props.postQuilt(options);
     });
   }
 
