@@ -1,4 +1,3 @@
-/* eslint no-console: [2, { allow: ["warn", "error"] }] */
 import {
   REQUEST_USER,
   RECEIVE_USER,
@@ -11,21 +10,15 @@ import {
   REQUEST_POST_QUILT,
 } from '../constants/ActionTypes';
 
-let userId = 0; // for development, should be deleted once server implemented
-
 // dispatched at login to set the current user of the app
-const requestUser = () => {
-  return {
-    type: REQUEST_USER,
-  };
-};
+const requestUser = () => ({
+  type: REQUEST_USER,
+});
 
-const receiveUser = (user) => {
-  return {
-    type: RECEIVE_USER,
-    payload: user,
-  };
-};
+const receiveUser = (user) => ({
+  type: RECEIVE_USER,
+  payload: user,
+});
 
 export function fetchUser(username) {
   return (dispatch) => {
@@ -33,7 +26,7 @@ export function fetchUser(username) {
     return fetch(`http://10.6.30.77:8000/api/auth?username=${username}`)
       .then(response => response.json())
       .then(user => dispatch(receiveUser(user)))
-      .catch(err => console.log('error', err))
+      .catch(err => console.log('error', err));
   };
 }
 
@@ -67,23 +60,21 @@ data = {
   vid: STRING (base64 encoding),
 }
 */
-export function postQuilt(quilt) {
+export function postQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
-    console.log('dispatching request')
+    console.log('dispatching request');
     return fetch('http://10.6.30.77:8000/api/quilt', {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
         'Content-Type': 'application/json',
       },
-    }).then(response => {
-        console.log('response received', response)
-        return response.json()
-      })
-      .then(data => dispatch(responsePostQuilt(data)))
-      .catch(err => console.log('error', err))
-  }
+    })
+    .then(response => response.json())
+    .then(quiltData => dispatch(responsePostQuilt(quiltData)))
+    .catch(err => console.log('error', err));
+  };
 }
 
 // get all users from server

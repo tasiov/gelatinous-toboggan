@@ -50,7 +50,7 @@ class Login extends Component {
 // todo: double check this
 Login.propTypes = {
   navigator: PropTypes.object,
-  setUser: PropTypes.func,
+  fetchUser: PropTypes.func,
 };
 
 const styles = StyleSheet.create({

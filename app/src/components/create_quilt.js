@@ -1,13 +1,4 @@
 /* eslint-disable no-use-before-define, react/prefer-stateless-function */
-/*
-I am unclear on how to approach this component. We're not supposed
-to use arrow functions or binds in our jsx (see
-https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/)
-but we're also supposed to prefer stateless functions.
-Since stateless functions are a convention, while arrow fns/bind in jsx is related
-to preformance, I chose to use a class component here (disabling eslint as well)
-*/
-
 import React, { Component } from 'react-native';
 import Button from './button';
 import { connect } from 'react-redux';

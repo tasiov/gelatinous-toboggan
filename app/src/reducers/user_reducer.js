@@ -1,12 +1,12 @@
 /* eslint-disable new-cap */
-import Immutable, { Map } from 'immutable';
+import { Map } from 'immutable';
 import { REQUEST_USER, RECEIVE_USER } from '../constants/ActionTypes';
 
 const initialState = Map({
   isFetching: false,
   id: null,
   username: null,
-})
+});
 
 export default function (state = initialState, action) {
   switch (action.type) {
