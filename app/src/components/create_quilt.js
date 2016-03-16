@@ -29,7 +29,7 @@ class CreateQuilt extends Component {
   onCreatePress() {
     // todo: add users arguement
     this.props.createQuilt();
-    this.props.navigator.push({ name: 'camera' });
+    this.props.navigator.resetTo({ name: 'camera' });
   }
 
   render() {

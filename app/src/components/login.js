@@ -25,7 +25,7 @@ class Login extends Component {
 
   onPress() {
     this.props.setUser(this.state.username);
-    this.props.navigator.immediatelyResetRouteStack([{ name: 'home' }]);
+    this.props.navigator.push({ name: 'home' });
   }
 
   onType(username) {
@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 60
   },
   input: {
     padding: 4,

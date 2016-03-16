@@ -53,6 +53,7 @@ class ShowCamera extends Component {
       isCapturing: false,
     });
     this.camera.stopCapture()
+    this.props.navigator.resetTo({name: 'home'});
   }
 
 

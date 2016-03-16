@@ -1,7 +1,9 @@
 /* eslint-disable no-use-before-define, react/prefer-stateless-function */
 import React from 'react-native';
 import Button from './button';
-import Swiper from 'react-native-swiper'
+import Swiper from 'react-native-swiper';
+import CreateQuilt from '../components/create_quilt';
+import ShowQuilts from '../containers/quilts';
 
 const {
   Component,
@@ -27,10 +29,18 @@ class Home extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Button text={'Start a Quilt'} onPress={this.onPressStart} />
-        <Button text={'View Quilts'} onPress={this.onPressView} />
-      </View>
+      <Swiper loop={false} index={1}>
+        <View style={styles.container}>
+          <ShowQuilts route={this.props.route} navigator={this.props.navigator} />
+        </View>
+        <View style={styles.container}>
+          <Button text={'Start a Quilt'} onPress={this.onPressStart} />
+          <Button text={'View Quilts'} onPress={this.onPressView} />
+        </View>
+        <View style={styles.container}>
+          <CreateQuilt route={this.props.route} navigator={this.props.navigator} />
+        </View>
+      </Swiper>
     );
   }
 }
@@ -44,6 +54,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 150
   },
   input: {
     padding: 4,
