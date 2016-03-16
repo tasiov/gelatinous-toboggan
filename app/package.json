@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "lint": "./node_modules/.bin/eslint ."
+    "lint": "./node_modules/.bin/eslint .",
+    "test": "mocha --require react-native-mock/mock.js --compilers js:babel-core/register --recursive test/"
   },
   "pre-commit": [
     "lint"
   ],
   "dependencies": {
+    "babel-preset-airbnb": "^1.1.1",
     "immutable": "^3.7.6",
     "lodash": "^3.10.1",
     "react-native": "^0.21.0",
@@ -27,9 +29,15 @@
     "redux-thunk": "^1.0.0"
   },
   "devDependencies": {
+    "babel-core": "^6.7.2",
     "concurrently": "^0.1.1",
+    "enzyme": "^2.1.0",
     "eslint": "^2.3.0",
     "eslint-config-airbnb": "^6.1.0",
-    "eslint-plugin-react": "^4.2.1"
+    "eslint-plugin-react": "^4.2.1",
+    "mocha": "^2.4.5",
+    "react-addons-test-utils": "^0.14.7",
+    "react-dom": "^0.14.7",
+    "react-native-mock": "0.0.6"
   }
 }

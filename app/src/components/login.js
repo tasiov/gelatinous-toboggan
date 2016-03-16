@@ -16,7 +16,7 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: 'Hello World',
+      username: '',
     };
 
     this.onPress = this.onPress.bind(this);
@@ -24,12 +24,12 @@ class Login extends Component {
   }
 
   onPress() {
-    this.props.setUser(this.state.username);
+    this.props.fetchUser(this.state.username);
     this.props.navigator.push({ name: 'home' });
   }
 
   onType(username) {
-    return this.setState(username);
+    return this.setState({ username });
   }
 
   render() {
@@ -50,7 +50,7 @@ class Login extends Component {
 // todo: double check this
 Login.propTypes = {
   navigator: PropTypes.object,
-  setUser: PropTypes.func,
+  fetchUser: PropTypes.func,
 };
 
 const styles = StyleSheet.create({

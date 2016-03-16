@@ -1,11 +1,19 @@
 /* eslint-disable new-cap */
-import Immutable, { Map } from 'immutable';
-import { SET_USER } from '../constants/ActionTypes';
+import { Map } from 'immutable';
+import { REQUEST_USER, RECEIVE_USER } from '../constants/ActionTypes';
 
-export default function (state = Map(), action) {
+const initialState = Map({
+  isFetching: false,
+  id: null,
+  username: null,
+});
+
+export default function (state = initialState, action) {
   switch (action.type) {
-    case SET_USER:
-      return Immutable.fromJS(action.payload);
+    case REQUEST_USER:
+      return state.set('isFetching', true);
+    case RECEIVE_USER:
+      return state.merge(Object.assign({ isFetching: false }, action.payload));
     default:
       return state;
   }

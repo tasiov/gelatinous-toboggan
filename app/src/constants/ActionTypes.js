@@ -1,4 +1,5 @@
-export const SET_USER = 'SET_USER';
+export const REQUEST_USER = 'REQUEST_USER';
+export const RECEIVE_USER = 'RECEIVE_USER';
 export const REQUEST_FRIENDS = 'REQUEST_FRIENDS';
 export const RECEIVE_FRIENDS = 'RECEIVE_FRIENDS';
 export const START_QUILT = 'START_QUILT';

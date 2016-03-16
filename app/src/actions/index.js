@@ -1,6 +1,6 @@
-/* eslint no-console: [2, { allow: ["warn", "error"] }] */
 import {
-  SET_USER,
+  REQUEST_USER,
+  RECEIVE_USER,
   START_QUILT,
   REQUEST_FRIENDS,
   // RECEIVE_FRIENDS,
@@ -10,16 +10,25 @@ import {
   REQUEST_POST_QUILT,
 } from '../constants/ActionTypes';
 
-let userId = 0; // for development, should be deleted once server implemented
-
 // dispatched at login to set the current user of the app
-export const setUser = (username) => ({
-  type: SET_USER,
-  payload: {
-    id: userId++,
-    username,
-  },
+const requestUser = () => ({
+  type: REQUEST_USER,
 });
+
+const receiveUser = (user) => ({
+  type: RECEIVE_USER,
+  payload: user,
+});
+
+export function fetchUser(username) {
+  return (dispatch) => {
+    dispatch(requestUser());
+    return fetch(`http://10.6.30.77:8000/api/auth?username=${username}`)
+      .then(response => response.json())
+      .then(user => dispatch(receiveUser(user)))
+      .catch(err => console.log('error', err));
+  };
+}
 
 // todo: make action creators more semantic
 
@@ -51,16 +60,20 @@ data = {
   vid: STRING (base64 encoding),
 }
 */
-export function postQuilt(quilt) {
+export function postQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
-    return fetch('http://10.6.30.48:8000/api/quilt', {
+    console.log('dispatching request');
+    return fetch('http://10.6.30.77:8000/api/quilt', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(quilt) })
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
     .then(response => response.json())
-    .then(data => dispatch(responsePostQuilt(data)))
-    .catch(err => console.error('error', err));
+    .then(quiltData => dispatch(responsePostQuilt(quiltData)))
+    .catch(err => console.log('error', err));
   };
 }
 

@@ -1,6 +1,4 @@
 /* eslint-disable no-use-before-define */
-/* eslint no-console: [2, { allow: ["log", "warn", "error"] }] */
-
 import React from 'react-native';
 import Camera from 'react-native-camera';
 import RNFS from 'react-native-fs';
@@ -10,10 +8,10 @@ import { postQuilt } from '../actions/index';
 const {
   Component,
   Dimensions,
+  PropTypes,
   StyleSheet,
   Text,
   View,
-  PropTypes,
 } = React;
 
 class ShowCamera extends Component {
@@ -33,6 +31,15 @@ class ShowCamera extends Component {
   // testing video posting, should be moved into action creator in future
   // also, add spinners,
   // add catches
+  onCapturePress() {
+    if (!this.state.isCapturing) {
+      this._onStartCapture();
+    } else {
+      this._onStopCapture();
+    }
+  }
+
+
   onCapturePress() {
     if (!this.state.isCapturing) {
       this._onStartCapture();
