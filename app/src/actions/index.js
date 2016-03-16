@@ -1,6 +1,7 @@
 /* eslint no-console: [2, { allow: ["warn", "error"] }] */
 import {
-  SET_USER,
+  REQUEST_USER,
+  RECEIVE_USER,
   START_QUILT,
   REQUEST_FRIENDS,
   // RECEIVE_FRIENDS,
@@ -13,13 +14,28 @@ import {
 let userId = 0; // for development, should be deleted once server implemented
 
 // dispatched at login to set the current user of the app
-export const setUser = (username) => ({
-  type: SET_USER,
-  payload: {
-    id: userId++,
-    username,
-  },
-});
+const requestUser = () => {
+  return {
+    type: REQUEST_USER,
+  };
+};
+
+const receiveUser = (user) => {
+  return {
+    type: RECEIVE_USER,
+    payload: user,
+  };
+};
+
+export function fetchUser(username) {
+  return (dispatch) => {
+    dispatch(requestUser());
+    return fetch(`http://10.6.30.77:8000/api/auth?username=${username}`)
+      .then(response => response.json())
+      .then(user => dispatch(receiveUser(user)))
+      .catch(err => console.log('error', err))
+  };
+}
 
 // todo: make action creators more semantic
 

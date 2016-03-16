@@ -2,7 +2,7 @@
 import React, { Component } from 'react-native';
 import { connect } from 'react-redux';
 import Login from '../components/login';
-import { setUser } from '../actions/index';
+import { fetchUser } from '../actions/index';
 import { bindActionCreators } from 'redux';
 
 class LoginContainer extends Component {
@@ -14,7 +14,7 @@ class LoginContainer extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ setUser }, dispatch);
+  return bindActionCreators({ fetchUser }, dispatch);
 }
 
 export default connect(null, mapDispatchToProps)(LoginContainer);

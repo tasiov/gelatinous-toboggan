@@ -24,7 +24,7 @@ class Login extends Component {
   }
 
   onPress() {
-    this.props.setUser(this.state.username);
+    this.props.fetchUser(this.state.username);
     this.props.navigator.push({ name: 'home' });
   }
 
