@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "lint": "./node_modules/.bin/eslint .",
-    "test": "mocha --require react-native-mock/mock.js --compilers js:babel-core/register --recursive test/*.js"
+    "test": "mocha --require react-native-mock/mock.js --compilers js:babel-core/register --recursive test/"
   },
   "pre-commit": [
     "lint"

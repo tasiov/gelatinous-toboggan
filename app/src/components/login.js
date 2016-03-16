@@ -16,7 +16,7 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: 'Hello World',
+      username: '',
     };
 
     this.onPress = this.onPress.bind(this);
@@ -29,7 +29,7 @@ class Login extends Component {
   }
 
   onType(username) {
-    return this.setState(username);
+    return this.setState({ username });
   }
 
   render() {
