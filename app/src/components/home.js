@@ -1,6 +1,7 @@
 /* eslint-disable no-use-before-define, react/prefer-stateless-function */
 import React from 'react-native';
 import Button from './button';
+import Swiper from 'react-native-swiper'
 
 const {
   Component,
