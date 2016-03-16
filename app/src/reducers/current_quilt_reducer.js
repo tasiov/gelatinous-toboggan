@@ -10,7 +10,7 @@ const initialState = Map({
   isSending: false,
 });
 
-export default function currentQuilt (state = initialState, action) {
+export default function currentQuilt(state = initialState, action) {
   switch (action.type) {
     case SET_CURRENT_QUILT:
       return Immutable.fromJS(action.payload);

@@ -3,6 +3,7 @@ import React, { Component } from 'react-native';
 import QuiltEntry from '../components/quilt_entry';
 import { connect } from 'react-redux';
 import Immutable from 'immutable'; // just for testing
+import { fetchQuilts } from '../actions/index';
 
 const {
   ListView,
@@ -15,6 +16,7 @@ class ShowQuilts extends Component {
   constructor(props) {
     super(props);
     this.getDataSource = this.getDataSource.bind(this);
+    props.fetchQuilts({ username: 'tasio' }); // TODO: pass in the username
   }
 
   onQuiltClick(quiltId, navigator) {
@@ -45,6 +47,7 @@ class ShowQuilts extends Component {
 ShowQuilts.propTypes = {
   onPress: PropTypes.func,
   quilts: PropTypes.object,
+  fetchQuilts: PropTypes.func,
 };
 
 
@@ -56,15 +59,19 @@ const styles = StyleSheet.create({
 
 // get quilts from state
 // todo: fetch quilts from server
-const mapStateToProps = (/* state */) => {
-  // const quilts = state.get('quilts');
-  const testQuilts = Immutable.List.of(1, 2, 3, 4, 5, 6);
-  return { quilts: testQuilts };
+const mapStateToProps = (state) => {
+  const quilts = state.get('quilts');
+  // const testQuilts = Immutable.List.of(1, 2, 3, 4, 5, 6);
+  return { quilts };
 };
 
 // todo: set currently watched quilt in state?
-// const mapDispatchToProps = () => {
-//
-// };
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchQuilts: (data) => {
+      dispatch(fetchQuilts(data));
+    },
+  };
+}
 
-export default connect(mapStateToProps)(ShowQuilts);
+export default connect(mapStateToProps, mapDispatchToProps)(ShowQuilts);

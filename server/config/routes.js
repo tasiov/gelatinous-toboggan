@@ -41,7 +41,7 @@ export default (app) => {
 
   // accepts urlencoded form data
   app.post('/api/quilt', (req, res) => {
-    console.log('quilt post request received')
+    // console.log('quilt post request received:', req.body)
     if (_.isEmpty(req.body)) {
       res.status(400).send('Failed to retrieve video data');
     } else {
@@ -49,16 +49,16 @@ export default (app) => {
        * front-end submission will look like and enable
        * session handling
        */
-      const quilt = {
-        filename: req.body.filename,
-        status: Number(req.body.status),
-        friends: JSON.parse(req.body.friends),
-      };
-      const postData = {
-        username: currUser,
-        quilt,
-      };
-      controller.postQuilt(postData)
+      // const quilt = {
+      //   filename: req.body.filename,
+      //   status: Number(req.body.status),
+      //   friends: JSON.parse(req.body.friends),
+      // };
+      // const postData = {
+      //   username: req.body.username,
+      //   quilt,
+      // };
+      controller.postQuilt(req.body)
       .then((data) => res.status(200).send(data[0][0])
       ).catch((error) => res.status(500).send(`Failed submission: ${error}`)
       );
