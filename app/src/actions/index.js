@@ -3,10 +3,10 @@ import {
   START_QUILT,
   REQUEST_FRIENDS,
   // RECEIVE_FRIENDS,
-  // RECEIVE_QUILTS,
+  RECEIVE_QUILTS,
   REQUEST_QUILTS,
   RESPONSE_POST_QUILT,
-  REQUEST_POST_QUILT
+  REQUEST_POST_QUILT,
 } from '../constants/ActionTypes';
 
 let userId = 0; // for development, should be deleted once server implemented
@@ -40,6 +40,11 @@ const responsePostQuilt = (data) => ({
   payload: data,
 });
 
+const userQuilts = (quilts) => ({
+  type: GET_USER_QUILTS,
+  payload: quilts,
+});
+
 // todo: catch post request errors with additional action creator
 // todo: ensure friends, title, theme data in post request
 /*
@@ -53,20 +58,15 @@ data = {
 export function postQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
-    console.log('dispatching request')
-    console.log(Object.keys(data));
-    return fetch('http://10.6.30.77:8000/api/quilt', {
+    return fetch('http://10.6.30.48:8000/api/quilt', {
       method: 'POST',
-      body: JSON.stringify(data),
-    }).then(response => {
-        console.log('response received', response)
-        return response.json()
-      })
-      .then(data => dispatch(responsePostQuilt(data)))
-      .catch(err => console.log('error', err))
-  }
+      headers: { 'Content-Type': 'application/json', },
+      body: JSON.stringify(data),})
+    .then(response => response.json())
+    .then(data => dispatch(responsePostQuilt(data)))
+    .catch(err => console.log('error', err))
+  };
 }
-
 
 // get all users from server
 const requestFriends = () => ({
@@ -101,24 +101,17 @@ const requestQuilts = () => ({
   type: REQUEST_QUILTS,
 });
 
-// uncomment when done setting up/testing
-// const receiveQuilts = (quilts) => ({
-//   type: RECEIVE_QUILTS,
-//   payload: quilts,
-// });
+const receiveQuilts = (quilts) => ({
+  type: RECEIVE_QUILTS,
+  payload: quilts,
+});
 
-export function fetchQuilts() {
+export function fetchQuilts(options) {
   return (dispatch) => {
     dispatch(requestQuilts());
-
-    // todo: hook up appropriately with server
-    // todo: catch errors
-
-    // return fetch('/api/friends')
-    //   .then(response => response.json())
-    //   .then(json => dispatch(receiveFriends(json)));
-    return new Promise((resolve) => {
-      setTimeout(() => resolve(['gm758', 'tasiov', 'test1', 'test2']), 1000);
-    });
+    return fetch(`http://10.6.30.48:8000/api/quilt?username=${options.username}`)
+      .then((response) => response.json())
+      .then(data => dispatch(receiveQuilts(data)))
+      .catch((error) => console.log('Error in getting user\'s quilts', error))
   };
 }

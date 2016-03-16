@@ -3,8 +3,6 @@ const Sequelize = require('sequelize');
 const db = require('../modules/index.js');
 const fs = require('fs');
 const path = require('path');
-const CombinedStream = require('combined-stream');
-const Promise = require("bluebird");
 
 // options = {username: username}
 const createUser = (options) =>
@@ -57,7 +55,7 @@ const postQuilt = (options) =>
       newQuilt = quilt;
 
       // add video to quilt
-      quiltVideos(newQuilt);
+      quiltVideos(newQuilt, options.quilt.video);
 
       return Sequelize.Promise.all([
         db.User.findAll(
@@ -85,30 +83,21 @@ const updateUserQuiltStatus = (options) => {
                     Helper functions
 ************************************************************/
 
-const quiltVideos = (quilt) => {
+const quiltVideos = (quilt, video) => {
   const quiltName = quilt.get('filename');
+
+  console.log('received video:');
   // check if quilt exists
     // create a file named 'quiltName' and append the video to it
     // append new video to existing quiltName
-  // const rstream = fs.createReadStream(path.join(__dirname, '../videos/video1.mp4'));
-  // // const rstream = fs.createReadStream(path.join(__dirname, '../videos/video3.mp4'));
+  // const rstream = fs.createReadStream(video);
+  // //const rstream = fs.createReadStream(path.join(__dirname, '../videos/video3.mp4'));
   // const wstream = fs.createWriteStream(path.join(__dirname, '../videos/video2.mp4'));
   // rstream.pipe(wstream);
-  // rstream.pipe(z).pipe(w);
 
-
-const combinedStream = CombinedStream.create();
-// combinedStream.append(fs.createReadStream(path.join(__dirname, '../videos/video1.mp4')));
-// combinedStream.append(fs.createReadStream(path.join(__dirname, '../videos/video2.mp4')));
-// const wstream = fs.createWriteStream(path.join(__dirname, '../videos/combined.mp4'))
-// combinedStream.append(function(next) {
-//   next(fs.createReadStream(path.join(__dirname, '../videos/video1.mp4')));
-// });
-// combinedStream.append(function(next) {
-//   next(fs.createReadStream(path.join(__dirname, '../videos/video2.mp4')));
-// });
-//
-// combinedStream.pipe(wstream);
+ fs.writeFile(path.join(__dirname, '../videos/video2.mp4'), new Buffer(video, "base64"), function(err) {
+   console.log('error writing video:', err);
+ });
 
 }
 

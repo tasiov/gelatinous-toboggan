@@ -41,9 +41,19 @@ class ShowCamera extends Component {
       return RNFS.readFile(file, 'base64');
     }).then((data) => {
       console.log('sending data');
-      this.props.postQuilt(Object.assign(this.props.currentQuilt, {
-        vid: data,
-      }));
+
+      let options = {
+        username: 'tasiov',
+        friends: ['josh', 'griffin'],
+        quilt: {
+          filename: 'quilt43',
+          title: 'quiltTitle',
+          theme: 'quiltTheme',
+          video: data,
+        },
+      }
+
+      this.props.postQuilt(options);
     });
   }
 
