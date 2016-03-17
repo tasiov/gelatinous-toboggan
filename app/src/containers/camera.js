@@ -49,16 +49,12 @@ class ShowCamera extends Component {
   }
 
   _onStartCapture() {
-    console.log('start capturing');
     this.setState({
       isCapturing: true,
     });
-    this.camera.capture().then((file) => {
-      console.log('reading file');
-      return RNFS.readFile(file, 'base64');
-    }).then((data) => {
-      console.log('sending data');
-
+    this.camera.capture().then((file) =>
+      RNFS.readFile(file, 'base64')
+    ).then((data) => {
       this.props.postQuilt(Object.assign(this.props.currentQuilt, {
         vid: data,
       }));
@@ -79,7 +75,6 @@ class ShowCamera extends Component {
   }
 
   _onStopCapture() {
-    console.log('stop capturing');
     this.setState({
       isCapturing: false,
     });

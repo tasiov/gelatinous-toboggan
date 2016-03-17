@@ -1,3 +1,4 @@
+/* eslint no-console: [2, { allow: ["log", "warn", "error"] }] */
 import {
   REQUEST_USER,
   RECEIVE_USER,
@@ -26,7 +27,7 @@ export function fetchUser(username) {
     return fetch(`http://10.6.30.77:8000/api/auth?username=${username}`)
       .then(response => response.json())
       .then(user => dispatch(receiveUser(user)))
-      .catch(err => console.log('error', err));
+      .catch(err => console.error('error', err));
   };
 }
 
@@ -63,7 +64,6 @@ data = {
 export function postQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
-    console.log('dispatching request');
     return fetch('http://10.6.30.77:8000/api/quilt', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -73,7 +73,7 @@ export function postQuilt(data) {
     })
     .then(response => response.json())
     .then(quiltData => dispatch(responsePostQuilt(quiltData)))
-    .catch(err => console.log('error', err));
+    .catch(err => console.error('error', err));
   };
 }
 

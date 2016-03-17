@@ -1,4 +1,9 @@
-/* eslint-disable react/prefer-stateless-function, no-use-before-define */
+/* eslint-disable
+react/prefer-stateless-function,
+no-use-before-define,
+react/jsx-no-bind,
+react/prop-types
+*/
 import React, { Component } from 'react-native';
 import FriendEntry from '../components/friend_entry';
 import { connect } from 'react-redux';

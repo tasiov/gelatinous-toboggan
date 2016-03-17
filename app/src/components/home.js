@@ -1,4 +1,5 @@
 /* eslint-disable no-use-before-define, react/prefer-stateless-function */
+/* eslint-disable no-use-before-define, react/jsx-no-bind */
 import React from 'react-native';
 import Button from './button';
 
