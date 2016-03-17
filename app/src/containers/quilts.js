@@ -16,7 +16,7 @@ class ShowQuilts extends Component {
   constructor(props) {
     super(props);
     this.getDataSource = this.getDataSource.bind(this);
-    props.fetchQuilts({ username: 'tasio' }); // TODO: pass in the username
+    props.fetchQuilts({ username: 'josh' }); // TODO: pass in the username
   }
 
   onQuiltClick(quiltId, navigator) {
