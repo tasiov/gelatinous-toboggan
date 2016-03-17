@@ -12,23 +12,24 @@ const {
 class Home extends Component {
   constructor(props) {
     super(props);
-    this.onPressStart = this.onPressStart.bind(this);
+    // this.onPressStart = this.onPressStart.bind(this);
     this.onPressView = this.onPressView.bind(this);
   }
 
-  onPressStart() {
-    this.props.navigator.push({ name: 'create' });
-  }
+  // onPressStart() {
+  //   this.props.navigator.push({ name: 'create' });
+  // }
 
-  onPressView() {
-    this.props.navigator.push({ name: 'view' });
+  onPressView(targetView) {
+    this.props.navigator.push({ name: targetView });
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Button text={'Start a Quilt'} onPress={this.onPressStart} />
-        <Button text={'View Quilts'} onPress={this.onPressView} />
+        <Button text={'Start a Quilt'} onPress={() => this.onPressView('create')} />
+        <Button text={'View Quilts'} onPress={() => this.onPressView('view')} />
+        <Button text={'View Friends'} onPress={() => this.onPressView('friends')} />
       </View>
     );
   }

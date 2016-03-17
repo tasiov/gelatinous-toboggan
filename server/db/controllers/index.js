@@ -98,12 +98,23 @@ const quiltVideos = (quilt, video) => {
  fs.writeFile(path.join(__dirname, '../videos/video2.mp4'), new Buffer(video, "base64"), function(err) {
    console.log('error writing video:', err);
  });
-
 }
+
+const getAllOtherUsers = (username) =>
+  db.User.findAll({
+    where: {
+      $not: {
+        username,
+      },
+    },
+  }).then((users) => users)
+    .catch((error) => console.error('Error retreiving users. ', error)
+    );
 
 module.exports = {
   createUser,
   getAllUsers,
+  getAllOtherUsers,
   getUser,
   getAllUserQuilts,
   postQuilt,

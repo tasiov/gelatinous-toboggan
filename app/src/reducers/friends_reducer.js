@@ -16,7 +16,7 @@ export default function friends(state = initialState, action) {
     case RECEIVE_FRIENDS:
       return state.merge({
         isFetching: false,
-        friends: List(action.payload), // maybe?
+        friends: action.payload, // maybe?
       });
     default:
       return state;
