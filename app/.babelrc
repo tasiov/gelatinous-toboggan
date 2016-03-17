@@ -3,7 +3,8 @@
   "compact": true,
   "comments": false,
   "presets": [
-    "airbnb"
+    "airbnb",
+    "react-native"
   ],
   "sourceMaps": false
 }
