@@ -72,9 +72,14 @@ export function postQuilt(data) {
     dispatch(requestPostQuilt());
     return fetch('http://10.6.30.48:8000/api/quilt', {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: data.video,
       headers: {
         'Content-Type': 'application/json',
+        'Meta-Data': JSON.stringify({
+          title: 'test',
+          theme: 'theme test',
+          users: ['griffin', 'says', 'hello'],
+        }),
       },
     })
     .then(response => dispatch(responsePostQuilt(response.status)))

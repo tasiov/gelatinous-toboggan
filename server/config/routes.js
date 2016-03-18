@@ -1,6 +1,15 @@
 // import utils from './utils.js'; // our custom middleware
 import controller from '../db/controllers/index';
 import _ from 'lodash';
+import base64 from 'base64-stream';
+import fs from 'fs';
+
+const util = require('util');
+setInterval(() => {
+  console.log(util.inspect(process.memoryUsage()));
+}, 1000)
+
+
 
 const currUser = 'tasio';
 
@@ -42,6 +51,11 @@ export default (app) => {
   // accepts urlencoded form data
   app.post('/api/quilt', (req, res) => {
     // console.log('quilt post request received:', req.body)
+    const title = JSON.parse(req.headers['meta-data']).title;
+    const writeStream = fs.createWriteStream(`./${title}.MOV`);
+    req.pipe(base64.decode()).pipe(writeStream);
+    return;
+
     if (_.isEmpty(req.body)) {
       res.status(400).send('Failed to retrieve video data');
     } else {

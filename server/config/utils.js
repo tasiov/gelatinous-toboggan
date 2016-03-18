@@ -36,8 +36,3 @@ function concatenateToQuilt(src, dest, dest2) {
     console.log(stderr);
   });
 }
-const testSrc = path.join(__dirname, '../videos/tmp/quilt_30.mp4');
-const testDest = path.join(__dirname, '../videos/tmp/quilt_31.mp4');
-const testDest2 = path.join(__dirname, '../videos/tmp/quilt_35.mp4');
-
-concatenateToQuilt(testSrc, testDest, testDest2)
