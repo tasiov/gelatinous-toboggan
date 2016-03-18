@@ -28,9 +28,6 @@
     "redux-thunk": "^1.0.0"
   },
   "devDependencies": {
-    "babel-core": "^6.7.2",
-    "babel-preset-airbnb": "^1.1.1",
-    "babel-preset-react-native": "^1.5.2",
     "concurrently": "^0.1.1",
     "enzyme": "^2.1.0",
     "eslint": "^2.3.0",

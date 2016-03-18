@@ -1,4 +1,5 @@
 /* eslint no-console: [2, { allow: ["log", "warn", "error"] }] */
+'use strict'
 import express from 'express';
 
 import middleware from './config/middleware.js';
