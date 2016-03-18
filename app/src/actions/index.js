@@ -77,9 +77,8 @@ export function postQuilt(data) {
         'Content-Type': 'application/json',
       },
     })
-    .then(response => response.json())
-    .then(quiltData => dispatch(responsePostQuilt(quiltData)))
-    .catch(error => console.error('error', error));
+    .then(response => dispatch(responsePostQuilt(response.status)))
+    .catch(err => console.log('post quilt error', err));
   };
 }
 

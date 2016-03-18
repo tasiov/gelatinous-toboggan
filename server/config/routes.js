@@ -45,23 +45,17 @@ export default (app) => {
     if (_.isEmpty(req.body)) {
       res.status(400).send('Failed to retrieve video data');
     } else {
-      /* TEMPORARY quilt formatting until we know what
-       * front-end submission will look like and enable
-       * session handling
-       */
-      // const quilt = {
-      //   filename: req.body.filename,
-      //   status: Number(req.body.status),
-      //   friends: JSON.parse(req.body.friends),
-      // };
-      // const postData = {
-      //   username: req.body.username,
-      //   quilt,
-      // };
+      /*
+      req.body = {
+        title: '',
+        theme: '',
+        users: [],
+        video: base64,
+    }
+      */
       controller.postQuilt(req.body)
-      .then((data) => res.status(200).send(data[0][0])
-      ).catch((error) => res.status(500).send(`Failed submission: ${error}`)
-      );
+        .then((data) => res.status(200).send("Received video"))
+        .catch((error) => res.status(500).send(`Failed submission: ${error}`));
     }
   });
 

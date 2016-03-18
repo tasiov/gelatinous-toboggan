@@ -3,6 +3,8 @@ const Sequelize = require('sequelize');
 const db = require('../modules/index.js');
 const fs = require('fs');
 const path = require('path');
+const _ = require('lodash');
+const utils = require('../../config/utils');
 
 // options = {username: username}
 const createUser = (options) =>
@@ -38,66 +40,49 @@ const getQuilt = (options) =>
     .catch((error) => console.error('Error retrieving quilt: ', error)
     );
 
-/* options = {
-  username: username,
-  friends: [],
-  quilt: {
-    title: quiltTitle,
-    theme: quiltTheme,
-    video: video
-  }
-}*/
+  /*
+    req.body = {
+      title: '',
+      theme: '',
+      users: [],
+      creator: ''
+      video: base64,
+    }
+  */
 let newQuilt;
 
 const postQuilt = (options) =>
-  db.Quilt.create(options.quilt)
+  db.Quilt.create(_.pick(options, ['title', 'theme']))
     .then((quilt) => {
       newQuilt = quilt;
 
-      // add video to quilt
-      quiltVideos(newQuilt, options.quilt.video);
+      const quiltId = quilt.get('id');
+
+      utils.saveTempMOV(quiltId, options.video);
 
       return Sequelize.Promise.all([
-        db.User.findAll(
-          { where: {
+        db.User.findAll({
+          where: {
             username: {
-              $in: options.friends,
+              $in: options.users,
             },
-          } }),
-        getUser({ username: options.username })]);
+          },
+        }),
+        getUser({ username: options.creator })]);
     })
-    .then((data) =>
-      Sequelize.Promise.all([
+    .then((data) => {
+      console.log(data);
+      return Sequelize.Promise.all([
         newQuilt.setUsers(data[0], { status: 0 }),
         newQuilt.setUsers(data[1], { status: 1 }),
-      ]))
-    .then((data) => data[0][0].concat(data[1][0]))
+      ]);
+    })
     .catch((error) => console.error('Error posting a quilt. ', error));
 
 const updateUserQuiltStatus = (options) => {
   const quilt = options.quilt; // quilt module. Can use getQuilt({ filename:quiltname }) to get quilt module
   const user = options.user; // user module. Can use getUser({username:username}) to get user module
   return quilt.setUsers(user, { status: 1 });
-}
-/************************************************************
-                    Helper functions
-************************************************************/
-
-const quiltVideos = (quilt, video) => {
-  const quiltName = quilt.get('filename');
-
-  console.log('received video:');
-  // check if quilt exists
-    // create a file named 'quiltName' and append the video to it
-    // append new video to existing quiltName
-  // const rstream = fs.createReadStream(video);
-  // //const rstream = fs.createReadStream(path.join(__dirname, '../videos/video3.mp4'));
-  // const wstream = fs.createWriteStream(path.join(__dirname, '../videos/video2.mp4'));
-  // rstream.pipe(wstream);
-
- fs.writeFile(path.join(__dirname, '../videos/video2.mp4'), new Buffer(video, "base64"), function(err) {
-   console.log('error writing video:', err);
- });
 }
 
 const getAllOtherUsers = (username) =>
