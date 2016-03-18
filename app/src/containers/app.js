@@ -8,7 +8,7 @@ import ShowQuilts from '../containers/quilts';
 import ShowCamera from '../containers/camera';
 import WatchVideo from '../components/video';
 import FriendsContainer from '../containers/friends';
-import NavigationBar from 'react-native-navbar';
+// import NavigationBar from 'react-native-navbar';
 
 const {
   Component,

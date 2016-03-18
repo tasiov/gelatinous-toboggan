@@ -1,8 +1,14 @@
-/* eslint-disable react/prefer-stateless-function, no-use-before-define */
+/* eslint-disable
+react/prefer-stateless-function,
+no-use-before-define,
+react/jsx-no-bind,
+react/prop-types
+*/
 import React, { Component } from 'react-native';
 import FriendEntry from '../components/friend_entry';
 import { connect } from 'react-redux';
 import Immutable from 'immutable'; // just for testing
+import { fetchFriends } from '../actions/index';
 
 const {
   ListView,
@@ -11,10 +17,11 @@ const {
 } = React;
 
 // todo: consider factoring out view rendering into own component
-class ShowQuilts extends Component {
+class FriendsContainer extends Component {
   constructor(props) {
     super(props);
     this.getDataSource = this.getDataSource.bind(this);
+    props.fetchFriends({ username: 'tasio' });
   }
 
   onSubmitClick(quiltId, navigator) {
@@ -42,7 +49,7 @@ class ShowQuilts extends Component {
   }
 }
 
-ShowQuilts.propTypes = {
+FriendsContainer.propTypes = {
   onPress: PropTypes.func,
   quilts: PropTypes.object,
   friends: PropTypes.object,
@@ -55,13 +62,18 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (/* state */) => {
-  // const users = state.get('users');
-  const testUsers = Immutable.List.of('griffin', 'tasio', 'joe', 'sally');
-  return { friends: testUsers };
+const mapStateToProps = (state) => {
+  const friends = state.get('friends');
+  // const testUsers = Immutable.List.of('griffin', 'tasio', 'joe', 'sally');
+  return { friends };
 };
 
-// const mapDispatchToProps = (dispatch) => {
-// }
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchFriends: (data) => {
+      dispatch(fetchFriends(data));
+    },
+  };
+}
 
-export default connect(mapStateToProps)(ShowQuilts);
+export default connect(mapStateToProps, mapDispatchToProps)(FriendsContainer);

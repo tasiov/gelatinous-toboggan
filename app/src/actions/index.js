@@ -1,9 +1,10 @@
+/* eslint no-console: [2, { allow: ["log", "warn", "error"] }] */
 import {
   REQUEST_USER,
   RECEIVE_USER,
   START_QUILT,
   REQUEST_FRIENDS,
-  // RECEIVE_FRIENDS,
+  RECEIVE_FRIENDS,
   RECEIVE_QUILTS,
   REQUEST_QUILTS,
   RESPONSE_POST_QUILT,
@@ -26,7 +27,7 @@ export function fetchUser(username) {
     return fetch(`http://10.6.30.77:8000/api/auth?username=${username}`)
       .then(response => response.json())
       .then(user => dispatch(receiveUser(user)))
-      .catch(err => console.log('error', err));
+      .catch(err => console.error('error', err));
   };
 }
 
@@ -63,7 +64,6 @@ data = {
 export function postQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
-    console.log('dispatching request');
     return fetch('http://10.6.30.77:8000/api/quilt', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -73,7 +73,7 @@ export function postQuilt(data) {
     })
     .then(response => response.json())
     .then(quiltData => dispatch(responsePostQuilt(quiltData)))
-    .catch(err => console.log('error', err));
+    .catch(err => console.error('error', err));
   };
 }
 
@@ -83,26 +83,22 @@ const requestFriends = () => ({
 });
 
 // uncommnet when not testing
-// const receiveFriends = (friends) => ({
-//   type: RECEIVE_FRIENDS,
-//   payload: friends,
-// });
+const receiveFriends = (friends) => ({
+  type: RECEIVE_FRIENDS,
+  payload: friends,
+});
 
-export function fetchFriends() {
+export function fetchFriends(options) {
   return (dispatch) => {
     dispatch(requestFriends());
 
     // todo: hook up appropriately with server
     // todo: catch errors
 
-    // return fetch('/api/friends')
-    //   .then(response => response.json())
-    //   .then(json => dispatch(receiveFriends(json)));
-
-    // for testing
-    return new Promise((resolve) => {
-      setTimeout(() => resolve(['joe', 'katy', 'kelly', 'griffin']), 100);
-    });
+    return fetch(`http://localhost:8000/api/friends/${options.username}`)
+      .then(response => response.json())
+      .then(json => dispatch(receiveFriends(json))
+      );
   };
 }
 
@@ -118,7 +114,7 @@ const receiveQuilts = (quilts) => ({
 export function fetchQuilts(options) {
   return (dispatch) => {
     dispatch(requestQuilts());
-    return fetch(`http://10.6.30.48:8000/api/quilt?username=${options.username}`)
+    return fetch(`http://localhost:8000/api/quilt?username=${options.username}`)
       .then((response) => response.json())
       .then((data) => dispatch(receiveQuilts(data)))
       .catch((error) => console.error('Error in getting user\'s quilts', error));
