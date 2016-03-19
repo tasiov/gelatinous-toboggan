@@ -1,5 +1,6 @@
 /* eslint-disable no-use-before-define */
 import React from 'react-native';
+import ItemCheckbox from 'react-native-item-checkbox';
 
 const {
   PropTypes,
@@ -9,11 +10,12 @@ const {
   View,
 } = React;
 
-// todo: make these behave like check boxes
-const FriendEntry = ({ username }) => (
+// todo: make these behave like check boxes (edit style=)
+const FriendEntry = ({ user }) => (
   <TouchableOpacity style={styles.container}>
     <View>
-      <Text>{username}</Text>
+      <ItemCheckbox />
+      <Text>{user.username}</Text>
     </View>
   </TouchableOpacity>
 );
