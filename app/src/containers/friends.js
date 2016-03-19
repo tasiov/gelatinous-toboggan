@@ -14,6 +14,7 @@ const {
   ListView,
   PropTypes,
   StyleSheet,
+  Text,
 } = React;
 
 // todo: consider factoring out view rendering into own component
@@ -30,28 +31,35 @@ class FriendsContainer extends Component {
   }
 
   onRenderRow(rowData) {
-    return <FriendEntry username={rowData} />;
+    console.log('rowData', rowData);
+    // return <Text>{ rowData }</Text>
+    return <FriendEntry user={rowData} key={rowData['id']} />;
   }
 
   getDataSource() {
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => Immutable.is(r1, r2) });
-    return ds.cloneWithRows(this.props.friends.toArray());
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => !Immutable.is(r1, r2) });
+    return ds.cloneWithRows(this.props.friends.get('friendsList').toArray());
   }
 
   render() {
-    return (
-      <ListView
-        style={styles.container}
-        dataSource={this.getDataSource()}
-        renderRow={this.onRenderRow}
-      />
-    );
+    // console.log('this.props.friends', this.props.friends);
+    if (this.props.friends.get('isFetching')) {
+      return <Text>Loading Friends...</Text>
+    } else {
+      return (
+        <ListView
+          style={styles.container}
+          dataSource={this.getDataSource()}
+          renderRow={this.onRenderRow}
+        />
+      );
+    }
   }
 }
 
 FriendsContainer.propTypes = {
   onPress: PropTypes.func,
-  quilts: PropTypes.object,
+  // quilts: PropTypes.object,
   friends: PropTypes.object,
 };
 

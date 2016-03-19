@@ -4,7 +4,7 @@ import { REQUEST_FRIENDS, RECEIVE_FRIENDS } from '../constants/ActionTypes';
 
 const initialState = Map({
   isFetching: false,
-  friends: List(),
+  friendsList: List(),
 });
 
 // todo: add request error handling
@@ -16,7 +16,7 @@ export default function friends(state = initialState, action) {
     case RECEIVE_FRIENDS:
       return state.merge({
         isFetching: false,
-        friends: action.payload, // maybe?
+        friendsList: List(action.payload),
       });
     default:
       return state;
