@@ -1,8 +1,4 @@
-<<<<<<< 1e445928b11499e51f37d04ee716fb21cd5f3d52
-/* eslint no-console: [2, { allow: ["log", "warn", "error"] }] */
-=======
 /* eslint no-console: [2, { allow: ["warn", "error"] }] */
->>>>>>> fix linter issues
 import {
   REQUEST_USER,
   RECEIVE_USER,
@@ -67,18 +63,22 @@ data = {
   vid: STRING (base64 encoding),
 }
 */
+
+// do we need seperate action creators for first vs subsequent quilts?
 export function postQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
-    return fetch('http://10.6.30.48:8000/api/quilt', {
+    console.log('dispatching request');
+    return fetch('http://10.6.30.77:8000/api/quilt/', {
       method: 'POST',
       body: data.video,
       headers: {
         'Content-Type': 'application/json',
         'Meta-Data': JSON.stringify({
-          title: 'test',
-          theme: 'theme test',
-          users: ['griffin', 'says', 'hello'],
+          title: data.title,
+          theme: data.theme,
+          users: data.users,
+          creator: data.creator,
         }),
       },
     })

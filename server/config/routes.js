@@ -1,17 +1,9 @@
 // import utils from './utils.js'; // our custom middleware
 import controller from '../db/controllers/index';
 import _ from 'lodash';
-import base64 from 'base64-stream';
 import fs from 'fs';
-
-const util = require('util');
-setInterval(() => {
-  console.log(util.inspect(process.memoryUsage()));
-}, 1000)
-
-
-
-const currUser = 'tasio';
+import path from 'path';
+import { writeQuiltFile } from './utils';
 
 export default (app) => {
   app.get('/api/auth', (req, res) => {
@@ -48,53 +40,49 @@ export default (app) => {
     }
   });
 
-  // accepts urlencoded form data
   app.post('/api/quilt', (req, res) => {
-    // console.log('quilt post request received:', req.body)
-    const title = JSON.parse(req.headers['meta-data']).title;
-    const writeStream = fs.createWriteStream(`./${title}.MOV`);
-    req.pipe(base64.decode()).pipe(writeStream);
-    return;
-
-    if (_.isEmpty(req.body)) {
-      res.status(400).send('Failed to retrieve video data');
-    } else {
-      /*
-      req.body = {
-        title: '',
-        theme: '',
-        users: [],
-        video: base64,
-    }
-      */
-      controller.postQuilt(req.body)
-        .then((data) => res.status(200).send("Received video"))
-        .catch((error) => res.status(500).send(`Failed submission: ${error}`));
-    }
+    const data = JSON.parse(req.headers['meta-data']);
+    controller.postQuilt(data)
+      .then((id) => {
+        const quiltFolder = path.join(__dirname, `../videos/tmp/quilt_${id}/`);
+        fs.mkdir(quiltFolder, () => {
+          writeQuiltFile(quiltFolder, id, req, res, true);
+        });
+      });
   });
 
   app.get('/api/quilt/:id', (req, res) => {
     console.log('server: /api/quilt/:id ', req.params.id);
     controller.getQuilt({ id: req.params.id })
-    .then((data) => {
-      const responseObj = data || {};
-      res.status(200).send(responseObj);
-    }).catch((error) => res.status(500).send(`Failed request: ${error}`)
-    );
+      .then((data) => {
+        const responseObj = data || {};
+        res.status(200).send(responseObj);
+      })
+      .catch((error) => res.status(500).send(`Failed request: ${error}`));
   });
 
   app.post('/api/quilt/:id', (req, res) => {
-    if (_.isEmpty(req.body)) {
-      res.status(400).send('Failed to retrieve video');
-    } else {
-      controller.getQuilt({ id: req.params.id })
-      .then((data) => {
-        if (_.isEmpty(data)) res.status(500).send('Invalid video id');
-        // Concat video to quilt
-        res.status(200).send('Received video submission');
-      }).catch((error) => res.status(500).send(`Failed request: ${error}`)
-      );
-    }
+    const data = JSON.parse(req.headers['meta-data']);
+    const quiltId = req.params.id;
+    const quiltFolder = path.join(__dirname, `../videos/tmp/quilt_${quiltId}`);
+    controller.updateUserQuiltStatus(data.id, quiltId)
+      .then(() => {
+        writeQuiltFile(quiltFolder, quiltId, req, res, false, data.id);
+      });
+
+    //
+    //
+    // if (_.isEmpty(req.body)) {
+    //   res.status(400).send('Failed to retrieve video');
+    // } else {
+    //   controller.getQuilt({ id: req.params.id })
+    //   .then((data) => {
+    //     if (_.isEmpty(data)) res.status(500).send('Invalid video id');
+    //     // Concat video to quilt
+    //     res.status(200).send('Received video submission');
+    //   }).catch((error) => res.status(500).send(`Failed request: ${error}`)
+    //   );
+    // }
   });
 
   app.get('/api/friends/:id', (req, res) => {
