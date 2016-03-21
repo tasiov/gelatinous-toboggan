@@ -3,14 +3,17 @@ import path from 'path';
 import { exec } from 'child_process';
 import base64 from 'base64-stream';
 import { promisify } from 'bluebird';
+import controller from '../db/controllers/index';
 
+// this module can still be cleaned up very much
 const execPromise = promisify(exec);
+const mkdirPromise = promisify(fs.mkdir);
 const concatQueues = {};
 
 function moveFromTmpToQuilts(file) {
   const basename = path.basename(file);
   const basedir = file.split(basename)[0];
-  return path.join(basedir, '../../quilts', basename);
+  return path.join(basedir, '../../quilts', `${basedir.split('/').slice(-2,-1)}.mp4`);
 }
 
 function changeExtentionToMp4(filePath) {
@@ -18,45 +21,61 @@ function changeExtentionToMp4(filePath) {
   return `${name}.mp4`;
 }
 
-export function convertMOVToMP4(filePath, firstFlag) {
+function convertMOVToMP4(filePath, firstFlag) {
   const newFilePath = changeExtentionToMp4(filePath);
-  return execPromise(`ffmpeg -i ${filePath} ${firstFlag ? moveFromTmpToQuilts(newFilePath) : newFilePath}; rm ${filePath}`).then(data => console.log(data));
+  return execPromise(`ffmpeg -i ${filePath} ${firstFlag ? moveFromTmpToQuilts(newFilePath) : newFilePath}; rm ${filePath}`)
 }
 
-function getQuiltFromId(id) {
+export function getQuiltFromId(id) {
   return path.join(__dirname, `../videos/quilts/quilt_${id}.mp4`);
 }
 
-function tmpQuiltFromId(id) {
+function getIntermediateQuiltFromId(id) {
   return path.join(__dirname, `../videos/quilts/quilt_${id}_tmp.mp4`);
 }
 
-export function concatenateToQuilt(src, dest, dest2) {
-  return execPromise(`ffmpeg -i ${src} -i ${dest} -filter_complex concat=n=2:v=1:a=1 -f mp4 -y ${dest2}; mv ${dest2} ${dest}`)
+function getTmpQuiltFromId(quiltId, userId) {
+  return path.join(__dirname, `../videos/tmp/quilt_${quiltId}/quilt_${userId}.MOV`);
 }
 
-export function writeQuiltFile(quiltFolder, id, req, res, firstFlag, userId) {
-  const filePath = firstFlag ? path.join(quiltFolder, `quilt_${id}.MOV`) : path.join(quiltFolder, `iquilt_${userId}.MOV`)
-  const writeStream = fs.createWriteStream(filePath);
-  req.pipe(base64.decode()).pipe(writeStream);
-  writeStream.on('finish', () => {
-    console.log('start converting');
-    convertMOVToMP4(filePath, firstFlag)
-      .then(() => {
-        console.log('conversion complete')
-        if (!firstFlag) {
-          const newExtension = changeExtentionToMp4(filePath);
-          const destinationLoc = getQuiltFromId(id);
-          const intermediateLoc = tmpQuiltFromId(id);
-          if (!concatQueues[destinationLoc]) {
-            concatQueues[destinationLoc] = createAsyncQueue();
-          }
-          concatQueues[destinationLoc].enqueue(concatenateToQuilt, newExtension, destinationLoc, intermediateLoc);
-        }
-      })
-    // then send push notification to friends
-    res.status(200);
+function concatenateToQuilt(src, dest, dest2) {
+  return execPromise(`ffmpeg -i ${dest} -i ${src} -filter_complex concat=n=2:v=1:a=1 -f mp4 -y ${dest2}; mv ${dest2} ${dest}; rm ${src}`)
+}
+
+function makeTmpDirectoryFromId(id) {
+  const quiltFolder = path.join(__dirname, `../videos/tmp/quilt_${id}`);
+  return mkdirPromise(quiltFolder);
+}
+
+function wrapStreamInPromise(stream) {
+  return new Promise((resolve, reject) => {
+    stream.on('finish', () => resolve());
+    stream.on('error', reject);
   });
+}
+
+export async function writeVideoToDiskPipeline(req, res, data, firstFlag) {
+  const quiltId = await (firstFlag ? controller.postQuilt(data) : controller.updateUserQuiltStatus(data.creator.id, data.quiltId));
+  if (firstFlag) {
+    await makeTmpDirectoryFromId(quiltId);
+  }
+  const filePath = getTmpQuiltFromId(quiltId, data.creator.id);
+  const writeStream = fs.createWriteStream(filePath);
+  await wrapStreamInPromise(req.pipe(base64.decode()).pipe(writeStream));
+  await convertMOVToMP4(filePath, firstFlag)
+  if (!firstFlag) {
+    const newExtension = changeExtentionToMp4(filePath);
+    const destinationLoc = getQuiltFromId(quiltId);
+    const intermediateLoc = getIntermediateQuiltFromId(quiltId);
+    if (!concatQueues[destinationLoc]) {
+      concatQueues[destinationLoc] = createAsyncQueue();
+    }
+    concatQueues[destinationLoc].enqueue(concatenateToQuilt, newExtension, destinationLoc, intermediateLoc);
+  }
+  // then send push notification to friends
+  // unsure when exactly to send status code
+  res.sendStatus(201);
+
 }
 // todo: catch errors
 
@@ -72,7 +91,6 @@ function createAsyncQueue() {
   obj._wrap = (f, ...args) => {
     const wrappedF = () => {
       f(...args).then((data) => {
-        console.log(id, data);
         obj.storage.shift();
         if (obj.storage.length) {
           obj.storage[0]();

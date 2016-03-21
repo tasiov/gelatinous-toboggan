@@ -1,10 +1,10 @@
 /* eslint no-console: [2, { allow: ["log", "warn", "error"] }] */
-const Sequelize = require('sequelize');
-const db = require('../modules/index.js');
-const fs = require('fs');
-const path = require('path');
-const _ = require('lodash');
-const utils = require('../../config/utils');
+import Sequelize from 'sequelize';
+import db from '../modules/index.js';
+import fs from 'fs';
+import path from 'path';
+import _ from 'lodash';
+import utils from '../../config/utils';
 
 // options = {username: username}
 const createUser = (options) =>
@@ -36,7 +36,7 @@ const postQuilt = (options) => {
   return db.Quilt.create(_.pick(options, ['title', 'theme']))
     .then((quilt) => {
       newQuilt = quilt;
-      return getUser({ username: options.creator });
+      return getUser({ username: options.creator.username });
     })
     .then(user => newQuilt.addUser(user, { status: 1 }))
     .then(() => (
@@ -53,20 +53,12 @@ const postQuilt = (options) => {
     .catch((error) => console.error('Error posting a quilt. ', error))
 };
 
-// const updateUserQuiltStatus = (options) => {
-//   const quilt = options.quilt; // quilt module. Can use getQuilt({ filename:quiltname }) to get quilt module
-//   const user = options.user; // user module. Can use getUser({username:username}) to get user module
-//   return quilt.setUsers(user, { status: 1 });
-// };
-
 const updateUserQuiltStatus = (userId, quiltId) => {
   return getUser({ id: userId }).then((user) => {
     return getQuilt({ id: quiltId })
       .then(quilt => quilt.setUsers(user, { status: 1 }));
-  });
+  }).then(() => quiltId);
 };
-
-
 
 const getAllOtherUsers = (username) =>
   db.User.findAll({
@@ -79,7 +71,7 @@ const getAllOtherUsers = (username) =>
     .catch((error) => console.error('Error retreiving users. ', error)
     );
 
-module.exports = {
+export default {
   createUser,
   getAllUsers,
   getAllOtherUsers,
@@ -88,4 +80,4 @@ module.exports = {
   getQuilt,
   postQuilt,
   updateUserQuiltStatus,
-};
+}
