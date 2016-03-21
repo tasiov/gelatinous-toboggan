@@ -2,6 +2,7 @@
 import React, {Component} from 'react-native';
 import { connect } from 'react-redux';
 import Video from 'react-native-video';
+import VideoEntry from '../components/video_entry';
 
 const {
   View,
@@ -9,8 +10,6 @@ const {
   PropTypes,
   Text,
 } = React;
-
-const vid = '/Users/maryam/Documents/hackreactor/gelatinous-toboggan/server/db/videos/video4.mp4';
 
 class WatchVideo extends Component {
   constructor(props) {
@@ -22,8 +21,10 @@ class WatchVideo extends Component {
     }
     return (
       <View style={styles.container}>
-        <Text> Theme: {this.props.watchQuilt.get('theme')}</Text>
-        <Video source={{ uri: vid }} style={styles.backgroundVideo} />
+        {// <Text> Theme: {this.props.watchQuilt.get('theme')}</Text>
+        // <Video source={{ uri: vid }} style={styles.backgroundVideo} />
+      }
+        <VideoEntry quilt = {this.props.watchQuilt}/>
       </View>
     );
   }
@@ -37,13 +38,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  backgroundVideo: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-  },
+  // backgroundVideo: {
+  //   position: 'absolute',
+  //   top: 0,
+  //   left: 0,
+  //   bottom: 0,
+  //   right: 0,
+  // },
 });
 
 function mapStateToProps(state) {
