@@ -9,25 +9,21 @@ const {
   View,
 } = React;
 
-const onPress = (navigator) => {
-  navigator.push({ name: 'video' });
-};
-
-const QuiltEntry = ({ /* navigator, onClick, */ username }) => (
+const QuiltEntry = ({ onClick, quilt }) => {
+  return (
   <View>
-    <TouchableHighlight onPress={onPress}>
+    <TouchableHighlight onPress={() => onClick(quilt['id'])} >
       <View style={styles.row}>
-        <Text>{username}</Text>
-        <Text>+</Text>
+        <Text>{quilt['filename']}</Text>
+        <Text>**</Text>
       </View>
     </TouchableHighlight>
   </View>
-);
+);}
 
 QuiltEntry.propTypes = {
-  navigator: PropTypes.object,
   onClick: PropTypes.func,
-  username: PropTypes.string,
+  quilt: PropTypes.object,
 };
 
 const styles = StyleSheet.create({

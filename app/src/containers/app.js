@@ -6,7 +6,7 @@ import CreateQuilt from '../components/create_quilt';
 // todo: create seperate component/container for quilts
 import ShowQuilts from '../containers/quilts';
 import ShowCamera from '../containers/camera';
-import WatchVideo from '../components/video';
+import WatchVideo from '../containers/video';
 import FriendsContainer from '../containers/friends';
 // import NavigationBar from 'react-native-navbar';
 
