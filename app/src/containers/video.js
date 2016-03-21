@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import React from 'react-native';
+import React, {Component} from 'react-native';
 import { connect } from 'react-redux';
 import Video from 'react-native-video';
 
@@ -12,16 +12,21 @@ const {
 
 const vid = '/Users/maryam/Documents/hackreactor/gelatinous-toboggan/server/db/videos/video4.mp4';
 
-function WatchVideo() {
-  if (this.props.watchQuilt.get('isFetching')) {
-    return <Text>Loading Current Quilt...</Text>;
+class WatchVideo extends Component {
+  constructor(props) {
+    super(props);
   }
-  return (
-    <View style={styles.container}>
-      <Text> Theme: {this.props.watchQuilt.get('theme')}</Text>
-      <Video source={{ uri: vid }} style={styles.backgroundVideo} />
-    </View>
-  );
+  render() {
+    if (this.props.watchQuilt.get('isFetching')) {
+      return <Text>Loading Current Quilt...</Text>;
+    }
+    return (
+      <View style={styles.container}>
+        <Text> Theme: {this.props.watchQuilt.get('theme')}</Text>
+        <Video source={{ uri: vid }} style={styles.backgroundVideo} />
+      </View>
+    );
+  }
 }
 
 WatchVideo.propTypes = {
