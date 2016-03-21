@@ -1,4 +1,7 @@
-/* eslint-disable no-use-before-define, react/prefer-stateless-function */
+/* eslint-disable
+no-use-before-define,
+react/prefer-stateless-function */
+
 import React from 'react-native';
 import LoginContainer from '../containers/login_container';
 import Home from '../components/home';
@@ -41,7 +44,7 @@ class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {/*<NavigationBar statusBar={{ hidden: true }} title={{ title: 'Quilt' }} />*/}
+        {/* <NavigationBar statusBar={{ hidden: true }} title={{ title: 'Quilt' }} /> */}
         <Navigator
           initialRoute={{ name: 'login' }}
           renderScene={this.renderScene}

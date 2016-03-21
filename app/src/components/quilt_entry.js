@@ -1,4 +1,4 @@
-/* eslint-disable no-use-before-define */
+/* eslint-disable no-use-before-define, react/jsx-no-bind*/
 import React from 'react-native';
 
 const {
@@ -9,17 +9,17 @@ const {
   View,
 } = React;
 
-const QuiltEntry = ({ onClick, quilt }) => {
-  return (
+// TODO: Change the properties of the quilt information
+const QuiltEntry = ({ onClick, quilt }) => (
   <View>
-    <TouchableHighlight onPress={() => onClick(quilt['id'])} >
+    <TouchableHighlight onPress={() => onClick(quilt.id)} >
       <View style={styles.row}>
-        <Text>{quilt['filename']}</Text>
+        <Text>{quilt.filename}</Text>
         <Text>**</Text>
       </View>
     </TouchableHighlight>
   </View>
-);}
+);
 
 QuiltEntry.propTypes = {
   onClick: PropTypes.func,

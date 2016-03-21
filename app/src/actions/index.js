@@ -1,8 +1,12 @@
+<<<<<<< 1e445928b11499e51f37d04ee716fb21cd5f3d52
 /* eslint no-console: [2, { allow: ["log", "warn", "error"] }] */
+=======
+/* eslint no-console: [2, { allow: ["warn", "error"] }] */
+>>>>>>> fix linter issues
 import {
   REQUEST_USER,
   RECEIVE_USER,
-  START_QUILT,
+  // START_QUILT,
   REQUEST_FRIENDS,
   RECEIVE_FRIENDS,
   RECEIVE_QUILTS,
@@ -29,7 +33,7 @@ export function fetchUser(username) {
     return fetch(`http://10.6.30.48:8000/api/auth?username=${username}`)
       .then(response => response.json())
       .then(user => dispatch(receiveUser(user)))
-      .catch(err => console.error('error', err));
+      .catch(error => console.error('error', error));
   };
 }
 
@@ -75,7 +79,7 @@ export function postQuilt(data) {
     })
     .then(response => response.json())
     .then(quiltData => dispatch(responsePostQuilt(quiltData)))
-    .catch(err => console.error('error', err));
+    .catch(error => console.error('error', error));
   };
 }
 
@@ -132,18 +136,12 @@ const receiveWatchQuilt = (watchQuilt) => ({
   payload: watchQuilt,
 });
 
-const newData = {title: 'title',
-theme: 'theme 1',
-users: ['josh', 'tasio', 'griffin'],
-video: null}
-
-export function fetchWatchQuilt(options){
+export function fetchWatchQuilt(options) {
   return (dispatch) => {
     dispatch(requestWatchQuilt());
     return fetch(`http://10.6.30.48:8000/api/quilt/${options.quiltId}`)
       .then((response) => response.json())
-      .then((data) => dispatch(receiveWatchQuilt(newData)))
+      .then((data) => dispatch(receiveWatchQuilt(data)))
       .catch((error) => console.error('Error in getting current quilt', error));
   };
-
 }

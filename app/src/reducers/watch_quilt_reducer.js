@@ -1,5 +1,5 @@
 /* eslint-disable new-cap */
-import Immutable, { Map, List } from 'immutable';
+import { Map, List } from 'immutable';
 import { REQUEST_CURRENT_QUILT, RECEIVE_CURRENT_QUILT } from '../constants/ActionTypes';
 
 const initialState = Map({

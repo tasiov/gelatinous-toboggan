@@ -9,7 +9,6 @@ const {
   ListView,
   PropTypes,
   StyleSheet,
-  View,
   Text,
 } = React;
 
@@ -26,12 +25,12 @@ class ShowQuilts extends Component {
   onQuiltClick(quiltId) {
     // console.log('quilt id:', quiltId, ' is clicked', this.props);
     // request the current quilt
-    this.props.fetchWatchQuilt({quiltId});
+    this.props.fetchWatchQuilt({ quiltId });
     this.props.navigator.push({ name: 'video' });
   }
 
   onRenderRow(rowData) {
-    return <QuiltEntry onClick={this.onQuiltClick} quilt = {rowData} key = {rowData['id']}/>
+    return <QuiltEntry onClick={this.onQuiltClick} quilt = {rowData} key = {rowData.id} />;
   }
 
   getDataSource() {
@@ -40,17 +39,16 @@ class ShowQuilts extends Component {
   }
 
   render() {
-    if(this.props.quilts.get('isFetching')) {
-      return <Text>Loading Quilts...</Text>
-    } else {
-      return (
-        <ListView
+    if (this.props.quilts.get('isFetching')) {
+      return <Text>Loading Quilts...</Text>;
+    }
+    return (
+      <ListView
         style={styles.container}
         dataSource={this.getDataSource()}
         renderRow={this.onRenderRow}
-        />
-      );
-    }
+      />
+    );
   }
 }
 
@@ -59,6 +57,7 @@ ShowQuilts.propTypes = {
   quilts: PropTypes.object,
   fetchQuilts: PropTypes.func,
   fetchWatchQuilt: PropTypes.func,
+  navigator: PropTypes.object,
 };
 
 const styles = StyleSheet.create({
@@ -67,12 +66,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => {
+function mapStateToProps(state) {
   return {
     watchQuilt: state.get('watchQuilt'), // Check if initialise with {} or isFetching = true
     quilts: state.get('quilts'),
   };
-};
+}
 
 // todo: set currently watched quilt in state?
 function mapDispatchToProps(dispatch) {

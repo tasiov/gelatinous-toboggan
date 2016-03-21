@@ -1,5 +1,5 @@
 /* eslint-disable no-use-before-define */
-import React, { Component }  from 'react-native';
+import React from 'react-native';
 import { connect } from 'react-redux';
 import Video from 'react-native-video';
 
@@ -7,28 +7,21 @@ const {
   View,
   StyleSheet,
   PropTypes,
-  Text
+  Text,
 } = React;
 
 const vid = '/Users/maryam/Documents/hackreactor/gelatinous-toboggan/server/db/videos/video4.mp4';
 
-class WatchVideo extends Component {
-  constructor(props) {
-    super(props);
+function WatchVideo() {
+  if (this.props.watchQuilt.get('isFetching')) {
+    return <Text>Loading Current Quilt...</Text>;
   }
-
-  render () {
-    if(this.props.watchQuilt.get('isFetching')) {
-      return <Text>Loading Current Quilt...</Text>
-    } else {
-      return (
-        <View style={styles.container}>
-          <Text> Theme: {this.props.watchQuilt.get('theme')}</Text>
-          <Video source={{ uri: vid }} style={styles.backgroundVideo} />
-        </View>
-      )
-    }
-  }
+  return (
+    <View style={styles.container}>
+      <Text> Theme: {this.props.watchQuilt.get('theme')}</Text>
+      <Video source={{ uri: vid }} style={styles.backgroundVideo} />
+    </View>
+  );
 }
 
 WatchVideo.propTypes = {
@@ -48,9 +41,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => {
+function mapStateToProps(state) {
   return { watchQuilt: state.get('watchQuilt') };
-};
+}
 
 // function mapDispatchToProps(dispatch) {
 //   return {
