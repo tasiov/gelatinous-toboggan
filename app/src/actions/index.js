@@ -2,7 +2,7 @@
 import {
   REQUEST_USER,
   RECEIVE_USER,
-  // START_QUILT,
+  START_QUILT,
   REQUEST_FRIENDS,
   RECEIVE_FRIENDS,
   RECEIVE_QUILTS,
@@ -12,6 +12,11 @@ import {
   REQUEST_CURRENT_QUILT,
   RECEIVE_CURRENT_QUILT,
 } from '../constants/ActionTypes';
+
+export const startQuilt = (data) => ({
+  type: START_QUILT,
+  payload: data,
+})
 
 // dispatched at login to set the current user of the app
 const requestUser = () => ({
