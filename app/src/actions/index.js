@@ -144,7 +144,7 @@ export function fetchFriends(options) {
     // todo: hook up appropriately with server
     // todo: catch errors
 
-    return fetch(`http://localhost:8000/api/friends/${options.username}`)
+    return fetch(`http://10.6.30.48:8000/api/friends/${options.username}`)
       .then(response => response.json())
       .then(json => dispatch(receiveFriends(json))
       );
@@ -163,7 +163,7 @@ const receiveQuilts = (quilts) => ({
 export function fetchQuilts(options) {
   return (dispatch) => {
     dispatch(requestQuilts());
-    return fetch(`http://localhost:8000/api/quilt?username=${options.username}`)
+    return fetch(`http://10.6.30.48:8000/api/quilt?username=${options.username}`)
       .then((response) => response.json())
       .then((data) => dispatch(receiveQuilts(data)))
       .catch((error) => console.error('Error in getting user\'s quilts', error));

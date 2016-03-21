@@ -13,13 +13,8 @@ const {
 class Home extends Component {
   constructor(props) {
     super(props);
-    // this.onPressStart = this.onPressStart.bind(this);
     this.onPressView = this.onPressView.bind(this);
   }
-
-  // onPressStart() {
-  //   this.props.navigator.push({ name: 'create' });
-  // }
 
   onPressView(targetView) {
     this.props.navigator.push({ name: targetView });

@@ -21,9 +21,6 @@ class WatchVideo extends Component {
     }
     return (
       <View style={styles.container}>
-        {// <Text> Theme: {this.props.watchQuilt.get('theme')}</Text>
-        // <Video source={{ uri: vid }} style={styles.backgroundVideo} />
-      }
         <VideoEntry quilt = {this.props.watchQuilt}/>
       </View>
     );
@@ -38,25 +35,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  // backgroundVideo: {
-  //   position: 'absolute',
-  //   top: 0,
-  //   left: 0,
-  //   bottom: 0,
-  //   right: 0,
-  // },
 });
 
 function mapStateToProps(state) {
   return { watchQuilt: state.get('watchQuilt') };
 }
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     fetchQuiltVideo: (data) => {
-//       dispatch(fetchQuiltVideo(data));
-//     },
-//   };
-// }
 
 export default connect(mapStateToProps)(WatchVideo);
