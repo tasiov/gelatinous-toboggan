@@ -52,26 +52,13 @@ class ShowCamera extends Component {
     this.setState({
       isCapturing: true,
     });
-    this.camera.capture().then((file) =>
-      RNFS.readFile(file, 'base64')
-    ).then((data) => {
-      this.props.postQuilt(Object.assign(this.props.currentQuilt, {
-        vid: data,
-      }));
-
-      // let options = {
-      //   username: 'tasiov',
-      //   friends: ['josh', 'griffin'],
-      //   quilt: {
-      //     filename: 'quilt43',
-      //     title: 'quiltTitle',
-      //     theme: 'quiltTheme',
-      //     video: data,
-      //   },
-      // }
-      //
-      // this.props.postQuilt(options);
-    });
+    this.camera.capture()
+      .then((file) => RNFS.readFile(file, 'base64'))
+      .then((data) => {
+        this.props.postQuilt(Object.assign(this.props.buildQuilt, {
+          video: data,
+        }));
+      });
   }
 
   _onStopCapture() {
@@ -107,7 +94,7 @@ class ShowCamera extends Component {
 
 ShowCamera.propTypes = {
   postQuilt: PropTypes.func,
-  currentQuilt: PropTypes.object,
+  buildQuilt: PropTypes.object,
 };
 
 const styles = StyleSheet.create({
@@ -135,9 +122,9 @@ const styles = StyleSheet.create({
 // which will be passed with the video
 // to action creator to post data
 function mapStateToProps(state) {
-  const currentQuilt = state.get('currentQuilt');
+  const buildQuilt = state.get('buildQuilt');
   return {
-    currentQuilt: currentQuilt.toObject(),
+    buildQuilt: buildQuilt.toObject(),
   };
 }
 
@@ -149,6 +136,5 @@ function mapDispatchToProps(dispatch) {
     },
   };
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShowCamera);

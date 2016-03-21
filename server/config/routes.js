@@ -66,6 +66,7 @@ export default (app) => {
   });
 
   app.get('/api/quilt/:id', (req, res) => {
+    console.log('server: /api/quilt/:id ', req.params.id);
     controller.getQuilt({ id: req.params.id })
     .then((data) => {
       const responseObj = data || {};

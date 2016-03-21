@@ -1,14 +1,20 @@
+<<<<<<< 1e445928b11499e51f37d04ee716fb21cd5f3d52
 /* eslint no-console: [2, { allow: ["log", "warn", "error"] }] */
+=======
+/* eslint no-console: [2, { allow: ["warn", "error"] }] */
+>>>>>>> fix linter issues
 import {
   REQUEST_USER,
   RECEIVE_USER,
-  START_QUILT,
+  // START_QUILT,
   REQUEST_FRIENDS,
   RECEIVE_FRIENDS,
   RECEIVE_QUILTS,
   REQUEST_QUILTS,
-  RESPONSE_POST_QUILT,
+  RECEIVE_POST_QUILT,
   REQUEST_POST_QUILT,
+  REQUEST_CURRENT_QUILT,
+  RECEIVE_CURRENT_QUILT,
 } from '../constants/ActionTypes';
 
 // dispatched at login to set the current user of the app
@@ -24,20 +30,20 @@ const receiveUser = (user) => ({
 export function fetchUser(username) {
   return (dispatch) => {
     dispatch(requestUser());
-    return fetch(`http://10.6.30.77:8000/api/auth?username=${username}`)
+    return fetch(`http://10.6.30.48:8000/api/auth?username=${username}`)
       .then(response => response.json())
       .then(user => dispatch(receiveUser(user)))
-      .catch(err => console.error('error', err));
+      .catch(error => console.error('error', error));
   };
 }
 
 // todo: make action creators more semantic
 
 // dispatched when quilt initially started
-export const startQuilt = (data) => ({
-  type: START_QUILT,
-  payload: data,
-});
+// export const startQuilt = (data) => ({
+//   type: START_QUILT,
+//   payload: data,
+// });
 
 // begin post request to send quilt to server
 const requestPostQuilt = () => ({
@@ -47,7 +53,7 @@ const requestPostQuilt = () => ({
 // receive response from the server relating to post request
 // todo: format response data so that status code passed
 const responsePostQuilt = (data) => ({
-  type: RESPONSE_POST_QUILT,
+  type: RECEIVE_POST_QUILT,
   payload: data,
 });
 
@@ -64,7 +70,7 @@ data = {
 export function postQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
-    return fetch('http://10.6.30.77:8000/api/quilt', {
+    return fetch('http://10.6.30.48:8000/api/quilt', {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {
@@ -73,7 +79,7 @@ export function postQuilt(data) {
     })
     .then(response => response.json())
     .then(quiltData => dispatch(responsePostQuilt(quiltData)))
-    .catch(err => console.error('error', err));
+    .catch(error => console.error('error', error));
   };
 }
 
@@ -118,5 +124,24 @@ export function fetchQuilts(options) {
       .then((response) => response.json())
       .then((data) => dispatch(receiveQuilts(data)))
       .catch((error) => console.error('Error in getting user\'s quilts', error));
+  };
+}
+
+const requestWatchQuilt = () => ({
+  type: REQUEST_CURRENT_QUILT,
+});
+
+const receiveWatchQuilt = (watchQuilt) => ({
+  type: RECEIVE_CURRENT_QUILT,
+  payload: watchQuilt,
+});
+
+export function fetchWatchQuilt(options) {
+  return (dispatch) => {
+    dispatch(requestWatchQuilt());
+    return fetch(`http://10.6.30.48:8000/api/quilt/${options.quiltId}`)
+      .then((response) => response.json())
+      .then((data) => dispatch(receiveWatchQuilt(data)))
+      .catch((error) => console.error('Error in getting current quilt', error));
   };
 }
