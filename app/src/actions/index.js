@@ -69,7 +69,41 @@ export function postQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
     console.log('dispatching request');
-    return fetch('http://10.6.30.77:8000/api/quilt/', {
+    return fetch('http://10.6.30.77:8000/api/quilt', {
+      method: 'POST',
+      body: data.video,
+      headers: {
+        'Content-Type': 'application/json',
+        'Meta-Data': JSON.stringify({
+          title: data.title,
+          theme: data.theme,
+          users: data.users,
+          creator: data.creator,
+        }),
+      },
+    })
+    .then(response => dispatch(responsePostQuilt(response.status)))
+    .catch(err => console.log('post quilt error', err));
+  };
+}
+
+// begin post request to send quilt to server
+const requestAddQuilt = () => ({
+  type: REQUEST_ADD_QUILT,
+});
+
+// receive response from the server relating to post request
+// todo: format response data so that status code passed
+const responseAddQuilt = (data) => ({
+  type: RESPONSE_ADD_QUILT,
+  payload: data,
+});
+
+export function addToQuilt(data) {
+  return (dispatch) => {
+    dispatch(requestPostQuilt());
+
+    return fetch(`http://10.6.30.77:8000/api/quilt/${data.quiltId}`, {
       method: 'POST',
       body: data.video,
       headers: {

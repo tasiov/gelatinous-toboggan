@@ -127,10 +127,14 @@ function mapStateToProps(state) {
   const buildQuilt = state.get('buildQuilt').toObject();
   buildQuilt.users = buildQuilt.users.toArray();
 
-  const creator = state.get('user').get('username');
+  const creator = state.get('user');
+
   return {
-    creator,
-    buildQuilt,
+    currentQuilt,
+    creator: {
+      id: creator.get('id'),
+      username: creator.get('username'),
+    },
   };
 }
 
