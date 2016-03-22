@@ -10,7 +10,7 @@ const {
 } = React;
 
 const video = '/Users/maryam/Documents/hackreactor/gelatinous-toboggan/server/db/videos/video4.mp4';
-const video_uri = "http://10.6.30.48:8000/db/videos/video1.mp4"
+// const video_uri = "http://10.6.30.48:8000/db/videos/video1.mp4";
 // TODO: Change the properties of the quilt information
 const VideoEntry = ({ quilt }) => (
   <View style={styles.container}>

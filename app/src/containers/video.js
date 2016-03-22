@@ -1,7 +1,6 @@
 /* eslint-disable no-use-before-define */
-import React, {Component} from 'react-native';
+import React, { Component } from 'react-native';
 import { connect } from 'react-redux';
-import Video from 'react-native-video';
 import VideoEntry from '../components/video_entry';
 
 const {
@@ -21,7 +20,7 @@ class WatchVideo extends Component {
     }
     return (
       <View style={styles.container}>
-        <VideoEntry quilt = {this.props.watchQuilt}/>
+        <VideoEntry quilt = {this.props.watchQuilt} />
       </View>
     );
   }
