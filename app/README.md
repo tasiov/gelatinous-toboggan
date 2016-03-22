@@ -16,6 +16,8 @@ are connected to the same wifi. Run the following code to get your network IP:
 Replace 'localhost' with the IP in the ios/Quilt/AppDelegate.m line mentioned above.
 In xcode, select your phone from the 'set active scene' options and press play in the top-left corner.
 
+Additionally, you'll want to put the IP output from the command above in config.js, so that
+requests end up at your local development server
 ## Development
 
 ### Installing Dependencies

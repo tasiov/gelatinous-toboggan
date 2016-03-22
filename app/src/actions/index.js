@@ -12,7 +12,10 @@ import {
   REQUEST_POST_QUILT,
   REQUEST_CURRENT_QUILT,
   RECEIVE_CURRENT_QUILT,
+  REQUEST_ADD_QUILT,
 } from '../constants/ActionTypes';
+
+import ip from '../config';
 
 export const startQuilt = (data) => ({
   type: START_QUILT,
@@ -32,7 +35,7 @@ const receiveUser = (user) => ({
 export function fetchUser(username) {
   return (dispatch) => {
     dispatch(requestUser());
-    return fetch(`http://10.6.30.77:8000/api/auth?username=${username}`)
+    return fetch(`http://${ip}:8000/api/auth?username=${username}`)
       .then(response => response.json())
       .then(user => dispatch(receiveUser(user)))
       .catch(error => console.error('error', error));
@@ -74,7 +77,7 @@ data = {
 export function postQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
-    return fetch('http://10.6.30.77:8000/api/quilt', {
+    return fetch(`http://${ip}:8000/api/quilt`, {
       method: 'POST',
       body: data.video,
       headers: {
@@ -92,6 +95,11 @@ export function postQuilt(data) {
   };
 }
 
+export const contributeToQuilt = (id) => ({
+  type: REQUEST_ADD_QUILT,
+  payload: id,
+})
+
 // begin post request to send quilt to server
 const requestAddQuilt = () => ({
   type: REQUEST_ADD_QUILT,
@@ -99,27 +107,23 @@ const requestAddQuilt = () => ({
 
 // receive response from the server relating to post request
 // todo: format response data so that status code passed
-const responseAddQuilt = (data) => ({
+const responseAddQuilt = () => ({
   type: RESPONSE_ADD_QUILT,
-  payload: data,
 });
 
 export function addToQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
 
-    return fetch(`http://10.6.30.77:8000/api/quilt/${data.quiltId}`, {
+    return fetch(`http://${ip}:8000/api/quilt/${data.quiltId}`, {
       method: 'POST',
-      body: data.video,
       headers: {
         'Content-Type': 'application/json',
         'Meta-Data': JSON.stringify({
-          title: data.title,
-          theme: data.theme,
-          users: data.users,
           creator: data.creator,
         }),
       },
+      body: data.video,
     })
     .then(response => dispatch(responsePostQuilt(response.status)))
     .catch(err => console.log('post quilt error', err));
@@ -144,7 +148,7 @@ export function fetchFriends(options) {
     // todo: hook up appropriately with server
     // todo: catch errors
 
-    return fetch(`http://10.6.30.77:8000/api/friends/${options.username}`)
+    return fetch(`http://${ip}:8000/api/friends/${options.username}`)
       .then(response => response.json())
       .then(json => dispatch(receiveFriends(json))
       );
@@ -163,7 +167,7 @@ const receiveQuilts = (quilts) => ({
 export function fetchQuilts(options) {
   return (dispatch) => {
     dispatch(requestQuilts());
-    return fetch(`http://10.6.30.77:8000/api/quilt?username=${options.username}`)
+    return fetch(`http://${ip}:8000/api/quilt?username=${options.username}`)
       .then((response) => response.json())
       .then((data) => dispatch(receiveQuilts(data)))
       .catch((error) => console.error('Error in getting user\'s quilts', error));

@@ -3,7 +3,7 @@ import React from 'react-native';
 import Camera from 'react-native-camera';
 import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
-import { postQuilt } from '../actions/index';
+import { postQuilt, addToQuilt } from '../actions/index';
 
 const {
   Component,
@@ -47,11 +47,21 @@ class ShowCamera extends Component {
     this.camera.capture()
       .then(file => RNFS.readFile(file, 'base64'))
       .then((data) => {
-        this.props.postQuilt(Object.assign(this.props.buildQuilt, {
-          creator: this.props.creator,
-          video: data,
-        }));
-    });
+        if (this.props.contribQuiltId === null) {
+          this.props.postQuilt(Object.assign(this.props.buildQuilt, {
+            creator: this.props.creator,
+            video: data,
+          }));
+        } else {
+          this.props.addToQuilt({
+            quiltId: this.props.contribQuiltId,
+            creator: this.props.creator,
+            video: data,
+          });
+        }
+        this.props.navigator.pop();
+        this.props.navigator.pop();
+      });
   }
 
   _onStopCapture() {
@@ -118,10 +128,14 @@ function mapStateToProps(state) {
   const buildQuilt = state.get('buildQuilt').toObject();
   buildQuilt.users = buildQuilt.users.toArray();
 
+  const contribQuiltId = state.get('contribQuilt').get('id');
+
+
   const creator = state.get('user');
 
   return {
     buildQuilt,
+    contribQuiltId,
     creator: {
       id: creator.get('id'),
       username: creator.get('username'),
@@ -134,6 +148,9 @@ function mapDispatchToProps(dispatch) {
   return {
     postQuilt: (data) => {
       dispatch(postQuilt(data));
+    },
+    addToQuilt: (data) => {
+      dispatch(addToQuilt(data));
     },
   };
 }
