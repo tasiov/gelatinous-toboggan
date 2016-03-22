@@ -3,6 +3,7 @@ import {
   REQUEST_USER,
   RECEIVE_USER,
   START_QUILT,
+  SELECT_WATCH_QUILT,
   REQUEST_FRIENDS,
   RECEIVE_FRIENDS,
   RECEIVE_QUILTS,
@@ -31,7 +32,7 @@ const receiveUser = (user) => ({
 export function fetchUser(username) {
   return (dispatch) => {
     dispatch(requestUser());
-    return fetch(`http://10.6.31.236:8000/api/auth?username=${username}`)
+    return fetch(`http://10.6.30.77:8000/api/auth?username=${username}`)
       .then(response => response.json())
       .then(user => dispatch(receiveUser(user)))
       .catch(error => console.error('error', error));
@@ -73,7 +74,7 @@ data = {
 export function postQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
-    return fetch('http://10.6.31.236:8000/api/quilt', {
+    return fetch('http://10.6.30.77:8000/api/quilt', {
       method: 'POST',
       body: data.video,
       headers: {
@@ -143,7 +144,7 @@ export function fetchFriends(options) {
     // todo: hook up appropriately with server
     // todo: catch errors
 
-    return fetch(`http://10.6.30.48:8000/api/friends/${options.username}`)
+    return fetch(`http://10.6.30.77:8000/api/friends/${options.username}`)
       .then(response => response.json())
       .then(json => dispatch(receiveFriends(json))
       );
@@ -162,7 +163,7 @@ const receiveQuilts = (quilts) => ({
 export function fetchQuilts(options) {
   return (dispatch) => {
     dispatch(requestQuilts());
-    return fetch(`http://10.6.30.48:8000/api/quilt?username=${options.username}`)
+    return fetch(`http://10.6.30.77:8000/api/quilt?username=${options.username}`)
       .then((response) => response.json())
       .then((data) => dispatch(receiveQuilts(data)))
       .catch((error) => console.error('Error in getting user\'s quilts', error));
@@ -178,12 +179,19 @@ const receiveWatchQuilt = (watchQuilt) => ({
   payload: watchQuilt,
 });
 
-export function fetchWatchQuilt(options) {
-  return (dispatch) => {
-    dispatch(requestWatchQuilt());
-    return fetch(`http://10.6.30.48:8000/api/quilt/${options.quiltId}`)
-      .then((response) => response.json())
-      .then((data) => dispatch(receiveWatchQuilt(data)))
-      .catch((error) => console.error('Error in getting current quilt', error));
+export function selectWatchQuilt(id) {
+  return {
+    type: SELECT_WATCH_QUILT,
+    payload: id,
   };
 }
+
+// export function fetchWatchQuilt(options) {
+//   return (dispatch) => {
+//     dispatch(requestWatchQuilt());
+//     return fetch(`http://10.6.30.77:8000/api/quilt/${options.quiltId}`)
+//       .then((response) => response.json())
+//       .then((data) => dispatch(receiveWatchQuilt(data)))
+//       .catch((error) => console.error('Error in getting current quilt', error));
+//   };
+// }

@@ -11,23 +11,17 @@ const {
 } = React;
 
 class WatchVideo extends Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
-    if (this.props.watchQuilt.get('isFetching')) {
-      return <Text>Loading Current Quilt...</Text>;
-    }
     return (
       <View style={styles.container}>
-        <VideoEntry quilt = {this.props.watchQuilt} />
+        <VideoEntry quiltId={this.props.watchQuiltId} />
       </View>
     );
   }
 }
 
 WatchVideo.propTypes = {
-  watchQuilt: PropTypes.object,
+  watchQuiltId: PropTypes.number,
 };
 
 const styles = StyleSheet.create({
@@ -37,7 +31,7 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
-  return { watchQuilt: state.get('watchQuilt') };
+  return { watchQuiltId: state.get('watchQuilt').get('id') };
 }
 
 export default connect(mapStateToProps)(WatchVideo);
