@@ -85,6 +85,7 @@ class ShowCamera extends Component {
           aspect={'fill'}
           captureTarget={Camera.constants.CaptureTarget.temp}
           captureMode={Camera.constants.CaptureMode.video}
+          captureQuality={Camera.constants.CaptureQuality.medium}
         >
           <Text style={styles.capture} onPress={this.onCapturePress}>
             [CAPTURE]
