@@ -46,17 +46,8 @@ export default (app) => {
   });
   // todo: verify with db call
   app.get('/api/quilt/:id', (req, res) => {
-<<<<<<< 4c53568833bf6c248b909ac8af7b8820b4f9d079
     console.log(getQuiltFromId(req.params.id));
     res.sendFile(getQuiltFromId(req.params.id));
-=======
-    controller.getQuilt({ id: req.params.id })
-    .then((data) => {
-      const responseObj = data || {};
-      res.status(200).send(responseObj);
-    }).catch((error) => res.status(500).send(`Failed request: ${error}`)
-    );
->>>>>>> refactor video as a component
   });
 
   app.post('/api/quilt/:id', (req, res) => {
