@@ -22,7 +22,37 @@ class FriendsContainer extends Component {
   constructor(props) {
     super(props);
     this.getDataSource = this.getDataSource.bind(this);
+    this.onCheckboxCheck = this.onCheckboxCheck.bind(this);
+    this.onCheckboxUncheck = this.onCheckboxUncheck.bind(this);
+    this.onRenderRow = this.onRenderRow.bind(this);
     props.fetchFriends({ username: 'tasio' });
+    this.checkedFriends = {};
+  }
+
+  onCheckboxCheck(id) {
+    console.log(id, 'checked!');
+    this.checkedFriends[id.toString()] = id;
+    // log array of checked user id's
+    checkedIds = [];
+    for (var key in this.checkedFriends) {
+      if (Number.isInteger(this.checkedFriends[key])) {
+        checkedIds.push(this.checkedFriends[key]);
+      }
+    }
+    console.log(checkedIds);
+  }
+
+  onCheckboxUncheck(id) {
+    console.log(id, 'unchecked!')
+    this.checkedFriends[id.toString()] = '';
+    // log array of checked user id's
+    checkedIds = [];
+    for (var key in this.checkedFriends) {
+      if (Number.isInteger(this.checkedFriends[key])) {
+        checkedIds.push(this.checkedFriends[key]);
+      }
+    }
+    console.log(checkedIds);
   }
 
   onSubmitClick(quiltId, navigator) {
@@ -31,9 +61,7 @@ class FriendsContainer extends Component {
   }
 
   onRenderRow(rowData) {
-    console.log('rowData', rowData);
-    // return <Text>{ rowData }</Text>
-    return <FriendEntry user={rowData} key={rowData['id']} />;
+    return <FriendEntry user={rowData} onCheckboxCheck={this.onCheckboxCheck} onCheckboxUncheck={this.onCheckboxUncheck} key={rowData['id']} />;
   }
 
   getDataSource() {
