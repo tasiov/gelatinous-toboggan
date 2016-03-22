@@ -108,7 +108,6 @@ const responseAddQuilt = () => ({
 export function postToExistingQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
-
     return fetch(`http://${ip}:8000/api/quilt/${data.quiltId}`, {
       method: 'POST',
       headers: {
