@@ -39,15 +39,6 @@ class ShowCamera extends Component {
     }
   }
 
-
-  onCapturePress() {
-    if (!this.state.isCapturing) {
-      this._onStartCapture();
-    } else {
-      this._onStopCapture();
-    }
-  }
-
   _onStartCapture() {
     this.setState({
       isCapturing: true,

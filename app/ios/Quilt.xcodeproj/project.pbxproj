@@ -25,6 +25,7 @@
 		854221D21CA07BF500ADD139 /* libRCTCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 854221C81CA07BBB00ADD139 /* libRCTCamera.a */; };
 		854221D91CA07C6300ADD139 /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 854221D81CA07C5800ADD139 /* libRNFS.a */; };
 		854222051CA0C04200ADD139 /* libRCTVideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 854222011CA0C03200ADD139 /* libRCTVideo.a */; };
+		855B73AB1CA0E06A0015011A /* libReactNativeIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 855B73A91CA0E05C0015011A /* libReactNativeIcons.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -126,6 +127,13 @@
 			remoteGlobalIDString = 134814201AA4EA6300B7C361;
 			remoteInfo = RCTVideo;
 		};
+		855B73A81CA0E05C0015011A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 855B73981CA0E05C0015011A /* ReactNativeIcons.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2F5A3EB81ACDBF8000439386;
+			remoteInfo = ReactNativeIcons;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -153,6 +161,7 @@
 		854221C21CA07BBB00ADD139 /* RCTCamera.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTCamera.xcodeproj; path = "../node_modules/react-native-camera/ios/RCTCamera.xcodeproj"; sourceTree = "<group>"; };
 		854221D31CA07C5800ADD139 /* RNFS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFS.xcodeproj; path = "../node_modules/react-native-fs/RNFS.xcodeproj"; sourceTree = "<group>"; };
 		854221F31CA0C03200ADD139 /* RCTVideo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTVideo.xcodeproj; path = "../node_modules/react-native-video/RCTVideo.xcodeproj"; sourceTree = "<group>"; };
+		855B73981CA0E05C0015011A /* ReactNativeIcons.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeIcons.xcodeproj; path = "../node_modules/react-native-icons/ios/ReactNativeIcons.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -167,6 +176,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				855B73AB1CA0E06A0015011A /* libReactNativeIcons.a in Frameworks */,
 				854222051CA0C04200ADD139 /* libRCTVideo.a in Frameworks */,
 				854221D91CA07C6300ADD139 /* libRNFS.a in Frameworks */,
 				854221D21CA07BF500ADD139 /* libRCTCamera.a in Frameworks */,
@@ -292,6 +302,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				855B73981CA0E05C0015011A /* ReactNativeIcons.xcodeproj */,
 				854221F31CA0C03200ADD139 /* RCTVideo.xcodeproj */,
 				854221D31CA07C5800ADD139 /* RNFS.xcodeproj */,
 				854221C21CA07BBB00ADD139 /* RCTCamera.xcodeproj */,
@@ -358,6 +369,14 @@
 			isa = PBXGroup;
 			children = (
 				854222011CA0C03200ADD139 /* libRCTVideo.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		855B73991CA0E05C0015011A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				855B73A91CA0E05C0015011A /* libReactNativeIcons.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -477,6 +496,10 @@
 					ProjectRef = 146833FF1AC3E56700842450 /* React.xcodeproj */;
 				},
 				{
+					ProductGroup = 855B73991CA0E05C0015011A /* Products */;
+					ProjectRef = 855B73981CA0E05C0015011A /* ReactNativeIcons.xcodeproj */;
+				},
+				{
 					ProductGroup = 854221D41CA07C5800ADD139 /* Products */;
 					ProjectRef = 854221D31CA07C5800ADD139 /* RNFS.xcodeproj */;
 				},
@@ -581,6 +604,13 @@
 			remoteRef = 854222001CA0C03200ADD139 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		855B73A91CA0E05C0015011A /* libReactNativeIcons.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libReactNativeIcons.a;
+			remoteRef = 855B73A81CA0E05C0015011A /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -605,7 +635,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputPaths = (
@@ -613,7 +643,7 @@
 			name = "Bundle React Native code and images";
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/packager/react-native-xcode.sh";
 		};
