@@ -52,13 +52,15 @@ class ShowCamera extends Component {
     this.setState({
       isCapturing: true,
     });
+
     this.camera.capture()
-      .then((file) => RNFS.readFile(file, 'base64'))
+      .then(file => RNFS.readFile(file, 'base64'))
       .then((data) => {
         this.props.postQuilt(Object.assign(this.props.buildQuilt, {
+          creator: this.props.creator,
           video: data,
         }));
-      });
+    });
   }
 
   _onStopCapture() {
@@ -122,9 +124,17 @@ const styles = StyleSheet.create({
 // which will be passed with the video
 // to action creator to post data
 function mapStateToProps(state) {
-  const buildQuilt = state.get('buildQuilt');
+  const buildQuilt = state.get('buildQuilt').toObject();
+  buildQuilt.users = buildQuilt.users.toArray();
+
+  const creator = state.get('user');
+
   return {
-    buildQuilt: buildQuilt.toObject(),
+    buildQuilt,
+    creator: {
+      id: creator.get('id'),
+      username: creator.get('username'),
+    },
   };
 }
 

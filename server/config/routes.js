@@ -1,8 +1,9 @@
 // import utils from './utils.js'; // our custom middleware
 import controller from '../db/controllers/index';
 import _ from 'lodash';
-
-const currUser = 'tasio';
+import fs from 'fs';
+import path from 'path';
+import { writeVideoToDiskPipeline, getQuiltFromId } from './utils';
 
 export default (app) => {
   app.get('/api/auth', (req, res) => {
@@ -39,54 +40,20 @@ export default (app) => {
     }
   });
 
-  // accepts urlencoded form data
   app.post('/api/quilt', (req, res) => {
-    // console.log('quilt post request received:', req.body)
-    if (_.isEmpty(req.body)) {
-      res.status(400).send('Failed to retrieve video data');
-    } else {
-      /* TEMPORARY quilt formatting until we know what
-       * front-end submission will look like and enable
-       * session handling
-       */
-      // const quilt = {
-      //   filename: req.body.filename,
-      //   status: Number(req.body.status),
-      //   friends: JSON.parse(req.body.friends),
-      // };
-      // const postData = {
-      //   username: req.body.username,
-      //   quilt,
-      // };
-      controller.postQuilt(req.body)
-      .then((data) => res.status(200).send(data[0][0])
-      ).catch((error) => res.status(500).send(`Failed submission: ${error}`)
-      );
-    }
+    const data = JSON.parse(req.headers['meta-data']);
+    writeVideoToDiskPipeline(req, res, data, true);
   });
-
+  // todo: verify with db call
   app.get('/api/quilt/:id', (req, res) => {
-    console.log('server: /api/quilt/:id ', req.params.id);
-    controller.getQuilt({ id: req.params.id })
-    .then((data) => {
-      const responseObj = data || {};
-      res.status(200).send(responseObj);
-    }).catch((error) => res.status(500).send(`Failed request: ${error}`)
-    );
+    console.log(getQuiltFromId(req.params.id));
+    res.sendFile(getQuiltFromId(req.params.id));
   });
 
   app.post('/api/quilt/:id', (req, res) => {
-    if (_.isEmpty(req.body)) {
-      res.status(400).send('Failed to retrieve video');
-    } else {
-      controller.getQuilt({ id: req.params.id })
-      .then((data) => {
-        if (_.isEmpty(data)) res.status(500).send('Invalid video id');
-        // Concat video to quilt
-        res.status(200).send('Received video submission');
-      }).catch((error) => res.status(500).send(`Failed request: ${error}`)
-      );
-    }
+    const data = JSON.parse(req.headers['meta-data']);
+    data.quiltId = req.params.id;
+    writeVideoToDiskPipeline(req, res, data, false);
   });
 
   app.get('/api/friends/:id', (req, res) => {

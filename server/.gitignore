@@ -33,3 +33,4 @@ node_modules/
 
 # Database
 db/quilt.sqlite
+videos/

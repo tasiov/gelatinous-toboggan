@@ -21,7 +21,8 @@ const User = sequelize.define('user', {
 });
 
 const Quilt = sequelize.define('quilt', {
-  filename: Sequelize.STRING,
+  title: Sequelize.STRING,
+  theme: Sequelize.STRING,
   status: {
     type: Sequelize.INTEGER,
     values: [0, 1], // 0 - stitching, 1 - done

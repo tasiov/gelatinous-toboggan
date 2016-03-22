@@ -1,12 +1,8 @@
-<<<<<<< 1e445928b11499e51f37d04ee716fb21cd5f3d52
-/* eslint no-console: [2, { allow: ["log", "warn", "error"] }] */
-=======
 /* eslint no-console: [2, { allow: ["warn", "error"] }] */
->>>>>>> fix linter issues
 import {
   REQUEST_USER,
   RECEIVE_USER,
-  // START_QUILT,
+  START_QUILT,
   REQUEST_FRIENDS,
   RECEIVE_FRIENDS,
   RECEIVE_QUILTS,
@@ -16,6 +12,11 @@ import {
   REQUEST_CURRENT_QUILT,
   RECEIVE_CURRENT_QUILT,
 } from '../constants/ActionTypes';
+
+export const startQuilt = (data) => ({
+  type: START_QUILT,
+  payload: data,
+})
 
 // dispatched at login to set the current user of the app
 const requestUser = () => ({
@@ -67,19 +68,61 @@ data = {
   vid: STRING (base64 encoding),
 }
 */
+
+// do we need seperate action creators for first vs subsequent quilts?
 export function postQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
-    return fetch('http://10.6.30.48:8000/api/quilt', {
+    console.log('dispatching request');
+    return fetch('http://10.6.30.77:8000/api/quilt', {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: data.video,
       headers: {
         'Content-Type': 'application/json',
+        'Meta-Data': JSON.stringify({
+          title: data.title,
+          theme: data.theme,
+          users: data.users,
+          creator: data.creator,
+        }),
       },
     })
-    .then(response => response.json())
-    .then(quiltData => dispatch(responsePostQuilt(quiltData)))
-    .catch(error => console.error('error', error));
+    .then(response => dispatch(responsePostQuilt(response.status)))
+    .catch(err => console.log('post quilt error', err));
+  };
+}
+
+// begin post request to send quilt to server
+const requestAddQuilt = () => ({
+  type: REQUEST_ADD_QUILT,
+});
+
+// receive response from the server relating to post request
+// todo: format response data so that status code passed
+const responseAddQuilt = (data) => ({
+  type: RESPONSE_ADD_QUILT,
+  payload: data,
+});
+
+export function addToQuilt(data) {
+  return (dispatch) => {
+    dispatch(requestPostQuilt());
+
+    return fetch(`http://10.6.30.77:8000/api/quilt/${data.quiltId}`, {
+      method: 'POST',
+      body: data.video,
+      headers: {
+        'Content-Type': 'application/json',
+        'Meta-Data': JSON.stringify({
+          title: data.title,
+          theme: data.theme,
+          users: data.users,
+          creator: data.creator,
+        }),
+      },
+    })
+    .then(response => dispatch(responsePostQuilt(response.status)))
+    .catch(err => console.log('post quilt error', err));
   };
 }
 
