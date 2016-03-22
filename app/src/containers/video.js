@@ -2,6 +2,7 @@
 import React, { Component } from 'react-native';
 import { connect } from 'react-redux';
 import VideoEntry from '../components/video_entry';
+import { contributeToQuilt } from '../actions/index'
 
 const {
   View,
@@ -13,21 +14,26 @@ const {
 class WatchVideo extends Component {
   constructor(props) {
     super(props);
+    this.onEnd = this.onEnd.bind(this);
   }
+  onEnd() {
+    console.log(this.props.navigator);
+    this.props.contributeToQuilt(this.props.watchQuiltId);
+    // for some reason push doesn't work...
+    this.props.navigator.replace({ name: 'camera' });
+  }
+
   render() {
-    if (this.props.watchQuilt.get('isFetching')) {
-      return <Text>Loading Current Quilt...</Text>;
-    }
     return (
       <View style={styles.container}>
-        <VideoEntry quilt = {this.props.watchQuilt} />
+        <VideoEntry onEnd={this.onEnd} quiltId={this.props.watchQuiltId} />
       </View>
     );
   }
 }
 
 WatchVideo.propTypes = {
-  watchQuilt: PropTypes.object,
+  watchQuiltId: PropTypes.number,
 };
 
 const styles = StyleSheet.create({
@@ -37,7 +43,15 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
-  return { watchQuilt: state.get('watchQuilt') };
+  return { watchQuiltId: state.get('watchQuilt').get('id') };
 }
 
-export default connect(mapStateToProps)(WatchVideo);
+function mapDispatchToProps(dispatch) {
+  return {
+    contributeToQuilt: (id) => {
+      dispatch(contributeToQuilt(id));
+    },
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(WatchVideo);

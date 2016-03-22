@@ -7,7 +7,7 @@ const initialState = Map({
   theme: '',
   users: List(),
   video: null,
-  isSending: true,
+  isSending: false,
 });
 
 export default function buildQuilt(state = initialState, action) {

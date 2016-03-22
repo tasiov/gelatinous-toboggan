@@ -3,7 +3,7 @@ import React, { Component } from 'react-native';
 import QuiltEntry from '../components/quilt_entry';
 import { connect } from 'react-redux';
 import Immutable from 'immutable'; // just for testing
-import { fetchQuilts, fetchWatchQuilt } from '../actions/index';
+import { fetchQuilts, selectWatchQuilt } from '../actions/index';
 
 const {
   ListView,
@@ -19,18 +19,16 @@ class ShowQuilts extends Component {
     this.getDataSource = this.getDataSource.bind(this);
     this.onRenderRow = this.onRenderRow.bind(this);
     this.onQuiltClick = this.onQuiltClick.bind(this);
-    props.fetchQuilts({ username: 'josh' }); // TODO: pass in the username
+    this.props.fetchQuilts({username: this.props.user.get('username')});
   }
 
   onQuiltClick(quiltId) {
-    // console.log('quilt id:', quiltId, ' is clicked', this.props);
-    // request the current quilt
-    this.props.fetchWatchQuilt({ quiltId });
+    this.props.selectWatchQuilt(quiltId);
     this.props.navigator.push({ name: 'video' });
   }
 
   onRenderRow(rowData) {
-    return <QuiltEntry onClick={this.onQuiltClick} quilt = {rowData} key = {rowData.id} />;
+    return <QuiltEntry onClick={this.onQuiltClick} quilt={rowData} key={rowData.id} />;
   }
 
   getDataSource() {
@@ -70,6 +68,7 @@ function mapStateToProps(state) {
   return {
     watchQuilt: state.get('watchQuilt'), // Check if initialise with {} or isFetching = true
     quilts: state.get('quilts'),
+    user: state.get('user'),
   };
 }
 
@@ -79,8 +78,8 @@ function mapDispatchToProps(dispatch) {
     fetchQuilts: (data) => {
       dispatch(fetchQuilts(data));
     },
-    fetchWatchQuilt: (data) => {
-      dispatch(fetchWatchQuilt(data));
+    selectWatchQuilt: (id) => {
+      dispatch(selectWatchQuilt(id));
     },
   };
 }
