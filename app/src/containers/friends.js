@@ -14,6 +14,7 @@ const {
   ListView,
   PropTypes,
   StyleSheet,
+  Text,
 } = React;
 
 // todo: consider factoring out view rendering into own component
@@ -21,7 +22,37 @@ class FriendsContainer extends Component {
   constructor(props) {
     super(props);
     this.getDataSource = this.getDataSource.bind(this);
+    this.onCheckboxCheck = this.onCheckboxCheck.bind(this);
+    this.onCheckboxUncheck = this.onCheckboxUncheck.bind(this);
+    this.onRenderRow = this.onRenderRow.bind(this);
     props.fetchFriends({ username: 'tasio' });
+    this.checkedFriends = {};
+  }
+
+  onCheckboxCheck(id) {
+    console.log(id, 'checked!');
+    this.checkedFriends[id.toString()] = id;
+    // log array of checked user id's
+    checkedIds = [];
+    for (var key in this.checkedFriends) {
+      if (Number.isInteger(this.checkedFriends[key])) {
+        checkedIds.push(this.checkedFriends[key]);
+      }
+    }
+    console.log(checkedIds);
+  }
+
+  onCheckboxUncheck(id) {
+    console.log(id, 'unchecked!')
+    this.checkedFriends[id.toString()] = '';
+    // log array of checked user id's
+    checkedIds = [];
+    for (var key in this.checkedFriends) {
+      if (Number.isInteger(this.checkedFriends[key])) {
+        checkedIds.push(this.checkedFriends[key]);
+      }
+    }
+    console.log(checkedIds);
   }
 
   onSubmitClick(quiltId, navigator) {
@@ -30,28 +61,33 @@ class FriendsContainer extends Component {
   }
 
   onRenderRow(rowData) {
-    return <FriendEntry username={rowData} />;
+    return <FriendEntry user={rowData} onCheckboxCheck={this.onCheckboxCheck} onCheckboxUncheck={this.onCheckboxUncheck} key={rowData['id']} />;
   }
 
   getDataSource() {
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => Immutable.is(r1, r2) });
-    return ds.cloneWithRows(this.props.friends.toArray());
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => !Immutable.is(r1, r2) });
+    return ds.cloneWithRows(this.props.friends.get('friendsList').toArray());
   }
 
   render() {
-    return (
-      <ListView
-        style={styles.container}
-        dataSource={this.getDataSource()}
-        renderRow={this.onRenderRow}
-      />
-    );
+    // console.log('this.props.friends', this.props.friends);
+    if (this.props.friends.get('isFetching')) {
+      return <Text>Loading Friends...</Text>
+    } else {
+      return (
+        <ListView
+          style={styles.container}
+          dataSource={this.getDataSource()}
+          renderRow={this.onRenderRow}
+        />
+      );
+    }
   }
 }
 
 FriendsContainer.propTypes = {
   onPress: PropTypes.func,
-  quilts: PropTypes.object,
+  // quilts: PropTypes.object,
   friends: PropTypes.object,
 };
 

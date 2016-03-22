@@ -31,7 +31,7 @@ const receiveUser = (user) => ({
 export function fetchUser(username) {
   return (dispatch) => {
     dispatch(requestUser());
-    return fetch(`http://10.6.30.48:8000/api/auth?username=${username}`)
+    return fetch(`http://10.6.31.236:8000/api/auth?username=${username}`)
       .then(response => response.json())
       .then(user => dispatch(receiveUser(user)))
       .catch(error => console.error('error', error));
@@ -73,8 +73,7 @@ data = {
 export function postQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
-    console.log('dispatching request');
-    return fetch('http://10.6.30.77:8000/api/quilt', {
+    return fetch('http://10.6.31.236:8000/api/quilt', {
       method: 'POST',
       body: data.video,
       headers: {
