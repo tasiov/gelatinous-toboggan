@@ -2,7 +2,6 @@
 import {
   REQUEST_USER,
   RECEIVE_USER,
-  START_QUILT,
   SELECT_WATCH_QUILT,
   REQUEST_FRIENDS,
   RECEIVE_FRIENDS,
@@ -10,8 +9,6 @@ import {
   REQUEST_QUILTS,
   RECEIVE_POST_QUILT,
   REQUEST_POST_QUILT,
-  REQUEST_CURRENT_QUILT,
-  RECEIVE_CURRENT_QUILT,
   REQUEST_ADD_QUILT,
   CREATE_QUILT,
   REVIEW_QUILT,
@@ -19,11 +16,6 @@ import {
 } from '../constants/ActionTypes';
 
 import ip from '../config';
-
-export const startQuilt = (data) => ({
-  type: START_QUILT,
-  payload: data,
-})
 
 export const createQuilt = (data) => ({
   type: CREATE_QUILT,
@@ -102,11 +94,6 @@ export function postQuilt(data) {
   };
 }
 
-export const contributeToQuilt = (id) => ({
-  type: REQUEST_ADD_QUILT,
-  payload: id,
-})
-
 // begin post request to send quilt to server
 const requestAddQuilt = () => ({
   type: REQUEST_ADD_QUILT,
@@ -181,28 +168,9 @@ export function fetchQuilts(options) {
   };
 }
 
-const requestWatchQuilt = () => ({
-  type: REQUEST_CURRENT_QUILT,
-});
-
-const receiveWatchQuilt = (watchQuilt) => ({
-  type: RECEIVE_CURRENT_QUILT,
-  payload: watchQuilt,
-});
-
 export function selectWatchQuilt(data) {
   return {
     type: SELECT_WATCH_QUILT,
     payload: data,
   };
 }
-
-// export function fetchWatchQuilt(options) {
-//   return (dispatch) => {
-//     dispatch(requestWatchQuilt());
-//     return fetch(`http://10.6.30.77:8000/api/quilt/${options.quiltId}`)
-//       .then((response) => response.json())
-//       .then((data) => dispatch(receiveWatchQuilt(data)))
-//       .catch((error) => console.error('Error in getting current quilt', error));
-//   };
-// }
