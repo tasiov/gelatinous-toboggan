@@ -8,28 +8,25 @@ const {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
 } = React;
 
 // todo: make these behave like check boxes (edit style=)
-const FriendEntry = ({ user, onCheckboxCheck, onCheckboxUncheck }) => {
-  return  (
+const FriendEntry = ({ user, onCheckboxCheck, onCheckboxUncheck }) => (
   <TouchableOpacity style={styles.container}>
       <ItemCheckbox
         style={styles.checkbox}
         key={user.id}
-        onCheck={()=>onCheckboxCheck(user.id)}
-        onUncheck={()=>onCheckboxUncheck(user.id)}
-        icon='tree'
+        onCheck={() => onCheckboxCheck(user.id)}
+        onUncheck={() => onCheckboxUncheck(user.id)}
+        icon="tree"
         size={60}
-        iconSize='small'
-        color='#B7E2F0'
+        iconSize="small"
+        color="#B7E2F0"
       />
       <Text style={styles.username}>{user.username}</Text>
-      <Icon
-      />
+      <Icon />
   </TouchableOpacity>
-);}
+);
 
 
 FriendEntry.propTypes = {

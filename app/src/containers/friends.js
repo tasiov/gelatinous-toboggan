@@ -1,4 +1,4 @@
-/* eslint-disable
+  /* eslint-disable
 react/prefer-stateless-function,
 no-use-before-define,
 react/jsx-no-bind,
@@ -30,29 +30,25 @@ class FriendsContainer extends Component {
   }
 
   onCheckboxCheck(id) {
-    console.log(id, 'checked!');
     this.checkedFriends[id.toString()] = id;
     // log array of checked user id's
     checkedIds = [];
-    for (var key in this.checkedFriends) {
+    for (const key in this.checkedFriends) {
       if (Number.isInteger(this.checkedFriends[key])) {
         checkedIds.push(this.checkedFriends[key]);
       }
     }
-    console.log(checkedIds);
   }
 
   onCheckboxUncheck(id) {
-    console.log(id, 'unchecked!')
     this.checkedFriends[id.toString()] = '';
     // log array of checked user id's
     checkedIds = [];
-    for (var key in this.checkedFriends) {
+    for (const key in this.checkedFriends) {
       if (Number.isInteger(this.checkedFriends[key])) {
         checkedIds.push(this.checkedFriends[key]);
       }
     }
-    console.log(checkedIds);
   }
 
   onSubmitClick(quiltId, navigator) {
@@ -61,7 +57,14 @@ class FriendsContainer extends Component {
   }
 
   onRenderRow(rowData) {
-    return <FriendEntry user={rowData} onCheckboxCheck={this.onCheckboxCheck} onCheckboxUncheck={this.onCheckboxUncheck} key={rowData['id']} />;
+    return (
+      <FriendEntry
+        user={rowData}
+        onCheckboxCheck={this.onCheckboxCheck}
+        onCheckboxUncheck={this.onCheckboxUncheck}
+        key={rowData.id}
+      />
+    );
   }
 
   getDataSource() {
@@ -70,18 +73,16 @@ class FriendsContainer extends Component {
   }
 
   render() {
-    // console.log('this.props.friends', this.props.friends);
     if (this.props.friends.get('isFetching')) {
-      return <Text>Loading Friends...</Text>
-    } else {
-      return (
-        <ListView
-          style={styles.container}
-          dataSource={this.getDataSource()}
-          renderRow={this.onRenderRow}
-        />
-      );
+      return <Text>Loading Friends...</Text>;
     }
+    return (
+      <ListView
+        style={styles.container}
+        dataSource={this.getDataSource()}
+        renderRow={this.onRenderRow}
+      />
+    );
   }
 }
 
