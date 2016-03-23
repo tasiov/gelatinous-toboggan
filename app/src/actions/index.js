@@ -42,13 +42,14 @@ export function fetchUser(username) {
   };
 }
 
-// todo: make action creators more semantic
+export const reviewQuilt = (file) => ({
+  type: REVIEW_QUILT,
+  payload: file,
+});
 
-// dispatched when quilt initially started
-// export const startQuilt = (data) => ({
-//   type: START_QUILT,
-//   payload: data,
-// });
+const cancelQuilt = () => ({
+  type: CANCEL_QUILT,
+});
 
 // begin post request to send quilt to server
 const requestPostQuilt = () => ({
@@ -62,18 +63,6 @@ const responsePostQuilt = (data) => ({
   payload: data,
 });
 
-// todo: catch post request errors with additional action creator
-// todo: ensure friends, title, theme data in post request
-/*
-data = {
-  title: STRING,
-  theme: STRING,
-  friends: ARRAY,
-  vid: STRING (base64 encoding),
-}
-*/
-
-// do we need seperate action creators for first vs subsequent quilts?
 export function postQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());

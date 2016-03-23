@@ -2,7 +2,7 @@
 import React, { Component } from 'react-native';
 import { connect } from 'react-redux';
 import VideoEntry from '../components/video_entry';
-import { contributeToQuilt } from '../actions/index'
+import { postQuilt, addToQuilt, contributeToQuilt } from '../actions/index'
 
 const {
   View,
@@ -16,6 +16,28 @@ class WatchVideo extends Component {
     super(props);
     this.onEnd = this.onEnd.bind(this);
   }
+
+  onAccept() {
+    rNFS.readFile(this.props.file, 'base64')
+      .then((data) => {
+        if (this.props.contribQuiltId === null) {
+          this.props.postQuilt(Object.assign(this.props.buildQuilt, {
+            creator: this.props.creator,
+            video: data,
+          }));
+        } else {
+          this.props.addToQuilt({
+            quiltId: this.props.contribQuiltId,
+            creator: this.props.creator,
+            video: data,
+          });
+        }
+        // this.props.navigator.pop();
+        // this.props.navigator.pop();
+      });
+  }
+
+
   onEnd() {
     console.log(this.props.navigator);
     this.props.contributeToQuilt(this.props.watchQuiltId);
@@ -43,7 +65,13 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(state) {
-  return { watchQuiltId: state.get('watchQuilt').get('id') };
+  return {
+    buildQuiltId: state.get('buildQuilt').get('id'),
+    buildQuiltFile: state.get('buildQuilt').get('file'),
+    contribQuiltId: state.get('contribQuilt').get('id'),
+    contribQuiltFile: state.get('buildQuilt').get('file'),
+    watchQuiltId: state.get('watchQuilt').get('id'),
+  };
 }
 
 function mapDispatchToProps(dispatch) {
