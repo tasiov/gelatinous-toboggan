@@ -10,13 +10,10 @@ import {
   RECEIVE_POST_QUILT,
   REQUEST_POST_QUILT,
   REQUEST_ADD_QUILT,
-<<<<<<< 6225c08c6ab8096aeef86e854b4b194ad0455dea
+  RESPONSE_ADD_QUILT,
   CREATE_QUILT,
   REVIEW_QUILT,
   ADD_TO_QUILT,
-=======
-  RESPONSE_ADD_QUILT,
->>>>>>> fix linter issues
 } from '../constants/ActionTypes';
 
 import ip from '../config';
