@@ -1,6 +1,9 @@
 /* eslint-disable no-use-before-define */
 import React from 'react-native';
+import { MKButton, MKColor } from 'react-native-material-kit';
 import { login } from '../assets/styles';
+import Button from './button';
+
 const {
   Component,
   PropTypes,
@@ -9,8 +12,10 @@ const {
   View,
 } = React;
 
-
-import Button from './button';
+const ColoredRaisedButton = MKButton.coloredButton()
+.withText('Log In')
+.withOnPress(this.onPress)
+.build();
 
 class Login extends Component {
   constructor(props) {
@@ -32,16 +37,6 @@ class Login extends Component {
     return this.setState({ username });
   }
 
-  // <View style={styles.container}>
-  //   <Text>Enter a Username</Text>
-  //   <TextInput
-  //     style={styles.input}
-  //     value={this.state.username}
-  //     onChangeText={this.onType}
-  //   />
-  //   <Button text={'Log In'} onPress={this.onPress} />
-  // </View>
-
   render() {
     return (
       <View style={login.container}>
@@ -56,7 +51,8 @@ class Login extends Component {
               value={this.state.username}
               onChangeText={this.onType}
               />
-          <Button text={'Log In'} onPress={this.onPress} />
+              {/*<Button text={'Log In'} onPress={this.onPress} />*/}
+          <ColoredRaisedButton/>
         </View>
       </View>
     );
