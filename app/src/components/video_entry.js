@@ -10,13 +10,10 @@ const {
   View,
 } = React;
 
-const video = '/Users/maryam/Documents/hackreactor/gelatinous-toboggan/server/db/videos/video4.mp4';
-// const video_uri = "http://10.6.30.48:8000/db/videos/video1.mp4";
-// TODO: Change the properties of the quilt information
-const VideoEntry = ({ quiltId, onEnd }) => (
+const VideoEntry = ({ quiltId, onEnd, url }) => (
   <View style={styles.container}>
     <Video
-      source={{ uri: `http://${ip}:8000/api/quilt/${quiltId}` }}
+      source={{ uri: url }}
       style={styles.backgroundVideo}
       onEnd={onEnd}
     />

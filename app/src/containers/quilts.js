@@ -37,6 +37,7 @@ class ShowQuilts extends Component {
   }
 
   render() {
+    console.log(this.props.quilts.get('quiltsList').toArray());
     if (this.props.quilts.get('isFetching')) {
       return <Text>Loading Quilts...</Text>;
     }
@@ -66,7 +67,6 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    watchQuilt: state.get('watchQuilt'), // Check if initialise with {} or isFetching = true
     quilts: state.get('quilts'),
     user: state.get('user'),
   };

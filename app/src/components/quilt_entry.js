@@ -14,7 +14,6 @@ const QuiltEntry = ({ onClick, quilt }) => (
   <View>
     <TouchableHighlight onPress={() => onClick(quilt.id)} >
       <View style={styles.row}>
-        <Text>Title: {quilt.title}</Text>
         <Text>Theme: {quilt.theme}</Text>
         <Text>Status: {quilt.status}</Text>
       </View>

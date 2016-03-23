@@ -13,12 +13,30 @@ import {
   REQUEST_CURRENT_QUILT,
   RECEIVE_CURRENT_QUILT,
   REQUEST_ADD_QUILT,
+  CREATE_QUILT,
+  REVIEW_QUILT,
+  ADD_TO_QUILT,
 } from '../constants/ActionTypes';
 
 import ip from '../config';
 
 export const startQuilt = (data) => ({
   type: START_QUILT,
+  payload: data,
+})
+
+export const createQuilt = (data) => ({
+  type: CREATE_QUILT,
+  payload: data,
+});
+
+export const addToQuilt = (data) => ({
+  type: ADD_TO_QUILT,
+  payload: data,
+});
+
+export const watchQuilt = (data) => ({
+  type: WATCH_QUILT,
   payload: data,
 })
 
@@ -100,7 +118,7 @@ const responseAddQuilt = () => ({
   type: RESPONSE_ADD_QUILT,
 });
 
-export function addToQuilt(data) {
+export function postToExistingQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
 
@@ -157,9 +175,9 @@ export function fetchQuilts(options) {
   return (dispatch) => {
     dispatch(requestQuilts());
     return fetch(`http://${ip}:8000/api/quilt?username=${options.username}`)
-      .then((response) => response.json())
-      .then((data) => dispatch(receiveQuilts(data)))
-      .catch((error) => console.error('Error in getting user\'s quilts', error));
+      .then(response => response.json())
+      .then(data => dispatch(receiveQuilts(data)))
+      .catch(error => console.error('Error in getting user\'s quilts', error));
   };
 }
 

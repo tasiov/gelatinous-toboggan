@@ -1,7 +1,6 @@
 /* eslint-disable no-use-before-define */
 import React from 'react-native';
 import Camera from 'react-native-camera';
-import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
 import { reviewQuilt } from '../actions/index';
 
@@ -47,7 +46,7 @@ class ShowCamera extends Component {
     this.camera.capture()
       .then(file => {
         this.props.reviewQuilt(file)
-        this.props.navigator.replace('video');
+        this.props.navigator.replace({name: 'video'});
       });
   }
 
@@ -113,17 +112,12 @@ const styles = StyleSheet.create({
 // which will be passed with the video
 // to action creator to post data
 function mapStateToProps(state) {
-  const buildQuilt = state.get('buildQuilt').toObject();
-  buildQuilt.users = buildQuilt.users.toArray();
-
-  const contribQuiltId = state.get('contribQuilt').get('id');
-
-
+  const currentQuilt = state.get('currentQuilt').toObject();
+  currentQuilt.users = currentQuilt.users.toArray();
   const creator = state.get('user');
 
   return {
-    buildQuilt,
-    contribQuiltId,
+    currentQuilt,
     creator: {
       id: creator.get('id'),
       username: creator.get('username'),
