@@ -11,41 +11,32 @@ import passport from 'passport';
 const requireAuth = passport.authenticate('jwt', { session: false });
 
 export default (app) => {
-  /* for testing purposes*/
-  app.get('/', requireAuth, function(req, res) {
-    res.send( { hi: 'there'} );
-  });
-
 
   app.get('/api/auth', (req, res) => {
     // if request query object is empty, send 404
-    console.log('auth:', req);
     if (_.isEmpty(req.query)) {
       res.status(400).send('Failed to retrieve query string');
     } else {
       controller.getUser(req.query)
       .then((data) => {
-        let token;
         // if user is not in db, then create user
         if (!data) {
           controller.createUser(req.query)
             .then((user) => {
-               token = Authentication.tokenForUser(user);
-              // res.status(200).send({ id: user.id, username: user.username })
-              res.status(200).send({ token })
+               res.status(200).send({ id: user.id, username: user.username, token: Authentication.tokenForUser(user) })
+              //res.status(200).send({ token }) 
             })
             .catch((error) => res.status(500).send(`Failed request: ${error}`));
         } else {
-           token = Authentication.tokenForUser(data);
-          // res.status(200).send({ id: data.id, username: data.username });
-          res.status(200).send({ token })
+           res.status(200).send({ id: data.id, username: data.username, token:Authentication.tokenForUser(data) });
+          // res.status(200).send({ token })
         }
       }).catch((error) => res.status(500).send(`Failed request: ${error}`)
       );
     }
   });
 
-  app.get('/api/quilt', (req, res) => {
+  app.get('/api/quilt', requireAuth, (req, res) => {
     // if request query object is empty, send 404
     if (_.isEmpty(req.query)) {
       res.status(400).send('Failed to retrieve query string');

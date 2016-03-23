@@ -18,7 +18,6 @@ const getAllUsers = () =>
 // options = {username: username}
 const getUser = (options) =>
   db.User.findOne({ where: options })
-    .then((user) => user)
     .catch((error) => console.error('Error retrieving user. ', error));
 
 // options = {username: username}

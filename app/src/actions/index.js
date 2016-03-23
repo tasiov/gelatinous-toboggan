@@ -160,10 +160,11 @@ const receiveQuilts = (quilts) => ({
 export function fetchQuilts(options) {
   return (dispatch) => {
     dispatch(requestQuilts());
-    return fetch(`http://${ip}:8000/api/quilt?username=${options.username}`)
-      .then(response => response.json())
-      .then(data => dispatch(receiveQuilts(data)))
-      .catch(error => console.error('Error in getting user\'s quilts', error));
+    return fetch(`http://${ip}:8000/api/quilt?username=${options.username}`, {
+      headers: { 'authorization': options.token }})
+      .then((response) => response.json())
+      .then((data) => dispatch(receiveQuilts(data)))
+      .catch((error) => console.error('Error in getting user\'s quilts', error));
   };
 }
 
