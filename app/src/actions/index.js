@@ -10,9 +10,13 @@ import {
   RECEIVE_POST_QUILT,
   REQUEST_POST_QUILT,
   REQUEST_ADD_QUILT,
+<<<<<<< 6225c08c6ab8096aeef86e854b4b194ad0455dea
   CREATE_QUILT,
   REVIEW_QUILT,
   ADD_TO_QUILT,
+=======
+  RESPONSE_ADD_QUILT,
+>>>>>>> fix linter issues
 } from '../constants/ActionTypes';
 
 import ip from '../config';
@@ -30,7 +34,7 @@ export const addToQuilt = (data) => ({
 export const watchQuilt = (data) => ({
   type: WATCH_QUILT,
   payload: data,
-})
+});
 
 // dispatched at login to set the current user of the app
 const requestUser = () => ({
@@ -90,9 +94,14 @@ export function postQuilt(data) {
       },
     })
     .then(response => dispatch(responsePostQuilt(response.status)))
-    .catch(err => console.log('post quilt error', err));
+    .catch(err => console.error('post quilt error', err));
   };
 }
+
+export const contributeToQuilt = (id) => ({
+  type: REQUEST_ADD_QUILT,
+  payload: id,
+});
 
 // begin post request to send quilt to server
 const requestAddQuilt = () => ({
@@ -108,7 +117,6 @@ const responseAddQuilt = () => ({
 export function postToExistingQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
-
     return fetch(`http://${ip}:8000/api/quilt/${data.quiltId}`, {
       method: 'POST',
       headers: {
@@ -120,7 +128,7 @@ export function postToExistingQuilt(data) {
       body: data.video,
     })
     .then(response => dispatch(responsePostQuilt(response.status)))
-    .catch(err => console.log('post quilt error', err));
+    .catch(err => console.error('post quilt error', err));
   };
 }
 
@@ -161,10 +169,11 @@ const receiveQuilts = (quilts) => ({
 export function fetchQuilts(options) {
   return (dispatch) => {
     dispatch(requestQuilts());
-    return fetch(`http://${ip}:8000/api/quilt?username=${options.username}`)
-      .then(response => response.json())
-      .then(data => dispatch(receiveQuilts(data)))
-      .catch(error => console.error('Error in getting user\'s quilts', error));
+    return fetch(`http://${ip}:8000/api/quilt?username=${options.username}`, {
+      headers: { authorization: options.token } })
+      .then((response) => response.json())
+      .then((data) => dispatch(receiveQuilts(data)))
+      .catch((error) => console.error('Error in getting user\'s quilts', error));
   };
 }
 

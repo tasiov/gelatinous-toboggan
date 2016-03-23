@@ -19,7 +19,12 @@ class ShowQuilts extends Component {
     this.getDataSource = this.getDataSource.bind(this);
     this.onRenderRow = this.onRenderRow.bind(this);
     this.onQuiltClick = this.onQuiltClick.bind(this);
-    this.props.fetchQuilts({ username: this.props.user.get('username') });
+    this.props.fetchQuilts(
+      {
+        username: this.props.user.get('username'),
+        token: this.props.user.get('token'),
+      }
+    );
   }
 
   onQuiltClick(quiltId, status) {

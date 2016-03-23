@@ -34,3 +34,6 @@ node_modules/
 # Database
 db/quilt.sqlite
 videos/
+
+# Config File
+config/config.js
