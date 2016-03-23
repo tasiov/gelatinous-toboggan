@@ -1,9 +1,9 @@
 /* eslint-disable no-use-before-define */
 import React from 'react-native';
+import { login } from '../assets/styles';
 const {
   Component,
   PropTypes,
-  StyleSheet,
   Text,
   TextInput,
   View,
@@ -32,16 +32,32 @@ class Login extends Component {
     return this.setState({ username });
   }
 
+  // <View style={styles.container}>
+  //   <Text>Enter a Username</Text>
+  //   <TextInput
+  //     style={styles.input}
+  //     value={this.state.username}
+  //     onChangeText={this.onType}
+  //   />
+  //   <Button text={'Log In'} onPress={this.onPress} />
+  // </View>
+
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Enter a Username</Text>
-        <TextInput
-          style={styles.input}
-          value={this.state.username}
-          onChangeText={this.onType}
-        />
-        <Button text={'Log In'} onPress={this.onPress} />
+      <View style={login.container}>
+        <View style={login.containerHead}>
+          <Text style={login.title}>Quilt</Text>
+        </View>
+        <View style={login.containerBody}>
+            <TextInput
+              style={login.input}
+              autoFocus={true}
+              placeholder={'Username'}
+              value={this.state.username}
+              onChangeText={this.onType}
+              />
+          <Button text={'Log In'} onPress={this.onPress} />
+        </View>
       </View>
     );
   }
@@ -52,27 +68,6 @@ Login.propTypes = {
   navigator: PropTypes.object,
   fetchUser: PropTypes.func,
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  input: {
-    padding: 4,
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
-    margin: 5,
-    width: 200,
-    alignSelf: 'center',
-  },
-  label: {
-    fontSize: 18,
-  },
-});
 
 
 export default Login;
