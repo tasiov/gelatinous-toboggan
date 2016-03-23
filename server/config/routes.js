@@ -4,9 +4,19 @@ import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
 import { writeVideoToDiskPipeline, getQuiltFromId } from './utils';
-import authToken from '../db/controllers/authentication';
+import Authentication from '../db/controllers/authentication';
+import passportService from '../db/services/passport';
+import passport from 'passport';
+
+const requireAuth = passport.authenticate('jwt', { session: false });
 
 export default (app) => {
+  /* for testing purposes*/
+  app.get('/', requireAuth, function(req, res) {
+    res.send( { hi: 'there'} );
+  });
+
+
   app.get('/api/auth', (req, res) => {
     // if request query object is empty, send 404
     console.log('auth:', req);
@@ -20,13 +30,13 @@ export default (app) => {
         if (!data) {
           controller.createUser(req.query)
             .then((user) => {
-               token = authToken.tokenForUser(user);
+               token = Authentication.tokenForUser(user);
               // res.status(200).send({ id: user.id, username: user.username })
               res.status(200).send({ token })
             })
             .catch((error) => res.status(500).send(`Failed request: ${error}`));
         } else {
-           token = authToken.tokenForUser(data);
+           token = Authentication.tokenForUser(data);
           // res.status(200).send({ id: data.id, username: data.username });
           res.status(200).send({ token })
         }
