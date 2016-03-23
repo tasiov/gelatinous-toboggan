@@ -18,7 +18,7 @@ class WatchVideo extends Component {
   constructor(props) {
     super(props);
     this.onAccept = this.onAccept.bind(this);
-    if (this.props.currentQuilt.status === 'watch') {
+    if (this.props.currentQuilt.status !== 'create') {
       this.url = `http://${ip}:8000/api/quilt/${this.props.currentQuilt.id}`;
     } else {
       this.url = this.props.currentQuilt.file;
@@ -47,7 +47,7 @@ class WatchVideo extends Component {
   }
 
   render() {
-    console.log('>>', this.url)
+    console.log(this.props.currentQuilt);
     if (this.props.currentQuilt.status !== 'watch') {
       return (
         <View style={styles.container}>

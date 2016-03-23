@@ -190,10 +190,10 @@ const receiveWatchQuilt = (watchQuilt) => ({
   payload: watchQuilt,
 });
 
-export function selectWatchQuilt(id) {
+export function selectWatchQuilt(data) {
   return {
     type: SELECT_WATCH_QUILT,
-    payload: id,
+    payload: data,
   };
 }
 

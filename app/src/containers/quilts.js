@@ -19,11 +19,20 @@ class ShowQuilts extends Component {
     this.getDataSource = this.getDataSource.bind(this);
     this.onRenderRow = this.onRenderRow.bind(this);
     this.onQuiltClick = this.onQuiltClick.bind(this);
-    this.props.fetchQuilts({username: this.props.user.get('username')});
+    this.props.fetchQuilts({ username: this.props.user.get('username') });
   }
 
-  onQuiltClick(quiltId) {
-    this.props.selectWatchQuilt(quiltId);
+  onQuiltClick(quiltId, status) {
+    let currentStatus;
+    if (status === 1) {
+      currentStatus = 'watch';
+    } else {
+      currentStatus = 'add';
+    }
+    this.props.selectWatchQuilt({
+      status: currentStatus,
+      id: quiltId,
+    });
     this.props.navigator.push({ name: 'video' });
   }
 
@@ -37,7 +46,6 @@ class ShowQuilts extends Component {
   }
 
   render() {
-    console.log(this.props.quilts.get('quiltsList').toArray());
     if (this.props.quilts.get('isFetching')) {
       return <Text>Loading Quilts...</Text>;
     }
@@ -78,8 +86,8 @@ function mapDispatchToProps(dispatch) {
     fetchQuilts: (data) => {
       dispatch(fetchQuilts(data));
     },
-    selectWatchQuilt: (id) => {
-      dispatch(selectWatchQuilt(id));
+    selectWatchQuilt: (data) => {
+      dispatch(selectWatchQuilt(data));
     },
   };
 }

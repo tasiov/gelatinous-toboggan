@@ -17,7 +17,7 @@ export default function currentQuilt(state = initialState, action) {
     case ADD_TO_QUILT:
       return state.merge(action.payload);
     case SELECT_WATCH_QUILT:
-      return state.set('id', action.payload).set('status', 'watch');
+      return state.merge(action.payload);
     case REVIEW_QUILT:
       return state.set('file', action.payload);
     default:
