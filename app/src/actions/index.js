@@ -14,6 +14,7 @@ import {
   CREATE_QUILT,
   REVIEW_QUILT,
   ADD_TO_QUILT,
+  WATCH_QUILT,
 } from '../constants/ActionTypes';
 
 import ip from '../config';
@@ -56,10 +57,6 @@ export function fetchUser(username) {
 export const reviewQuilt = (file) => ({
   type: REVIEW_QUILT,
   payload: file,
-});
-
-const cancelQuilt = () => ({
-  type: CANCEL_QUILT,
 });
 
 // begin post request to send quilt to server
@@ -113,7 +110,7 @@ const responseAddQuilt = () => ({
 
 export function postToExistingQuilt(data) {
   return (dispatch) => {
-    dispatch(requestPostQuilt());
+    dispatch(requestAddQuilt());
     return fetch(`http://${ip}:8000/api/quilt/${data.quiltId}`, {
       method: 'POST',
       headers: {
@@ -124,8 +121,8 @@ export function postToExistingQuilt(data) {
       },
       body: data.video,
     })
-    .then(response => dispatch(responsePostQuilt(response.status)))
-    .catch(err => console.error('post quilt error', err));
+    .then(response => dispatch(responseAddQuilt(response.status)))
+    .catch(err => console.log('post quilt error', err));
   };
 }
 

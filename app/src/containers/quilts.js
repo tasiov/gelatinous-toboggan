@@ -68,8 +68,9 @@ ShowQuilts.propTypes = {
   // onQuiltClick: PropTypes.func,
   quilts: PropTypes.object,
   fetchQuilts: PropTypes.func,
-  fetchWatchQuilt: PropTypes.func,
+  selectWatchQuilt: PropTypes.func,
   navigator: PropTypes.object,
+  user: PropTypes.object,
 };
 
 const styles = StyleSheet.create({
