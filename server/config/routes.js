@@ -33,10 +33,8 @@ export default (app) => {
       res.status(400).send('Failed to retrieve query string');
     } else {
       controller.getAllUserQuilts(req.query)
-      .then((data) =>
-        res.status(200).send(data)
-      ).catch((error) => res.status(500).send(`Failed request: ${error}`)
-      );
+        .then(data => res.status(200).send(data))
+        .catch(error => res.status(500).send(`Failed request: ${error}`));
     }
   });
 

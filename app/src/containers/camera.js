@@ -1,9 +1,8 @@
 /* eslint-disable no-use-before-define */
 import React from 'react-native';
 import Camera from 'react-native-camera';
-import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
-import { postQuilt, addToQuilt } from '../actions/index';
+import { reviewQuilt } from '../actions/index';
 
 const {
   Component,
@@ -45,22 +44,9 @@ class ShowCamera extends Component {
     });
 
     this.camera.capture()
-      .then(file => RNFS.readFile(file, 'base64'))
-      .then((data) => {
-        if (this.props.contribQuiltId === null) {
-          this.props.postQuilt(Object.assign(this.props.buildQuilt, {
-            creator: this.props.creator,
-            video: data,
-          }));
-        } else {
-          this.props.addToQuilt({
-            quiltId: this.props.contribQuiltId,
-            creator: this.props.creator,
-            video: data,
-          });
-        }
-        this.props.navigator.pop();
-        this.props.navigator.pop();
+      .then(file => {
+        this.props.reviewQuilt(file)
+        this.props.navigator.replace({name: 'video'});
       });
   }
 
@@ -85,6 +71,7 @@ class ShowCamera extends Component {
           aspect={'fill'}
           captureTarget={Camera.constants.CaptureTarget.temp}
           captureMode={Camera.constants.CaptureMode.video}
+          captureQuality={Camera.constants.CaptureQuality.medium}
         >
           <Text style={styles.capture} onPress={this.onCapturePress}>
             [CAPTURE]
@@ -125,17 +112,12 @@ const styles = StyleSheet.create({
 // which will be passed with the video
 // to action creator to post data
 function mapStateToProps(state) {
-  const buildQuilt = state.get('buildQuilt').toObject();
-  buildQuilt.users = buildQuilt.users.toArray();
-
-  const contribQuiltId = state.get('contribQuilt').get('id');
-
-
+  const currentQuilt = state.get('currentQuilt').toObject();
+  currentQuilt.users = currentQuilt.users.toArray();
   const creator = state.get('user');
 
   return {
-    buildQuilt,
-    contribQuiltId,
+    currentQuilt,
     creator: {
       id: creator.get('id'),
       username: creator.get('username'),
@@ -143,15 +125,11 @@ function mapStateToProps(state) {
   };
 }
 
-// dispatch postQuilt with previous current quilt state plus video data
 function mapDispatchToProps(dispatch) {
   return {
-    postQuilt: (data) => {
-      dispatch(postQuilt(data));
-    },
-    addToQuilt: (data) => {
-      dispatch(addToQuilt(data));
-    },
+    reviewQuilt: (file) => {
+      dispatch(reviewQuilt(file));
+    }
   };
 }
 

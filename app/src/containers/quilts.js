@@ -19,11 +19,20 @@ class ShowQuilts extends Component {
     this.getDataSource = this.getDataSource.bind(this);
     this.onRenderRow = this.onRenderRow.bind(this);
     this.onQuiltClick = this.onQuiltClick.bind(this);
-    this.props.fetchQuilts({username: this.props.user.get('username')});
+    this.props.fetchQuilts({ username: this.props.user.get('username') });
   }
 
-  onQuiltClick(quiltId) {
-    this.props.selectWatchQuilt(quiltId);
+  onQuiltClick(quiltId, status) {
+    let currentStatus;
+    if (status === 1) {
+      currentStatus = 'watch';
+    } else {
+      currentStatus = 'add';
+    }
+    this.props.selectWatchQuilt({
+      status: currentStatus,
+      id: quiltId,
+    });
     this.props.navigator.push({ name: 'video' });
   }
 
@@ -66,7 +75,6 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    watchQuilt: state.get('watchQuilt'), // Check if initialise with {} or isFetching = true
     quilts: state.get('quilts'),
     user: state.get('user'),
   };
@@ -78,8 +86,8 @@ function mapDispatchToProps(dispatch) {
     fetchQuilts: (data) => {
       dispatch(fetchQuilts(data));
     },
-    selectWatchQuilt: (id) => {
-      dispatch(selectWatchQuilt(id));
+    selectWatchQuilt: (data) => {
+      dispatch(selectWatchQuilt(data));
     },
   };
 }

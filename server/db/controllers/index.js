@@ -23,8 +23,13 @@ const getUser = (options) =>
 // options = {username: username}
 const getAllUserQuilts = (options) =>
   getUser(options)
-    .then((user) => user.getQuilts({ order: [['status', 'DESC']] }))
-    .catch((error) => console.error('Error retrieving user\'s quilts: ', error));
+    .then(user => user.getQuilts())
+    .then(userQuilts => userQuilts.map(userQuilt => ({
+      id: userQuilt.get('id'),
+      theme: userQuilt.get('theme'),
+      status: userQuilt.get('UserQuilt').get('status')
+    })))
+    .catch(error => console.error('Error retrieving user\'s quilts: ', error));
 
 const getQuilt = (options) => (
   db.Quilt.findOne({ where: options })

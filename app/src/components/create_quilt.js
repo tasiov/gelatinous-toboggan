@@ -2,7 +2,7 @@
 import React, { Component } from 'react-native';
 import Button from './button';
 import { connect } from 'react-redux';
-import { startQuilt } from '../actions/index';
+import { createQuilt } from '../actions/index';
 
 const {
   PropTypes,
@@ -41,7 +41,7 @@ CreateQuilt.propTypes = {
 
 const mapDispatchToProps = (dispatch) => ({
   createQuilt: () => {
-    dispatch(startQuilt());
+    dispatch(createQuilt());
   },
 });
 
