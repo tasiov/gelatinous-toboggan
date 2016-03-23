@@ -4,23 +4,31 @@ import _ from 'lodash';
 import fs from 'fs';
 import path from 'path';
 import { writeVideoToDiskPipeline, getQuiltFromId } from './utils';
+import authToken from '../db/controllers/authentication';
 
 export default (app) => {
   app.get('/api/auth', (req, res) => {
     // if request query object is empty, send 404
+    console.log('auth:', req);
     if (_.isEmpty(req.query)) {
       res.status(400).send('Failed to retrieve query string');
     } else {
       controller.getUser(req.query)
       .then((data) => {
+        let token;
         // if user is not in db, then create user
         if (!data) {
           controller.createUser(req.query)
-            .then((user) => res.status(200).send({ id: user.id, username: user.username })
-            ).catch((error) => res.status(500).send(`Failed request: ${error}`)
-            );
+            .then((user) => {
+               token = authToken.tokenForUser(user);
+              // res.status(200).send({ id: user.id, username: user.username })
+              res.status(200).send({ token })
+            })
+            .catch((error) => res.status(500).send(`Failed request: ${error}`));
         } else {
-          res.status(200).send({ id: data.id, username: data.username });
+           token = authToken.tokenForUser(data);
+          // res.status(200).send({ id: data.id, username: data.username });
+          res.status(200).send({ token })
         }
       }).catch((error) => res.status(500).send(`Failed request: ${error}`)
       );

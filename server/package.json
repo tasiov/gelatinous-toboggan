@@ -21,6 +21,7 @@
     "body-parser": "^1.15.0",
     "express": "^4.13.4",
     "fs": "0.0.2",
+    "jwt-simple": "^0.5.0",
     "lodash": "^4.6.1",
     "mocha": "^2.4.5",
     "morgan": "^1.7.0",
