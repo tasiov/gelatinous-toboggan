@@ -30,7 +30,6 @@ class WatchVideo extends Component {
   onAccept() {
     RNFS.readFile(this.props.currentQuilt.file, 'base64')
       .then((data) => {
-        console.log('posting');
         if (this.props.currentQuilt.status === 'create') {
           this.props.postQuilt(Object.assign(this.props.currentQuilt, {
             creator: this.props.creator,
@@ -43,6 +42,7 @@ class WatchVideo extends Component {
             video: data,
           });
         }
+        this.props.navigator.replace({ name: 'home' });
       });
   }
 
