@@ -18,6 +18,8 @@ class WatchVideo extends Component {
   constructor(props) {
     super(props);
     this.onAccept = this.onAccept.bind(this);
+    this.onReject = this.onReject.bind(this);
+
     if (this.props.currentQuilt.status !== 'create') {
       this.url = `http://${ip}:8000/api/quilt/${this.props.currentQuilt.id}`;
     } else {
@@ -41,24 +43,26 @@ class WatchVideo extends Component {
             video: data,
           });
         }
-        // this.props.navigator.pop();
-        // this.props.navigator.pop();
       });
   }
 
+  onReject() {
+    this.props.navigator.replace({ name: 'camera' });
+  }
+
   render() {
-    console.log(this.props.currentQuilt);
     if (this.props.currentQuilt.status !== 'watch') {
       return (
         <View style={styles.container}>
-          <VideoEntry onEnd={this.onEnd} url={this.url} />
-          <Button onPress={this.onAccept} text="Submit" />
+          <VideoEntry onEnd={this.onEnd} url={this.url} repeat={true} />
+          <Button onPress={this.onAccept} text="Accept" />
+          <Button onPress={this.onReject} text="Reject" />
         </View>
       );
     } else {
       return (
         <View style={styles.container}>
-          <VideoEntry onEnd={this.onEnd} url={this.url} />
+          <VideoEntry onEnd={this.onEnd} url={this.url} repeat={false} />
         </View>
       );
     }

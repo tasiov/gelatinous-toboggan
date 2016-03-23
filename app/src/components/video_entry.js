@@ -10,11 +10,12 @@ const {
   View,
 } = React;
 
-const VideoEntry = ({ quiltId, onEnd, url }) => (
+const VideoEntry = ({ quiltId, onEnd, url, repeat }) => (
   <View style={styles.container}>
     <Video
       source={{ uri: url }}
       style={styles.backgroundVideo}
+      repeat={repeat}
       onEnd={onEnd}
     />
   </View>
