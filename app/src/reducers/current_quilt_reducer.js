@@ -1,6 +1,11 @@
 /* eslint-disable new-cap */
-import Immutable, { Map, List } from 'immutable';
-import { CREATE_QUILT, ADD_TO_QUILT, SELECT_WATCH_QUILT, REVIEW_QUILT } from '../constants/ActionTypes';
+import { Map, List } from 'immutable';
+import {
+  CREATE_QUILT,
+  ADD_TO_QUILT,
+  SELECT_WATCH_QUILT,
+  REVIEW_QUILT,
+} from '../constants/ActionTypes';
 
 const initialState = Map({
   id: null,

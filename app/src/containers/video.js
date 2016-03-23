@@ -2,7 +2,7 @@
 import React, { Component } from 'react-native';
 import { connect } from 'react-redux';
 import VideoEntry from '../components/video_entry';
-import { postQuilt, addToQuilt } from '../actions/index'
+import { postQuilt, addToQuilt } from '../actions/index';
 import Button from '../components/button';
 import RNFS from 'react-native-fs';
 import ip from '../config';
@@ -11,7 +11,6 @@ const {
   View,
   StyleSheet,
   PropTypes,
-  Text,
 } = React;
 
 class WatchVideo extends Component {
@@ -51,26 +50,32 @@ class WatchVideo extends Component {
   }
 
   render() {
+    let jsx;
     if (this.props.currentQuilt.status !== 'watch') {
-      return (
+      jsx = (
         <View style={styles.container}>
-          <VideoEntry onEnd={this.onEnd} url={this.url} repeat={true} />
+          <VideoEntry onEnd={this.onEnd} url={this.url} repeat />
           <Button onPress={this.onAccept} text="Accept" />
           <Button onPress={this.onReject} text="Reject" />
         </View>
       );
     } else {
-      return (
+      jsx = (
         <View style={styles.container}>
           <VideoEntry onEnd={this.onEnd} url={this.url} repeat={false} />
         </View>
       );
     }
-
+    return jsx;
   }
 }
 
 WatchVideo.propTypes = {
+  addToQuilt: PropTypes.func,
+  currentQuilt: PropTypes.object,
+  creator: PropTypes.object,
+  navigator: PropTypes.object,
+  postQuilt: PropTypes.func,
   watchQuiltId: PropTypes.number,
 };
 
@@ -99,7 +104,7 @@ function mapDispatchToProps(dispatch) {
     },
     addToQuilt: (data) => {
       dispatch(addToQuilt(data));
-    }
+    },
   };
 }
 

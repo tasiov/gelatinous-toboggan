@@ -3,7 +3,6 @@ import user from './user_reducer';
 import friends from './friends_reducer';
 import quilts from './quilts_reducer';
 import currentQuilt from './current_quilt_reducer';
-import contribQuilt from './contrib_quilt_reducer';
 
 const rootReducer = combineReducers({
   user,

@@ -1,16 +1,14 @@
 /* eslint-disable no-use-before-define, react/jsx-no-bind*/
 import React from 'react-native';
 import Video from 'react-native-video';
-import ip from '../config';
 
 const {
   PropTypes,
   StyleSheet,
-  Text,
   View,
 } = React;
 
-const VideoEntry = ({ quiltId, onEnd, url, repeat }) => (
+const VideoEntry = ({ onEnd, url, repeat }) => (
   <View style={styles.container}>
     <Video
       source={{ uri: url }}
@@ -22,7 +20,9 @@ const VideoEntry = ({ quiltId, onEnd, url, repeat }) => (
 );
 
 VideoEntry.propTypes = {
-  quilt: PropTypes.number,
+  onEnd: PropTypes.func,
+  url: PropTypes.string,
+  repeat: PropTypes.bool,
 };
 
 const styles = StyleSheet.create({

@@ -24,7 +24,7 @@ export default (app) => {
           controller.createUser(req.query)
             .then((user) => {
                res.status(200).send({ id: user.id, username: user.username, token: Authentication.tokenForUser(user) })
-              //res.status(200).send({ token }) 
+              //res.status(200).send({ token })
             })
             .catch((error) => res.status(500).send(`Failed request: ${error}`));
         } else {

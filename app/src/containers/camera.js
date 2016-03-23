@@ -45,8 +45,8 @@ class ShowCamera extends Component {
 
     this.camera.capture()
       .then(file => {
-        this.props.reviewQuilt(file)
-        this.props.navigator.replace({name: 'video'});
+        this.props.reviewQuilt(file);
+        this.props.navigator.replace({ name: 'video' });
       });
   }
 
@@ -83,8 +83,8 @@ class ShowCamera extends Component {
 }
 
 ShowCamera.propTypes = {
-  postQuilt: PropTypes.func,
-  buildQuilt: PropTypes.object,
+  navigator: PropTypes.object,
+  reviewQuilt: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
@@ -129,7 +129,7 @@ function mapDispatchToProps(dispatch) {
   return {
     reviewQuilt: (file) => {
       dispatch(reviewQuilt(file));
-    }
+    },
   };
 }
 
