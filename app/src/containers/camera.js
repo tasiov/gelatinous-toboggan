@@ -3,6 +3,7 @@ import React from 'react-native';
 import Camera from 'react-native-camera';
 import { connect } from 'react-redux';
 import { reviewQuilt } from '../actions/index';
+import Button from '../components/button';
 
 const {
   Component,
@@ -20,10 +21,12 @@ class ShowCamera extends Component {
     this._onStartCapture = this._onStartCapture.bind(this);
     this._onStopCapture = this._onStopCapture.bind(this);
     this.onCapturePress = this.onCapturePress.bind(this);
+    this.reverseCamera = this.reverseCamera.bind(this);
 
     // refactor into redux?
     this.state = {
       isCapturing: false,
+      type: 'back',
     };
   }
 
@@ -72,13 +75,19 @@ class ShowCamera extends Component {
           captureTarget={Camera.constants.CaptureTarget.temp}
           captureMode={Camera.constants.CaptureMode.video}
           captureQuality={Camera.constants.CaptureQuality.medium}
+          type={this.state.type}
         >
           <Text style={styles.capture} onPress={this.onCapturePress}>
             [CAPTURE]
           </Text>
+          <Button text="SELFIE!" onPress={this.reverseCamera} />
         </Camera>
       </View>
     );
+  }
+
+  reverseCamera() {
+    this.setState({ type: this.state.type === 'back' ? 'front' : 'back' });
   }
 }
 
