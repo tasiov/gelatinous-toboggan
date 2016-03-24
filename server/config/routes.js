@@ -72,7 +72,7 @@ export default (app) => {
       controller.getAllOtherUsers(req.params.id)
       .then((data) => {
         // let friends = Object.assign(data);
-        return res.status(200).send(data)
+        return res.status(200).send(data);
       }
       ).catch((error) => res.status(500).send(`Failed request: ${error}`)
       );
