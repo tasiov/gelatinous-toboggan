@@ -1,21 +1,31 @@
 /* eslint-disable no-use-before-define */
 import React from 'react-native';
-import { MKButton, MKColor } from 'react-native-material-kit';
-import { login } from '../assets/styles';
-import Button from './button';
+import { MKButton, mdl } from 'react-native-material-kit';
+import { login, colors } from '../assets/styles';
 
 const {
   Component,
   PropTypes,
-  Text,
-  TextInput,
   View,
+  Text,
 } = React;
 
-const ColoredRaisedButton = MKButton.coloredButton()
-.withText('Log In')
-.withOnPress(this.onPress)
-.build();
+const Textfield = mdl.Textfield.textfield()
+  .withAutoCorrect(false)
+  .withPlaceholder('Username')
+  .withKeyboardType(this.onType)
+  .withStyle(login.textfield)
+  .withUnderlineSize(2)
+  .withHighlightColor(colors.auburn)
+  .withTintColor(colors.auburn)
+  .withTextInputStyle(login.textInput)
+  .build();
+
+  const CustomButton = new MKButton.Builder()
+  .withText('LOG IN')
+  .withStyle(login.button)
+  .withTextStyle(login.buttonText)
+  .build();
 
 class Login extends Component {
   constructor(props) {
@@ -29,6 +39,7 @@ class Login extends Component {
   }
 
   onPress() {
+    console.log('test');
     this.props.fetchUser(this.state.username);
     this.props.navigator.push({ name: 'home' });
   }
@@ -44,15 +55,8 @@ class Login extends Component {
           <Text style={login.title}>Quilt</Text>
         </View>
         <View style={login.containerBody}>
-            <TextInput
-              style={login.input}
-              autoFocus={true}
-              placeholder={'Username'}
-              value={this.state.username}
-              onChangeText={this.onType}
-              />
-              {/*<Button text={'Log In'} onPress={this.onPress} />*/}
-          <ColoredRaisedButton/>
+          <Textfield/>
+          <CustomButton onPress={this.onPress}/>
         </View>
       </View>
     );
