@@ -3,8 +3,9 @@ import { StyleSheet } from 'react-native';
 export const colors = {
   beige: '#FCF3F0',
   auburn: '#A91E39',
-  darkGreen: '#2A8A6F',
+  eucalyptus: '#2A8A6F',
   gray: '#6B6B6B',
+  nightShadz: '#8A0922',
 }
 
 export const login = StyleSheet.create({
@@ -41,7 +42,7 @@ export const login = StyleSheet.create({
     marginTop: 30,
     width: 80,
     height: 35,
-    backgroundColor: colors.darkGreen,
+    backgroundColor: colors.eucalyptus,
     shadowRadius: 2,
     shadowOffset: {width:0, height:2},
     shadowOpacity: .7,
@@ -50,5 +51,20 @@ export const login = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
+  },
+});
+
+export const home = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  button: {
+    flex: 1,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 40,
+    fontFamily: 'Pacifico'
   },
 });

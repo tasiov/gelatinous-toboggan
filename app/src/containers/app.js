@@ -11,7 +11,6 @@ import ShowQuilts from '../containers/quilts';
 import ShowCamera from '../containers/camera';
 import WatchVideo from '../containers/video';
 import FriendsContainer from '../containers/friends';
-// import NavigationBar from 'react-native-navbar';
 
 const {
   Component,
@@ -44,7 +43,6 @@ class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {/*<NavigationBar title={{ title: 'Quilt' }} />*/}
         <Navigator
           initialRoute={{ name: 'login' }}
           renderScene={this.renderScene}

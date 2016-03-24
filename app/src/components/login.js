@@ -22,7 +22,7 @@ const Textfield = mdl.Textfield.textfield()
   .build();
 
   const CustomButton = new MKButton.Builder()
-  .withText('LOG IN')
+  .withText("LOG IN")
   .withStyle(login.button)
   .withTextStyle(login.buttonText)
   .build();
