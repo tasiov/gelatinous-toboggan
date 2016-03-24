@@ -57,14 +57,34 @@ export const login = StyleSheet.create({
 export const home = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.beige,
+  },
+  navbar: {
+    height: 40,
+  },
+  navbarText: {
+    color: 'white',
+    fontFamily: 'Pacifico',
+    fontSize: 18
+  },
+  buttonContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   button: {
-    flex: 1,
+    width: 200,
+    height: 60,
+    backgroundColor: colors.eucalyptus,
+    shadowRadius: 2,
+    shadowOffset: {width:0, height:2},
+    shadowOpacity: .7,
+    shadowColor: 'black',
   },
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 40,
+    fontSize: 20,
     fontFamily: 'Pacifico'
   },
 });

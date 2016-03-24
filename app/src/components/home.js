@@ -31,16 +31,24 @@ class Home extends Component {
   render() {
     return (
       <View style={home.container}>
-        <NavigationBar statusBar={{hidden: true}} title={{ title: 'Quilt' }} />
-        <CustomButton backgroundColor={colors.nightShadz} onPress={() => this.onPressView('create')}>
+        <NavigationBar style={home.navbar} statusBar={{hidden: true}}
+          title={<Text style={home.navbarText}>Quilt</Text>}
+          tintColor={colors.auburn} />
+        <View style={home.buttonContainer}>
+          <CustomButton backgroundColor={colors.eucalyptus} onPress={() => this.onPressView('create')}>
           <Text style={home.buttonText}>Start A Quilt</Text>
-        </CustomButton>
-        <CustomButton backgroundColor={colors.eucalyptus} onPress={() => this.onPressView('view')}>
-          <Text style={home.buttonText}>View Quilts</Text>
-        </CustomButton>
-        <CustomButton backgroundColor={colors.auburn} onPress={() => this.onPressView('friends')}>
+          </CustomButton>
+        </View>
+        <View style={home.buttonContainer}>
+          <CustomButton backgroundColor={colors.auburn} onPress={() => this.onPressView('view')}>
+            <Text style={home.buttonText}>View Quilts</Text>
+          </CustomButton>
+        </View>
+        <View style={home.buttonContainer}>
+          <CustomButton backgroundColor={colors.nightShadz} onPress={() => this.onPressView('friends')}>
           <Text style={home.buttonText}>View Friends</Text>
-        </CustomButton>
+          </CustomButton>
+        </View>
       </View>
     );
   }
