@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define */
 import React, { Component } from 'react-native';
 import { connect } from 'react-redux';
-import VideoEntry from '../components/video_entry';
+import Video from 'react-native-video';
 import { postQuilt, addToQuilt } from '../actions/index';
 import Button from '../components/button';
 import RNFS from 'react-native-fs';
@@ -24,9 +24,27 @@ class WatchVideo extends Component {
     } else {
       this.url = this.props.currentQuilt.file;
     }
+
+
   }
 
   onAccept() {
+    if (this.props.currentQuilt.status !== 'watch') {
+      this._sendVideo();
+    } else {
+      this._replayVideo();
+    }
+  }
+
+  onReject() {
+    if (this.props.currentQuilt.status !== 'watch'){
+      this.props.navigator.replace({ name: 'camera' });
+    } else {
+      this.props.navigator.pop();
+    }
+  }
+
+  _sendVideo() {
     RNFS.readFile(this.props.currentQuilt.file, 'base64')
       .then((data) => {
         if (this.props.currentQuilt.status === 'create') {
@@ -45,28 +63,27 @@ class WatchVideo extends Component {
       });
   }
 
-  onReject() {
-    this.props.navigator.replace({ name: 'camera' });
+  _replayVideo() {
+    this.refs.video.seek(0);
   }
 
   render() {
-    let jsx;
-    if (this.props.currentQuilt.status !== 'watch') {
-      jsx = (
-        <View style={styles.container}>
-          <VideoEntry onEnd={this.onEnd} url={this.url} repeat />
-          <Button onPress={this.onAccept} text="Accept" />
-          <Button onPress={this.onReject} text="Reject" />
-        </View>
-      );
-    } else {
-      jsx = (
-        <View style={styles.container}>
-          <VideoEntry onEnd={this.onEnd} url={this.url} repeat={false} />
-        </View>
-      );
-    }
-    return jsx;
+    const acceptText = this.props.currentQuilt.status === 'watch' ? 'Replay' : 'Accept';
+    const rejectText = this.props.currentQuilt.status === 'watch' ? 'Back' : 'Reject';
+    const repeat = this.props.currentQuilt.status !== 'watch';
+    return (
+      <View style={styles.container}>
+        <Video
+          ref="video"
+          source={{ uri: this.url }}
+          style={styles.backgroundVideo}
+          repeat={repeat}
+          onEnd={this.onEnd}
+        />
+        <Button onPress={this.onAccept} text={acceptText} />
+        <Button onPress={this.onReject} text={rejectText} />
+      </View>
+    );
   }
 }
 
@@ -82,6 +99,13 @@ WatchVideo.propTypes = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  backgroundVideo: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
   },
 });
 
