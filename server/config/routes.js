@@ -51,7 +51,8 @@ export default (app) => {
     const data = JSON.parse(req.headers['meta-data']);
     writeVideoToDiskPipeline(req, res, data, true);
   });
-  // todo: verify with db call
+
+  // todo: verify auth
   app.get('/api/quilt/:id', (req, res) => {
     console.log(getQuiltFromId(req.params.id));
     res.sendFile(getQuiltFromId(req.params.id));
