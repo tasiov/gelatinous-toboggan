@@ -11,12 +11,10 @@ import ShowQuilts from '../containers/quilts';
 import ShowCamera from '../containers/camera';
 import WatchVideo from '../containers/video';
 import FriendsContainer from '../containers/friends';
-// import NavigationBar from 'react-native-navbar';
 
 const {
   Component,
   Navigator,
-  StyleSheet,
   View,
 } = React;
 
@@ -43,8 +41,7 @@ class App extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        {/* <NavigationBar statusBar={{ hidden: true }} title={{ title: 'Quilt' }} /> */}
+      <View style={{ flex: 1 }}>
         <Navigator
           initialRoute={{ name: 'login' }}
           renderScene={this.renderScene}
@@ -54,21 +51,5 @@ class App extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#eee',
-  },
-  navBar: {
-    backgroundColor: 'green',
-  },
-  header: {
-    marginTop: 20,
-    marginBottom: 10,
-    fontSize: 20,
-    textAlign: 'center',
-  },
-});
 
 export default App;

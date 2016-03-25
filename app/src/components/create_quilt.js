@@ -1,15 +1,20 @@
 /* eslint-disable no-use-before-define, react/prefer-stateless-function */
 import React, { Component } from 'react-native';
-import Button from './button';
 import { connect } from 'react-redux';
-import { createQuilt } from '../actions/index';
+import { createQuilt } from '../assets/styles';
+import { MKButton } from 'react-native-material-kit';
+import NavBar from './navbar';
 
 const {
   PropTypes,
-  StyleSheet,
-  Text,
   View,
 } = React;
+
+const CustomButton = new MKButton.Builder()
+.withText('Create Quilt')
+.withStyle(createQuilt.button)
+.withTextStyle(createQuilt.buttonText)
+.build();
 
 class CreateQuilt extends Component {
   constructor(props) {
@@ -25,10 +30,11 @@ class CreateQuilt extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Invite Friends</Text>
-        <Text>+Friends</Text>
-        <Button text={'Create!'} onPress={this.onCreatePress} />
+      <View style={createQuilt.container}>
+        <NavBar onPress={this.props.navigator.pop} />
+        <View style={createQuilt.buttonContainer}>
+          <CustomButton onPress={this.onCreatePress} />
+        </View>
       </View>
     );
   }
@@ -42,27 +48,6 @@ CreateQuilt.propTypes = {
 const mapDispatchToProps = (dispatch) => ({
   createQuilt: () => {
     dispatch(createQuilt());
-  },
-});
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  input: {
-    padding: 4,
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
-    margin: 5,
-    width: 200,
-    alignSelf: 'center',
-  },
-  label: {
-    fontSize: 18,
   },
 });
 
