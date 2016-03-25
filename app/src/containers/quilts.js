@@ -4,12 +4,14 @@ import QuiltEntry from '../components/quilt_entry';
 import { connect } from 'react-redux';
 import Immutable from 'immutable'; // just for testing
 import { fetchQuilts, selectWatchQuilt } from '../actions/index';
+import { viewQuilts } from '../assets/styles';
+import NavBar from '../components/navbar';
 
 const {
   ListView,
   PropTypes,
-  StyleSheet,
   Text,
+  View,
 } = React;
 
 // todo: consider factoring out view rendering into own component
@@ -55,11 +57,13 @@ class ShowQuilts extends Component {
       return <Text>Loading Quilts...</Text>;
     }
     return (
-      <ListView
-        style={styles.container}
-        dataSource={this.getDataSource()}
-        renderRow={this.onRenderRow}
-      />
+      <View style={viewQuilts.container}>
+        <NavBar/>
+        <ListView
+          dataSource={this.getDataSource()}
+          renderRow={this.onRenderRow}
+        />
+      </View>
     );
   }
 }
@@ -72,12 +76,6 @@ ShowQuilts.propTypes = {
   navigator: PropTypes.object,
   user: PropTypes.object,
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 function mapStateToProps(state) {
   return {

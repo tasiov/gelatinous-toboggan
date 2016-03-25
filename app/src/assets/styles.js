@@ -40,17 +40,30 @@ export const login = StyleSheet.create({
   },
   button: {
     marginTop: 30,
-    width: 80,
-    height: 35,
+    width: 95,
+    height: 45,
     backgroundColor: colors.eucalyptus,
     shadowRadius: 2,
     shadowOffset: {width:0, height:2},
     shadowOpacity: .7,
     shadowColor: 'black',
+    borderRadius: 8,
   },
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
+    fontSize: 18,
+  },
+});
+
+export const navbar = StyleSheet.create({
+  bar: {
+    height: 40,
+  },
+  text: {
+    color: 'white',
+    fontFamily: 'Pacifico',
+    fontSize: 18
   },
 });
 
@@ -58,14 +71,6 @@ export const home = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.beige,
-  },
-  navbar: {
-    height: 40,
-  },
-  navbarText: {
-    color: 'white',
-    fontFamily: 'Pacifico',
-    fontSize: 18
   },
   buttonContainer: {
     flex: 1,
@@ -80,6 +85,7 @@ export const home = StyleSheet.create({
     shadowOffset: {width:0, height:2},
     shadowOpacity: .7,
     shadowColor: 'black',
+    borderRadius: 8,
   },
   buttonText: {
     color: 'white',
@@ -87,4 +93,39 @@ export const home = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'Pacifico'
   },
+});
+
+export const viewQuilts = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.beige,
+  },
+});
+
+export const quiltEntry = StyleSheet.create({
+  highlight: {
+    height: 80,
+    padding: 5,
+    margin: 2,
+    borderColor: 'gray',
+    borderWidth: 2,
+    borderRadius: 4,
+  },
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  theme: {
+    flex: 1,
+    color: colors.gray,
+    fontWeight: 'bold',
+    fontSize: 18,
+  },
+  status: {
+    flex: 1,
+    color: colors.gray,
+    fontWeight: 'bold',
+    fontSize: 18,
+  }
 });

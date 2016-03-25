@@ -3,7 +3,7 @@
 import React from 'react-native';
 import { MKButton } from 'react-native-material-kit';
 import { home, colors } from '../assets/styles';
-import NavigationBar from 'react-native-navbar';
+import NavBar from './navbar';
 
 const {
   Component,
@@ -31,12 +31,10 @@ class Home extends Component {
   render() {
     return (
       <View style={home.container}>
-        <NavigationBar style={home.navbar} statusBar={{hidden: true}}
-          title={<Text style={home.navbarText}>Quilt</Text>}
-          tintColor={colors.auburn} />
+        <NavBar/>
         <View style={home.buttonContainer}>
           <CustomButton backgroundColor={colors.eucalyptus} onPress={() => this.onPressView('create')}>
-          <Text style={home.buttonText}>Start A Quilt</Text>
+            <Text style={home.buttonText}>Start A Quilt</Text>
           </CustomButton>
         </View>
         <View style={home.buttonContainer}>
@@ -46,7 +44,7 @@ class Home extends Component {
         </View>
         <View style={home.buttonContainer}>
           <CustomButton backgroundColor={colors.nightShadz} onPress={() => this.onPressView('friends')}>
-          <Text style={home.buttonText}>View Friends</Text>
+            <Text style={home.buttonText}>View Friends</Text>
           </CustomButton>
         </View>
       </View>

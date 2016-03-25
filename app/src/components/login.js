@@ -39,7 +39,6 @@ class Login extends Component {
   }
 
   onPress() {
-    console.log('test');
     this.props.fetchUser(this.state.username);
     this.props.navigator.push({ name: 'home' });
   }

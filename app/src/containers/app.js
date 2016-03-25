@@ -42,7 +42,7 @@ class App extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={{flex: 1}}>
         <Navigator
           initialRoute={{ name: 'login' }}
           renderScene={this.renderScene}
@@ -52,21 +52,5 @@ class App extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#eee',
-  },
-  navBar: {
-    backgroundColor: 'green',
-  },
-  header: {
-    marginTop: 20,
-    marginBottom: 10,
-    fontSize: 20,
-    textAlign: 'center',
-  },
-});
 
 export default App;
