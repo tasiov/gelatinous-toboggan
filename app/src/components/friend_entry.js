@@ -5,7 +5,6 @@ import CheckBox from './checkbox';
 const {
   PropTypes,
   StyleSheet,
-  Text,
   TouchableOpacity,
 } = React;
 

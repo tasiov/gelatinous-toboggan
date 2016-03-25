@@ -1,3 +1,5 @@
+/* eslint-disable no-use-before-define */
+
 // Source: https://github.com/sconxu/react-native-checkbox
 
 import React, { Component } from 'react-native';
@@ -23,7 +25,7 @@ class CheckBox extends Component {
 
   onChange() {
     this.setState({ check: !this.state.check });
-    if(this.state.check) {
+    if (this.state.check) {
       this.props.onCheckboxCheck(this.props.id);
     } else {
       this.props.onCheckboxUncheck(this.props.id);
@@ -33,7 +35,7 @@ class CheckBox extends Component {
   render() {
     let source = require('./cb_disabled.png');
 
-    if(this.state.check){
+    if (this.state.check) {
       source = require('./cb_enabled.png');
     }
 
@@ -41,7 +43,8 @@ class CheckBox extends Component {
       <View style={styles.container}>
         <Image
           style={styles.checkbox}
-          source={source}/>
+          source={source}
+        />
         <View style={styles.labelContainer}>
           <Text style={[styles.label, this.props.labelStyle]}>{this.props.label}</Text>
         </View>
@@ -56,13 +59,14 @@ class CheckBox extends Component {
           </View>
           <Image
             style={styles.checkbox}
-            source={source}/>
+            source={source}
+          />
         </View>
       );
     }
 
     return (
-      <TouchableHighlight onPress={this.onChange} underlayColor='white'>
+      <TouchableHighlight onPress={this.onChange} underlayColor="white">
         {container}
       </TouchableHighlight>
     );
@@ -73,14 +77,18 @@ CheckBox.propTypes = {
   label: PropTypes.string,
   labelStyle: PropTypes.object,
   checked: PropTypes.bool,
-  onChange: PropTypes.func
-}
+  onChange: PropTypes.func,
+  onCheckboxCheck: PropTypes.func,
+  onCheckboxUncheck: PropTypes.func,
+  id: PropTypes.number,
+  labelBefore: PropTypes.string,
+};
 
 CheckBox.getDefaultProps = {
   label: 'Label',
   labelBefore: false,
-  checked: false
-}
+  checked: false,
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -90,17 +98,17 @@ const styles = StyleSheet.create({
   },
   checkbox: {
     width: 26,
-    height: 26
+    height: 26,
   },
   labelContainer: {
     marginLeft: 10,
-    marginRight: 10
+    marginRight: 10,
   },
   label: {
     fontSize: 15,
     lineHeight: 15,
     color: 'grey',
-  }
+  },
 });
 
 export default CheckBox;

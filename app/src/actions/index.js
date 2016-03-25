@@ -122,7 +122,7 @@ export function postToExistingQuilt(data) {
       body: data.video,
     })
     .then(response => dispatch(responseAddQuilt(response.status)))
-    .catch(err => console.log('post quilt error', err));
+    .catch(err => console.error('post quilt error', err));
   };
 }
 
