@@ -24,8 +24,6 @@ class WatchVideo extends Component {
     } else {
       this.url = this.props.currentQuilt.file;
     }
-
-
   }
 
   onAccept() {
@@ -37,7 +35,7 @@ class WatchVideo extends Component {
   }
 
   onReject() {
-    if (this.props.currentQuilt.status !== 'watch'){
+    if (this.props.currentQuilt.status !== 'watch') {
       this.props.navigator.replace({ name: 'camera' });
     } else {
       this.props.navigator.pop();
