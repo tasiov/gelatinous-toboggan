@@ -5,7 +5,8 @@ export const colors = {
   auburn: '#A91E39',
   eucalyptus: '#2A8A6F',
   gray: '#6B6B6B',
-  nightShadz: '#8A0922',
+  blue: '#32598B',
+  yellowish: '#D39240',
 }
 
 export const login = StyleSheet.create({
@@ -42,7 +43,7 @@ export const login = StyleSheet.create({
     marginTop: 30,
     width: 95,
     height: 45,
-    backgroundColor: colors.eucalyptus,
+    backgroundColor: colors.blue,
     shadowRadius: 2,
     shadowOffset: {width:0, height:2},
     shadowOpacity: .7,
@@ -80,7 +81,6 @@ export const home = StyleSheet.create({
   button: {
     width: 200,
     height: 60,
-    backgroundColor: colors.eucalyptus,
     shadowRadius: 2,
     shadowOffset: {width:0, height:2},
     shadowOpacity: .7,
@@ -128,4 +128,31 @@ export const quiltEntry = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 18,
   }
+});
+
+export const createQuilt = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.beige,
+  },
+  buttonContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button: {
+    width: 200,
+    height: 60,
+    backgroundColor: colors.eucalyptus,
+    shadowRadius: 2,
+    shadowOffset: {width:0, height:2},
+    shadowOpacity: .7,
+    shadowColor: 'black',
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
 });

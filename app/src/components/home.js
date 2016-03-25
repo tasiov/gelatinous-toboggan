@@ -38,12 +38,12 @@ class Home extends Component {
           </CustomButton>
         </View>
         <View style={home.buttonContainer}>
-          <CustomButton backgroundColor={colors.auburn} onPress={() => this.onPressView('view')}>
+          <CustomButton backgroundColor={colors.blue} onPress={() => this.onPressView('view')}>
             <Text style={home.buttonText}>View Quilts</Text>
           </CustomButton>
         </View>
         <View style={home.buttonContainer}>
-          <CustomButton backgroundColor={colors.nightShadz} onPress={() => this.onPressView('friends')}>
+          <CustomButton backgroundColor={colors.blue} onPress={() => this.onPressView('friends')}>
             <Text style={home.buttonText}>View Friends</Text>
           </CustomButton>
         </View>
