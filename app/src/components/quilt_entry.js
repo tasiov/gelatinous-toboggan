@@ -1,9 +1,9 @@
 /* eslint-disable no-use-before-define, react/jsx-no-bind*/
 import React from 'react-native';
+import { quiltEntry, colors } from '../assets/styles';
 
 const {
   PropTypes,
-  StyleSheet,
   Text,
   TouchableHighlight,
   View,
@@ -11,30 +11,21 @@ const {
 
 // TODO: Change the properties of the quilt information
 const QuiltEntry = ({ onClick, quilt }) => (
-  <View>
-    <TouchableHighlight onPress={() => onClick(quilt.id)} >
-      <View style={styles.row}>
-        <Text>{quilt.filename}</Text>
-        <Text>**</Text>
-      </View>
-    </TouchableHighlight>
-  </View>
+  <TouchableHighlight
+    underlayColor={colors.gray}
+    style={quiltEntry.highlight}
+    onPress={() => onClick(quilt.id)}
+  >
+    <View style={quiltEntry.row}>
+      <Text style={quiltEntry.theme}>Theme: {quilt.theme}</Text>
+      <Text style={quiltEntry.status}>Status: {quilt.status}</Text>
+    </View>
+  </TouchableHighlight>
 );
 
 QuiltEntry.propTypes = {
   onClick: PropTypes.func,
   quilt: PropTypes.object,
 };
-
-const styles = StyleSheet.create({
-  textContainer: {
-    flex: 1,
-  },
-  row: {
-    alignItems: 'center',
-    flexDirection: 'row',
-    padding: 5,
-  },
-});
 
 export default QuiltEntry;

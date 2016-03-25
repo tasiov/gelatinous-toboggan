@@ -1,16 +1,31 @@
 /* eslint-disable no-use-before-define */
 import React from 'react-native';
+import { MKButton, mdl } from 'react-native-material-kit';
+import { login, colors } from '../assets/styles';
+
 const {
   Component,
   PropTypes,
-  StyleSheet,
-  Text,
-  TextInput,
   View,
+  Text,
 } = React;
 
+const Textfield = mdl.Textfield.textfield()
+  .withAutoCorrect(false)
+  .withPlaceholder('Username')
+  .withKeyboardType(this.onType)
+  .withStyle(login.textfield)
+  .withUnderlineSize(2)
+  .withHighlightColor(colors.auburn)
+  .withTintColor(colors.auburn)
+  .withTextInputStyle(login.textInput)
+  .build();
 
-import Button from './button';
+const CustomButton = new MKButton.Builder()
+  .withText('LOG IN')
+  .withStyle(login.button)
+  .withTextStyle(login.buttonText)
+  .build();
 
 class Login extends Component {
   constructor(props) {
@@ -34,14 +49,14 @@ class Login extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Enter a Username</Text>
-        <TextInput
-          style={styles.input}
-          value={this.state.username}
-          onChangeText={this.onType}
-        />
-        <Button text={'Log In'} onPress={this.onPress} />
+      <View style={login.container}>
+        <View style={login.containerHead}>
+          <Text style={login.title}>Quilt</Text>
+        </View>
+        <View style={login.containerBody}>
+          <Textfield />
+          <CustomButton onPress={this.onPress} />
+        </View>
       </View>
     );
   }
@@ -52,27 +67,6 @@ Login.propTypes = {
   navigator: PropTypes.object,
   fetchUser: PropTypes.func,
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  input: {
-    padding: 4,
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
-    margin: 5,
-    width: 200,
-    alignSelf: 'center',
-  },
-  label: {
-    fontSize: 18,
-  },
-});
 
 
 export default Login;

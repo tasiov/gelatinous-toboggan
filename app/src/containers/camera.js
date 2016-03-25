@@ -1,9 +1,9 @@
 /* eslint-disable no-use-before-define */
 import React from 'react-native';
 import Camera from 'react-native-camera';
-import RNFS from 'react-native-fs';
 import { connect } from 'react-redux';
-import { postQuilt } from '../actions/index';
+import { reviewQuilt } from '../actions/index';
+import Button from '../components/button';
 
 const {
   Component,
@@ -21,10 +21,12 @@ class ShowCamera extends Component {
     this._onStartCapture = this._onStartCapture.bind(this);
     this._onStopCapture = this._onStopCapture.bind(this);
     this.onCapturePress = this.onCapturePress.bind(this);
+    this.reverseCamera = this.reverseCamera.bind(this);
 
     // refactor into redux?
     this.state = {
       isCapturing: false,
+      type: 'back',
     };
   }
 
@@ -39,28 +41,16 @@ class ShowCamera extends Component {
     }
   }
 
-
-  onCapturePress() {
-    if (!this.state.isCapturing) {
-      this._onStartCapture();
-    } else {
-      this._onStopCapture();
-    }
-  }
-
   _onStartCapture() {
     this.setState({
       isCapturing: true,
     });
 
     this.camera.capture()
-      .then(file => RNFS.readFile(file, 'base64'))
-      .then((data) => {
-        this.props.postQuilt(Object.assign(this.props.buildQuilt, {
-          creator: this.props.creator,
-          video: data,
-        }));
-    });
+      .then(file => {
+        this.props.reviewQuilt(file);
+        this.props.navigator.replace({ name: 'video' });
+      });
   }
 
   _onStopCapture() {
@@ -75,6 +65,9 @@ class ShowCamera extends Component {
     this.camera = cam;
   }
 
+  reverseCamera() {
+    this.setState({ type: this.state.type === 'back' ? 'front' : 'back' });
+  }
   render() {
     return (
       <View style={styles.container}>
@@ -84,19 +77,23 @@ class ShowCamera extends Component {
           aspect={'fill'}
           captureTarget={Camera.constants.CaptureTarget.temp}
           captureMode={Camera.constants.CaptureMode.video}
+          captureQuality={Camera.constants.CaptureQuality.medium}
+          type={this.state.type}
         >
           <Text style={styles.capture} onPress={this.onCapturePress}>
             [CAPTURE]
           </Text>
+          <Button text="SELFIE!" onPress={this.reverseCamera} />
         </Camera>
       </View>
     );
   }
+
 }
 
 ShowCamera.propTypes = {
-  postQuilt: PropTypes.func,
-  buildQuilt: PropTypes.object,
+  navigator: PropTypes.object,
+  reviewQuilt: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
@@ -124,13 +121,12 @@ const styles = StyleSheet.create({
 // which will be passed with the video
 // to action creator to post data
 function mapStateToProps(state) {
-  const buildQuilt = state.get('buildQuilt').toObject();
-  buildQuilt.users = buildQuilt.users.toArray();
-
+  const currentQuilt = state.get('currentQuilt').toObject();
+  currentQuilt.users = currentQuilt.users.toArray();
   const creator = state.get('user');
 
   return {
-    buildQuilt,
+    currentQuilt,
     creator: {
       id: creator.get('id'),
       username: creator.get('username'),
@@ -138,11 +134,10 @@ function mapStateToProps(state) {
   };
 }
 
-// dispatch postQuilt with previous current quilt state plus video data
 function mapDispatchToProps(dispatch) {
   return {
-    postQuilt: (data) => {
-      dispatch(postQuilt(data));
+    reviewQuilt: (file) => {
+      dispatch(reviewQuilt(file));
     },
   };
 }

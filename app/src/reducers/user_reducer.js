@@ -6,6 +6,7 @@ const initialState = Map({
   isFetching: false,
   id: null,
   username: null,
+  token: null,
 });
 
 export default function (state = initialState, action) {

@@ -1,35 +1,25 @@
 /* eslint-disable no-use-before-define */
 import React from 'react-native';
-import ItemCheckbox from 'react-native-item-checkbox';
-import Icon from 'react-native-icons';
+import CheckBox from './checkbox';
 
 const {
   PropTypes,
   StyleSheet,
-  Text,
   TouchableOpacity,
-  View,
 } = React;
 
 // todo: make these behave like check boxes (edit style=)
-const FriendEntry = ({ user, onCheckboxCheck, onCheckboxUncheck }) => {
-  return  (
+const FriendEntry = ({ user, onCheckboxCheck, onCheckboxUncheck }) => (
   <TouchableOpacity style={styles.container}>
-      <ItemCheckbox
-        style={styles.checkbox}
-        key={user.id}
-        onCheck={()=>onCheckboxCheck(user.id)}
-        onUncheck={()=>onCheckboxUncheck(user.id)}
-        icon='tree'
-        size={60}
-        iconSize='small'
-        color='#B7E2F0'
-      />
-      <Text style={styles.username}>{user.username}</Text>
-      <Icon
-      />
+    <CheckBox
+      label={user.username}
+      id={user.id}
+      checked={false}
+      onCheckboxCheck={onCheckboxCheck}
+      onCheckboxUncheck={onCheckboxUncheck}
+    />
   </TouchableOpacity>
-);}
+);
 
 
 FriendEntry.propTypes = {
@@ -43,8 +33,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     paddingTop: 20,
-  },
-  checkbox: {
   },
   username: {
     paddingTop: 20,

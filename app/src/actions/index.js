@@ -2,21 +2,37 @@
 import {
   REQUEST_USER,
   RECEIVE_USER,
-  START_QUILT,
+  SELECT_WATCH_QUILT,
   REQUEST_FRIENDS,
   RECEIVE_FRIENDS,
   RECEIVE_QUILTS,
   REQUEST_QUILTS,
   RECEIVE_POST_QUILT,
   REQUEST_POST_QUILT,
-  REQUEST_CURRENT_QUILT,
-  RECEIVE_CURRENT_QUILT,
+  REQUEST_ADD_QUILT,
+  RESPONSE_ADD_QUILT,
+  CREATE_QUILT,
+  REVIEW_QUILT,
+  ADD_TO_QUILT,
+  WATCH_QUILT,
 } from '../constants/ActionTypes';
 
-export const startQuilt = (data) => ({
-  type: START_QUILT,
+import ip from '../config';
+
+export const createQuilt = (data) => ({
+  type: CREATE_QUILT,
   payload: data,
-})
+});
+
+export const addToQuilt = (data) => ({
+  type: ADD_TO_QUILT,
+  payload: data,
+});
+
+export const watchQuilt = (data) => ({
+  type: WATCH_QUILT,
+  payload: data,
+});
 
 // dispatched at login to set the current user of the app
 const requestUser = () => ({
@@ -31,20 +47,17 @@ const receiveUser = (user) => ({
 export function fetchUser(username) {
   return (dispatch) => {
     dispatch(requestUser());
-    return fetch(`http://10.6.31.236:8000/api/auth?username=${username}`)
+    return fetch(`http://${ip}:8000/api/auth?username=${username}`)
       .then(response => response.json())
       .then(user => dispatch(receiveUser(user)))
       .catch(error => console.error('error', error));
   };
 }
 
-// todo: make action creators more semantic
-
-// dispatched when quilt initially started
-// export const startQuilt = (data) => ({
-//   type: START_QUILT,
-//   payload: data,
-// });
+export const reviewQuilt = (file) => ({
+  type: REVIEW_QUILT,
+  payload: file,
+});
 
 // begin post request to send quilt to server
 const requestPostQuilt = () => ({
@@ -58,22 +71,10 @@ const responsePostQuilt = (data) => ({
   payload: data,
 });
 
-// todo: catch post request errors with additional action creator
-// todo: ensure friends, title, theme data in post request
-/*
-data = {
-  title: STRING,
-  theme: STRING,
-  friends: ARRAY,
-  vid: STRING (base64 encoding),
-}
-*/
-
-// do we need seperate action creators for first vs subsequent quilts?
 export function postQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
-    return fetch('http://10.6.31.236:8000/api/quilt', {
+    return fetch(`http://${ip}:8000/api/quilt`, {
       method: 'POST',
       body: data.video,
       headers: {
@@ -87,9 +88,14 @@ export function postQuilt(data) {
       },
     })
     .then(response => dispatch(responsePostQuilt(response.status)))
-    .catch(err => console.log('post quilt error', err));
+    .catch(err => console.error('post quilt error', err));
   };
 }
+
+export const contributeToQuilt = (id) => ({
+  type: REQUEST_ADD_QUILT,
+  payload: id,
+});
 
 // begin post request to send quilt to server
 const requestAddQuilt = () => ({
@@ -98,30 +104,25 @@ const requestAddQuilt = () => ({
 
 // receive response from the server relating to post request
 // todo: format response data so that status code passed
-const responseAddQuilt = (data) => ({
+const responseAddQuilt = () => ({
   type: RESPONSE_ADD_QUILT,
-  payload: data,
 });
 
-export function addToQuilt(data) {
+export function postToExistingQuilt(data) {
   return (dispatch) => {
-    dispatch(requestPostQuilt());
-
-    return fetch(`http://10.6.30.77:8000/api/quilt/${data.quiltId}`, {
+    dispatch(requestAddQuilt());
+    return fetch(`http://${ip}:8000/api/quilt/${data.quiltId}`, {
       method: 'POST',
-      body: data.video,
       headers: {
         'Content-Type': 'application/json',
         'Meta-Data': JSON.stringify({
-          title: data.title,
-          theme: data.theme,
-          users: data.users,
           creator: data.creator,
         }),
       },
+      body: data.video,
     })
-    .then(response => dispatch(responsePostQuilt(response.status)))
-    .catch(err => console.log('post quilt error', err));
+    .then(response => dispatch(responseAddQuilt(response.status)))
+    .catch(err => console.error('post quilt error', err));
   };
 }
 
@@ -143,7 +144,7 @@ export function fetchFriends(options) {
     // todo: hook up appropriately with server
     // todo: catch errors
 
-    return fetch(`http://10.6.30.48:8000/api/friends/${options.username}`)
+    return fetch(`http://${ip}:8000/api/friends/${options.username}`)
       .then(response => response.json())
       .then(json => dispatch(receiveFriends(json))
       );
@@ -162,28 +163,17 @@ const receiveQuilts = (quilts) => ({
 export function fetchQuilts(options) {
   return (dispatch) => {
     dispatch(requestQuilts());
-    return fetch(`http://10.6.30.48:8000/api/quilt?username=${options.username}`)
+    return fetch(`http://${ip}:8000/api/quilt?username=${options.username}`, {
+      headers: { authorization: options.token } })
       .then((response) => response.json())
       .then((data) => dispatch(receiveQuilts(data)))
       .catch((error) => console.error('Error in getting user\'s quilts', error));
   };
 }
 
-const requestWatchQuilt = () => ({
-  type: REQUEST_CURRENT_QUILT,
-});
-
-const receiveWatchQuilt = (watchQuilt) => ({
-  type: RECEIVE_CURRENT_QUILT,
-  payload: watchQuilt,
-});
-
-export function fetchWatchQuilt(options) {
-  return (dispatch) => {
-    dispatch(requestWatchQuilt());
-    return fetch(`http://10.6.30.48:8000/api/quilt/${options.quiltId}`)
-      .then((response) => response.json())
-      .then((data) => dispatch(receiveWatchQuilt(data)))
-      .catch((error) => console.error('Error in getting current quilt', error));
+export function selectWatchQuilt(data) {
+  return {
+    type: SELECT_WATCH_QUILT,
+    payload: data,
   };
 }

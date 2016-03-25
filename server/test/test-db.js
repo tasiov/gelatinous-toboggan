@@ -32,10 +32,10 @@ describe('Quilt Model', () => {
     );
 
   it('should be able to create a new quilt', () =>
-    modules.Quilt.create({ filename: 'quilt1', status: 1 })
+    modules.Quilt.create({ title: 'quilt1', status: 1 })
     .then((quilt) => {
       expect(quilt).to.exist;
-      expect(quilt.get('filename')).to.equal('quilt1');
+      expect(quilt.get('title')).to.equal('quilt1');
     })
   );
 });
@@ -50,7 +50,7 @@ describe('UserQuilt Model', () => {
   it('should be able to assign user to a quilt', () =>
     Sequelize.Promise.all([
       modules.User.create({ username: 'maryam' }),
-      modules.Quilt.create({ filename: 'quilt1', status: 1 })])
+      modules.Quilt.create({ title: 'quilt1', status: 1 })])
     .then((data) => data[0].addQuilt(data[1], { status: 1 }))
     .then((quilts) => expect(quilts[0][0].userId).to.equal(1))
   );
@@ -73,7 +73,7 @@ describe('postQuilt Controller', () => {
       const quilt = {
         username: 'tasio',
         friends: ['josh', 'griffin'],
-        quilt: { filename: 'quilt1', status: 0 },
+        quilt: { title: 'quilt1', status: 0 },
       };
       return controllers.postQuilt(quilt);
     })

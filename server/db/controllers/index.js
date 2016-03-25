@@ -20,11 +20,23 @@ const getUser = (options) =>
   db.User.findOne({ where: options })
     .catch((error) => console.error('Error retrieving user. ', error));
 
+// status 0 = pending me
+// status 1 = pending others
+// status 2 = done
+function reduceQuilts(userQuilts) {
+  return userQuilts.map(userQuilt => ({
+    id: userQuilt.get('id'),
+    theme: userQuilt.get('theme'),
+    status: userQuilt.get('UserQuilt').get('status') + userQuilt.get('status'),
+  })).reverse();
+}
+
 // options = {username: username}
 const getAllUserQuilts = (options) =>
   getUser(options)
-    .then((user) => user.getQuilts({ order: [['status', 'DESC']] }))
-    .catch((error) => console.error('Error retrieving user\'s quilts: ', error));
+    .then(user => user.getQuilts())
+    .then(reduceQuilts)
+    .catch(error => console.error('Error retrieving user\'s quilts: ', error));
 
 const getQuilt = (options) => (
   db.Quilt.findOne({ where: options })

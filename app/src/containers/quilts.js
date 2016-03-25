@@ -3,13 +3,15 @@ import React, { Component } from 'react-native';
 import QuiltEntry from '../components/quilt_entry';
 import { connect } from 'react-redux';
 import Immutable from 'immutable'; // just for testing
-import { fetchQuilts, fetchWatchQuilt } from '../actions/index';
+import { fetchQuilts, selectWatchQuilt } from '../actions/index';
+import { viewQuilts } from '../assets/styles';
+import NavBar from '../components/navbar';
 
 const {
   ListView,
   PropTypes,
-  StyleSheet,
   Text,
+  View,
 } = React;
 
 // todo: consider factoring out view rendering into own component
@@ -19,18 +21,30 @@ class ShowQuilts extends Component {
     this.getDataSource = this.getDataSource.bind(this);
     this.onRenderRow = this.onRenderRow.bind(this);
     this.onQuiltClick = this.onQuiltClick.bind(this);
-    props.fetchQuilts({ username: 'josh' }); // TODO: pass in the username
+    this.props.fetchQuilts(
+      {
+        username: this.props.user.get('username'),
+        token: this.props.user.get('token'),
+      }
+    );
   }
 
-  onQuiltClick(quiltId) {
-    // console.log('quilt id:', quiltId, ' is clicked', this.props);
-    // request the current quilt
-    this.props.fetchWatchQuilt({ quiltId });
+  onQuiltClick(quiltId, status) {
+    let currentStatus;
+    if (status === 1) {
+      currentStatus = 'watch';
+    } else {
+      currentStatus = 'add';
+    }
+    this.props.selectWatchQuilt({
+      status: currentStatus,
+      id: quiltId,
+    });
     this.props.navigator.push({ name: 'video' });
   }
 
   onRenderRow(rowData) {
-    return <QuiltEntry onClick={this.onQuiltClick} quilt = {rowData} key = {rowData.id} />;
+    return <QuiltEntry onClick={this.onQuiltClick} quilt={rowData} key={rowData.id} />;
   }
 
   getDataSource() {
@@ -43,11 +57,13 @@ class ShowQuilts extends Component {
       return <Text>Loading Quilts...</Text>;
     }
     return (
-      <ListView
-        style={styles.container}
-        dataSource={this.getDataSource()}
-        renderRow={this.onRenderRow}
-      />
+      <View style={viewQuilts.container}>
+        <NavBar onPress={this.props.navigator.pop} />
+        <ListView
+          dataSource={this.getDataSource()}
+          renderRow={this.onRenderRow}
+        />
+      </View>
     );
   }
 }
@@ -56,20 +72,15 @@ ShowQuilts.propTypes = {
   // onQuiltClick: PropTypes.func,
   quilts: PropTypes.object,
   fetchQuilts: PropTypes.func,
-  fetchWatchQuilt: PropTypes.func,
+  selectWatchQuilt: PropTypes.func,
   navigator: PropTypes.object,
+  user: PropTypes.object,
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 function mapStateToProps(state) {
   return {
-    watchQuilt: state.get('watchQuilt'), // Check if initialise with {} or isFetching = true
     quilts: state.get('quilts'),
+    user: state.get('user'),
   };
 }
 
@@ -79,8 +90,8 @@ function mapDispatchToProps(dispatch) {
     fetchQuilts: (data) => {
       dispatch(fetchQuilts(data));
     },
-    fetchWatchQuilt: (data) => {
-      dispatch(fetchWatchQuilt(data));
+    selectWatchQuilt: (data) => {
+      dispatch(selectWatchQuilt(data));
     },
   };
 }
