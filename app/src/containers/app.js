@@ -7,10 +7,14 @@ import LoginContainer from '../containers/login_container';
 import Home from '../components/home';
 import CreateQuilt from '../components/create_quilt';
 // todo: create seperate component/container for quilts
-import ShowQuilts from '../containers/quilts';
-import ShowCamera from '../containers/camera';
-import WatchVideo from '../containers/video';
-import FriendsContainer from '../containers/friends';
+import ShowQuilts from './quilts';
+import ShowCamera from './camera';
+import WatchVideo from './video';
+import FriendsContainer from './friends';
+import LoginOrSignup from '../containers/login_or_signup';
+import PhoneNumber from '../containers/phoneNumber';
+import Username from '../containers/username';
+// import NavigationBar from 'react-native-navbar';
 
 const {
   Component,
@@ -20,13 +24,16 @@ const {
 
 // todo: refactor into redux-based navigation system
 const ROUTES = {
-  login: LoginContainer,
-  home: Home,
-  create: CreateQuilt,
   camera: ShowCamera,
+  create: CreateQuilt,
+  friends: FriendsContainer,
+  home: Home,
+  login: LoginContainer,
+  loginOrSignup: LoginOrSignup,
+  phone: PhoneNumber,
+  username: Username,
   view: ShowQuilts,
   video: WatchVideo,
-  friends: FriendsContainer,
 };
 
 class App extends Component {
@@ -43,7 +50,7 @@ class App extends Component {
     return (
       <View style={{ flex: 1 }}>
         <Navigator
-          initialRoute={{ name: 'login' }}
+          initialRoute={{ name: 'loginOrSignup' }}
           renderScene={this.renderScene}
           configureScene={this.configScene}
         />

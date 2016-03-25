@@ -15,9 +15,16 @@ import {
   REVIEW_QUILT,
   ADD_TO_QUILT,
   WATCH_QUILT,
+  LOGIN_OR_SIGNUP,
+  RECEIVE_USER_ERROR,
 } from '../constants/ActionTypes';
 
 import ip from '../config';
+
+export const selectLoginOrSignup = (selection) => ({
+  type: LOGIN_OR_SIGNUP,
+  payload: selection,
+})
 
 export const createQuilt = (data) => ({
   type: CREATE_QUILT,
@@ -44,14 +51,44 @@ const receiveUser = (user) => ({
   payload: user,
 });
 
-export function fetchUser(username) {
+const receiveUserError = () => ({
+  type: RECEIVE_USER_ERROR,
+})
+
+export function signupUser(email, password) {
   return (dispatch) => {
     dispatch(requestUser());
-    return fetch(`http://${ip}:8000/api/auth?username=${username}`)
-      .then(response => response.json())
-      .then(user => dispatch(receiveUser(user)))
-      .catch(error => console.error('error', error));
-  };
+    return fetch(`http://${ip}:8000/api/auth?email=${email}&password=${password}`, {
+      method: 'POST',
+    })
+    .then(response => response.json())
+    .then(user => dispatch(receiveUser(user)))
+    .catch(error => console.error('error', error));
+  }
+}
+
+export function loginUser(usernameOrEmail, password) {
+  return (dispatch) => {
+    dispatch(requestUser());
+    return fetch(`http://${ip}:8000/api/auth?usernameOrEmail=${usernameOrEmail}&password=${password}`, {
+      method: 'GET',
+    })
+    .then(response => response.json())
+    .then(user => dispatch(receiveUser(user)))
+    .catch(error => dispatch(receiveUserError()));
+  }
+}
+
+export function updateUser(id, data) {
+  return (dispatch) => {
+    dispatch(requestUser());
+    return fetch(`http://${ip}:8000/api/auth?userId=${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    })
+    .then(() => dispatch(receiveUser(data)))
+    .catch(error => console.error('error', error));
+  }
 }
 
 export const reviewQuilt = (file) => ({

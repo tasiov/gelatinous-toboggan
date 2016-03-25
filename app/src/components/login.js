@@ -22,7 +22,6 @@ const Textfield = mdl.Textfield.textfield()
   .build();
 
 const CustomButton = new MKButton.Builder()
-  .withText('LOG IN')
   .withStyle(login.button)
   .withTextStyle(login.buttonText)
   .build();
@@ -30,21 +29,53 @@ const CustomButton = new MKButton.Builder()
 class Login extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      username: '',
+      email: '',
+      password: '',
     };
 
     this.onPress = this.onPress.bind(this);
-    this.onType = this.onType.bind(this);
+    this.onTypeEmail = this.onTypeEmail.bind(this);
+    this.onTypePassword = this.onTypePassword.bind(this);
+  }
+
+  onNavigate() {
+    if (!this.props.isFetching && this.props.token) {
+      if (this.props.loginOrSignup === 'login') {
+        this.props.navigator.resetTo({ name: 'home' });
+      } else {
+        this.props.navigator.replace({ name: 'username' });
+      }
+    } else if (this.props.isFetching) {
+      console.log('spinner!');
+    }
   }
 
   onPress() {
-    this.props.fetchUser(this.state.username);
-    this.props.navigator.push({ name: 'home' });
+    if (this.props.loginOrSignup === 'login') {
+      this.props.loginUser(this.state.email, this.state.password)
+        .then(() => {
+          if (this.props.token) {
+            this.props.navigator.resetTo({ name: 'home' })
+          }
+        });
+    } else {
+      this.props.signupUser(this.state.email, this.state.password)
+        .then(() => {
+          if (this.props.token) {
+            this.props.navigator.replace({ name: 'username' });
+          }
+        });
+    }
   }
 
-  onType(username) {
-    return this.setState({ username });
+  onTypeEmail(email) {
+    return this.setState({ email });
+  }
+
+  onTypePassword(password) {
+    return this.setState({ password });
   }
 
   render() {
@@ -54,8 +85,17 @@ class Login extends Component {
           <Text style={login.title}>Quilt</Text>
         </View>
         <View style={login.containerBody}>
-          <Textfield />
-          <CustomButton onPress={this.onPress} />
+          <TextInput
+            value={this.state.email}
+            onChangeText={this.onTypeEmail}
+            placeHolder="Email Address"
+          />
+          <TextInput
+            value={this.state.password}
+            onChangeText={this.onTypePassword}
+            placeHolder="Password"
+          />
+          <CustomButton text={this.props.loginOrSignup} onPress={this.onPress} />
         </View>
       </View>
     );

@@ -10,7 +10,8 @@ const jwtOptions = {
 };
 
 const jwtLogin = new Strategy(jwtOptions, function(payload, done) {
-  return controller.getUser({username: payload.sub})
+  console.log('>>>>>', payload)
+  return controller.getUser({ email: payload.sub })
   .then((user) => {
     if(user){
       return done(null, user);

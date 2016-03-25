@@ -2,7 +2,7 @@
 import React, { Component } from 'react-native';
 import { connect } from 'react-redux';
 import Login from '../components/login';
-import { fetchUser } from '../actions/index';
+import { loginUser, signupUser } from '../actions/index';
 import { bindActionCreators } from 'redux';
 
 class LoginContainer extends Component {
@@ -13,8 +13,17 @@ class LoginContainer extends Component {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ fetchUser }, dispatch);
+function mapStateToProps(state) {
+  const user = state.get('user');
+  return {
+    loginOrSignup: user.get('loginOrSignup'),
+    isFetching: user.get('isFetching'),
+    token: user.get('token'),
+  };
 }
 
-export default connect(null, mapDispatchToProps)(LoginContainer);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ loginUser, signupUser }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer);
