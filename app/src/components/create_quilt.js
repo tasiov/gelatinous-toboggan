@@ -33,7 +33,7 @@ class CreateQuilt extends Component {
   render() {
     return (
       <View style={createQuilt.container}>
-        <NavBar/>
+        <NavBar onPress={this.props.navigator.pop}/>
         <View style={createQuilt.buttonContainer}>
           <CustomButton onPress={this.onCreatePress} />
         </View>

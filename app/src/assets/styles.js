@@ -59,12 +59,17 @@ export const login = StyleSheet.create({
 
 export const navbar = StyleSheet.create({
   bar: {
-    height: 40,
+    height: 50,
   },
   text: {
     color: 'white',
     fontFamily: 'Pacifico',
-    fontSize: 18
+    fontSize: 20
+  },
+  leftButton: {
+    color: 'white',
+    fontSize: 20,
+    marginLeft: 5,
   },
 });
 
