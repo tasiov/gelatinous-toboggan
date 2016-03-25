@@ -4,7 +4,6 @@ import { quiltEntry, colors } from '../assets/styles';
 
 const {
   PropTypes,
-  StyleSheet,
   Text,
   TouchableHighlight,
   View,
@@ -12,7 +11,11 @@ const {
 
 // TODO: Change the properties of the quilt information
 const QuiltEntry = ({ onClick, quilt }) => (
-  <TouchableHighlight underlayColor={colors.gray} style={quiltEntry.highlight} onPress={() => onClick(quilt.id)}>
+  <TouchableHighlight
+    underlayColor={colors.gray}
+    style={quiltEntry.highlight}
+    onPress={() => onClick(quilt.id)}
+  >
     <View style={quiltEntry.row}>
       <Text style={quiltEntry.theme}>Theme: {quilt.theme}</Text>
       <Text style={quiltEntry.status}>Status: {quilt.status}</Text>

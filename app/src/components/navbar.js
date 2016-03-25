@@ -9,19 +9,20 @@ const {
 
 const leftButton = (onPress) => (
   <Text style={navbar.leftButton} onPress={onPress}>Back</Text>
-)
+);
 
-const NavBar = ({ onPress }) => {
-  console.log(onPress);
-  return onPress ?
-    <NavigationBar style={navbar.bar} statusBar={{hidden: true}}
+const NavBar = (onPress) => (
+  onPress ?
+    <NavigationBar style={navbar.bar} statusBar={{ hidden: true }}
       title={<Text style={navbar.text}>Quilt</Text>}
-      tintColor={colors.auburn} leftButton={leftButton(onPress)}/>
+      tintColor={colors.auburn} leftButton={leftButton(onPress)}
+    />
   :
-    <NavigationBar style={navbar.bar} statusBar={{hidden: true}}
+    <NavigationBar style={navbar.bar} statusBar={{ hidden: true }}
       title={<Text style={navbar.text}>Quilt</Text>}
-      tintColor={colors.auburn} />
-}
+      tintColor={colors.auburn}
+    />
+);
 
 NavBar.propTypes = {
   onPress: PropTypes.func,

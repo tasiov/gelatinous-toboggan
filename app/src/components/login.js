@@ -21,8 +21,8 @@ const Textfield = mdl.Textfield.textfield()
   .withTextInputStyle(login.textInput)
   .build();
 
-  const CustomButton = new MKButton.Builder()
-  .withText("LOG IN")
+const CustomButton = new MKButton.Builder()
+  .withText('LOG IN')
   .withStyle(login.button)
   .withTextStyle(login.buttonText)
   .build();
@@ -54,8 +54,8 @@ class Login extends Component {
           <Text style={login.title}>Quilt</Text>
         </View>
         <View style={login.containerBody}>
-          <Textfield/>
-          <CustomButton onPress={this.onPress}/>
+          <Textfield />
+          <CustomButton onPress={this.onPress} />
         </View>
       </View>
     );

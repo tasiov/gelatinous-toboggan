@@ -1,19 +1,17 @@
 /* eslint-disable no-use-before-define, react/prefer-stateless-function */
 import React, { Component } from 'react-native';
 import { connect } from 'react-redux';
-import { startQuilt } from '../actions/index';
 import { createQuilt } from '../assets/styles';
 import { MKButton } from 'react-native-material-kit';
 import NavBar from './navbar';
 
 const {
   PropTypes,
-  Text,
   View,
 } = React;
 
 const CustomButton = new MKButton.Builder()
-.withText("Create Quilt!")
+.withText('Create Quilt')
 .withStyle(createQuilt.button)
 .withTextStyle(createQuilt.buttonText)
 .build();
@@ -33,7 +31,7 @@ class CreateQuilt extends Component {
   render() {
     return (
       <View style={createQuilt.container}>
-        <NavBar onPress={this.props.navigator.pop}/>
+        <NavBar onPress={this.props.navigator.pop} />
         <View style={createQuilt.buttonContainer}>
           <CustomButton onPress={this.onCreatePress} />
         </View>

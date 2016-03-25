@@ -8,9 +8,8 @@ import NavBar from './navbar';
 const {
   Component,
   PropTypes,
-  StyleSheet,
   View,
-  Text
+  Text,
 } = React;
 
 const CustomButton = new MKButton.Builder()
@@ -31,9 +30,12 @@ class Home extends Component {
   render() {
     return (
       <View style={home.container}>
-        <NavBar/>
+        <NavBar />
         <View style={home.buttonContainer}>
-          <CustomButton backgroundColor={colors.eucalyptus} onPress={() => this.onPressView('create')}>
+          <CustomButton
+            backgroundColor={colors.eucalyptus}
+            onPress={() => this.onPressView('create')}
+          >
             <Text style={home.buttonText}>Start A Quilt</Text>
           </CustomButton>
         </View>

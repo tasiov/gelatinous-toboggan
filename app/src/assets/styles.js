@@ -7,7 +7,7 @@ export const colors = {
   gray: '#6B6B6B',
   blue: '#32598B',
   yellowish: '#D39240',
-}
+};
 
 export const login = StyleSheet.create({
   container: {
@@ -45,8 +45,8 @@ export const login = StyleSheet.create({
     height: 45,
     backgroundColor: colors.blue,
     shadowRadius: 2,
-    shadowOffset: {width:0, height:2},
-    shadowOpacity: .7,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.7,
     shadowColor: 'black',
     borderRadius: 8,
   },
@@ -64,7 +64,7 @@ export const navbar = StyleSheet.create({
   text: {
     color: 'white',
     fontFamily: 'Pacifico',
-    fontSize: 20
+    fontSize: 20,
   },
   leftButton: {
     color: 'white',
@@ -87,8 +87,8 @@ export const home = StyleSheet.create({
     width: 200,
     height: 60,
     shadowRadius: 2,
-    shadowOffset: {width:0, height:2},
-    shadowOpacity: .7,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.7,
     shadowColor: 'black',
     borderRadius: 8,
   },
@@ -96,7 +96,7 @@ export const home = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     fontSize: 20,
-    fontFamily: 'Pacifico'
+    fontFamily: 'Pacifico',
   },
 });
 
@@ -132,7 +132,7 @@ export const quiltEntry = StyleSheet.create({
     color: colors.gray,
     fontWeight: 'bold',
     fontSize: 18,
-  }
+  },
 });
 
 export const createQuilt = StyleSheet.create({
@@ -150,8 +150,8 @@ export const createQuilt = StyleSheet.create({
     height: 60,
     backgroundColor: colors.eucalyptus,
     shadowRadius: 2,
-    shadowOffset: {width:0, height:2},
-    shadowOpacity: .7,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.7,
     shadowColor: 'black',
     borderRadius: 8,
   },

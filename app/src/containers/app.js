@@ -15,7 +15,6 @@ import FriendsContainer from '../containers/friends';
 const {
   Component,
   Navigator,
-  StyleSheet,
   View,
 } = React;
 
@@ -42,7 +41,7 @@ class App extends Component {
 
   render() {
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <Navigator
           initialRoute={{ name: 'login' }}
           renderScene={this.renderScene}

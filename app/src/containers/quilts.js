@@ -58,7 +58,7 @@ class ShowQuilts extends Component {
     }
     return (
       <View style={viewQuilts.container}>
-        <NavBar onPress={this.props.navigator.pop}/>
+        <NavBar onPress={this.props.navigator.pop} />
         <ListView
           dataSource={this.getDataSource()}
           renderRow={this.onRenderRow}
