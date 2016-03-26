@@ -123,7 +123,6 @@ export async function writeVideoToDiskPipeline(req, res, data, firstFlag) {
   // then send push notification to friends
   // unsure when exactly to send status code
   res.sendStatus(201);
-
 }
 // todo: catch errors
 
