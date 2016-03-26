@@ -1,6 +1,6 @@
-const db = require('./index.js');
-const modules = require('./modules/index.js');
-const Sequelize = require('sequelize');
+import sequelize from './index.js';
+import modules from './modules/index.js';
+import Sequelize from 'sequelize';
 // const controllers = require('./controllers/index.js');
 
 const user1 = {
@@ -59,7 +59,7 @@ const allQuilts = [
 
 function initializeData() {
   // remove force for production
-  return db.sequelize.sync({ force: true })
+  return sequelize.sync({ force: true })
     .then(() =>
       Sequelize.Promise.all([
         Sequelize.Promise.map(allUsers, user => modules.User.create(user)),

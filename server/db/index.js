@@ -10,6 +10,4 @@ const sequelize = new Sequelize('quilt', null, null, {
   storage: path.join(__dirname, 'quilt.sqlite'),
 });
 
-module.exports = {
-  sequelize,
-};
+export default sequelize;

@@ -6,10 +6,17 @@ import path from 'path';
 import _ from 'lodash';
 import utils from '../../config/utils';
 
-// options = {username: username}
-const createUser = (options) =>
-  db.User.create(options)
+// options = { email: email, password: password }
+const createUser = (email, password) =>
+  db.User.findOrCreate({ where: { email } })
+    .spread((user, created) => {
+      return created ? user.setPassword(password) : false;
+    })
     .catch((error) => console.log('Error creating user: ', error));
+
+const updateUser = (id, data) =>
+  db.User.update(data, { where: { id } })
+    .catch(err => console.log(err));
 
 const getAllUsers = () =>
   db.User.findAll()
@@ -19,6 +26,17 @@ const getAllUsers = () =>
 const getUser = (options) =>
   db.User.findOne({ where: options })
     .catch((error) => console.error('Error retrieving user. ', error));
+
+const verifyUser = (usernameOrEmail, password) =>
+  db.User.find({
+    where: {
+      $or: [
+        { username: usernameOrEmail },
+        { email: usernameOrEmail },
+      ],
+    }
+  })
+  .then(user => user && user.verifyPassword(password) ? user : false)
 
 // status 0 = pending me
 // status 1 = pending others
@@ -32,8 +50,8 @@ function reduceQuilts(userQuilts) {
 }
 
 // options = {username: username}
-const getAllUserQuilts = (options) =>
-  getUser(options)
+const getAllUserQuilts = (username) =>
+  getUser({ username })
     .then(user => user.getQuilts())
     .then(reduceQuilts)
     .catch(error => console.error('Error retrieving user\'s quilts: ', error));
@@ -91,5 +109,7 @@ export default {
   getAllUserQuilts,
   getQuilt,
   postQuilt,
+  updateUser,
   updateUserQuiltStatus,
+  verifyUser,
 }

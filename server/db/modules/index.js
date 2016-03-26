@@ -9,14 +9,27 @@ The following relationships exist within the db:
 * users to users: m-n (users can have multiple friends)
 * users to quilts: m-n (users can have multiple quilts and quilts can have multiple users)
 */
-const Sequelize = require('sequelize');
-const sequelize = require('../index.js').sequelize;
+import Sequelize from 'sequelize';
+import sequelize from '../index.js';
+import Bluebird from 'bluebird';
+import bcrypt from 'bcrypt';
+Bluebird.promisifyAll(bcrypt);
 
 const User = sequelize.define('user', {
-  username: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    unique: true,
+  email: Sequelize.STRING,
+  password: Sequelize.STRING,
+  phoneNumber: Sequelize.STRING,
+  username: Sequelize.STRING,
+}, {
+  instanceMethods: {
+    setPassword: function(password) {
+      return bcrypt.genSaltAsync(10)
+        .then(salt => bcrypt.hashAsync(password, salt))
+        .then(hash => this.update({ password: hash }));
+    },
+    verifyPassword: function(password) {
+      return bcrypt.compareAsync(password, this.get('password'));
+    },
   },
 });
 

@@ -14,3 +14,9 @@ export const CREATE_QUILT = 'CREATE_QUILT';
 export const ADD_TO_QUILT = 'ADD_TO_QUILT';
 export const WATCH_QUILT = 'WATCH_QUILT';
 export const REVIEW_QUILT = 'REVIEW_QUILT';
+
+export const LOGIN_OR_SIGNUP = 'LOGIN_OR_SIGNUP';
+
+export const SET_USERNAME = 'SET_USERNAME';
+export const ADD_PHONE_NUMBER = 'ADD_PHONE_NUMBER';
+export const RECEIVE_USER_ERROR = 'RECEIVE_USER_ERROR';

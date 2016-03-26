@@ -21,12 +21,10 @@ class ShowQuilts extends Component {
     this.getDataSource = this.getDataSource.bind(this);
     this.onRenderRow = this.onRenderRow.bind(this);
     this.onQuiltClick = this.onQuiltClick.bind(this);
-    this.props.fetchQuilts(
-      {
-        username: this.props.user.get('username'),
-        token: this.props.user.get('token'),
-      }
-    );
+    this.props.fetchQuilts({
+      username: this.props.username,
+      token: this.props.token,
+    });
   }
 
   onQuiltClick(quiltId, status) {
@@ -74,13 +72,16 @@ ShowQuilts.propTypes = {
   fetchQuilts: PropTypes.func,
   selectWatchQuilt: PropTypes.func,
   navigator: PropTypes.object,
-  user: PropTypes.object,
+  username: PropTypes.string,
+  token: PropTypes.string,
 };
 
 function mapStateToProps(state) {
+  const user = state.get('user');
   return {
     quilts: state.get('quilts'),
-    user: state.get('user'),
+    username: user.get('username'),
+    token: user.get('token'),
   };
 }
 
