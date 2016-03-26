@@ -1,10 +1,9 @@
-FROM node:4-onbuild
+FROM debian
+
+# Install Nodejs
+RUN curl -sL https://deb.nodesource.com/setup | sudo bash - && \
+apt-get install -yq nodejs build-essential
+RUN npm install -g npm
 
 # Copy entire project
 ADD / /
-WORKDIR /app
-RUN npm install
-WORKDIR ../server
-RUN npm install
-EXPOSE 8000
-CMD [ "npm", "start" ]
