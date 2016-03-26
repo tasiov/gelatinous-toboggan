@@ -12,8 +12,6 @@ const {
 
 const Textfield = mdl.Textfield.textfield()
   .withAutoCorrect(false)
-  .withPlaceholder('Username')
-  .withKeyboardType(this.onType)
   .withStyle(login.textfield)
   .withUnderlineSize(2)
   .withHighlightColor(colors.auburn)
@@ -23,7 +21,6 @@ const Textfield = mdl.Textfield.textfield()
 
 const CustomButton = new MKButton.Builder()
   .withStyle(login.button)
-  .withTextStyle(login.buttonText)
   .build();
 
 class Login extends Component {
@@ -85,17 +82,19 @@ class Login extends Component {
           <Text style={login.title}>Quilt</Text>
         </View>
         <View style={login.containerBody}>
-          <TextInput
+          <Textfield
             value={this.state.email}
             onChangeText={this.onTypeEmail}
-            placeHolder="Email Address"
+            placeholder={"Email Address"}
           />
-          <TextInput
+          <Textfield
             value={this.state.password}
             onChangeText={this.onTypePassword}
-            placeHolder="Password"
+            placeholder={"Password"}
           />
-          <CustomButton text={this.props.loginOrSignup} onPress={this.onPress} />
+          <CustomButton onPress={this.onPress}>
+            <Text style={login.buttonText}>{this.props.loginOrSignup}</Text>
+          </CustomButton>
         </View>
       </View>
     );
