@@ -14,3 +14,10 @@ ADD / /
 
 WORKDIR /app
 RUN npm install
+
+WORKDIR ../server
+RUN npm install
+
+EXPOSE 8000
+
+CMD [ "npm", "start" ]
