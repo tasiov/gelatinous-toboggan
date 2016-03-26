@@ -25,7 +25,7 @@ const Quilt = sequelize.define('quilt', {
   theme: Sequelize.STRING,
   status: {
     type: Sequelize.INTEGER,
-    values: [0, 1], // 0 - stitching, 1 - done
+    values: [0, 1, 2], // 0 - not ready for viewing, 1 - stitching, 2 - done
   },
 });
 

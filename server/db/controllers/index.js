@@ -23,7 +23,7 @@ const getUser = (options) =>
 // status 0 = pending me
 // status 1 = pending others
 // status 2 = done
-function reduceQuilts(userQuilts) {
+function mapQuilts(userQuilts) {
   return userQuilts.map(userQuilt => ({
     id: userQuilt.get('id'),
     theme: userQuilt.get('theme'),
@@ -35,7 +35,7 @@ function reduceQuilts(userQuilts) {
 const getAllUserQuilts = (options) =>
   getUser(options)
     .then(user => user.getQuilts())
-    .then(reduceQuilts)
+    .then(mapQuilts)
     .catch(error => console.error('Error retrieving user\'s quilts: ', error));
 
 const getQuilt = (options) => (
@@ -45,7 +45,8 @@ const getQuilt = (options) => (
 
 const postQuilt = (options) => {
   let newQuilt;
-  return db.Quilt.create(_.pick(options, ['title', 'theme']))
+  let createObj = Object.assign({}, _.pick(options, ['title', 'theme']), {status: 0});
+  return db.Quilt.create(createObj)
     .then((quilt) => {
       newQuilt = quilt;
       return getUser({ username: options.creator.username });
