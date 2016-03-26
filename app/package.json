@@ -11,6 +11,7 @@
     "lint"
   ],
   "dependencies": {
+    "email-validator": "^1.0.4",
     "immutable": "^3.7.6",
     "lodash": "^3.10.1",
     "react-native": "^0.21.0",
