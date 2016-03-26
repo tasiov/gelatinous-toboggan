@@ -135,7 +135,7 @@ export const quiltEntry = StyleSheet.create({
   },
 });
 
-export const createQuilt = StyleSheet.create({
+export const create = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.beige,
