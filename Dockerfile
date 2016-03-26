@@ -1,4 +1,4 @@
-FROM ubuntu
+FROM ubuntu:15.04
 
 # Install Nodejs, npm, git and ffmpeg
 
