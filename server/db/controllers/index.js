@@ -6,10 +6,17 @@ import path from 'path';
 import _ from 'lodash';
 import utils from '../../config/utils';
 
-// options = {username: username}
-const createUser = (options) =>
-  db.User.create(options)
+// options = { email: email, password: password }
+const createUser = (email, password) =>
+  db.User.findOrCreate({ where: { email } })
+    .spread((user, created) => {
+      return created ? user.setPassword(password) : false;
+    })
     .catch((error) => console.log('Error creating user: ', error));
+
+const updateUser = (id, data) =>
+  db.User.update(data, { where: { id } })
+    .catch(err => console.log(err));
 
 const getAllUsers = () =>
   db.User.findAll()
@@ -20,6 +27,17 @@ const getUser = (options) =>
   db.User.findOne({ where: options })
     .catch((error) => console.error('Error retrieving user. ', error));
 
+const verifyUser = (usernameOrEmail, password) =>
+  db.User.find({
+    where: {
+      $or: [
+        { username: usernameOrEmail },
+        { email: usernameOrEmail },
+      ],
+    }
+  })
+  .then(user => user && user.verifyPassword(password) ? user : false)
+
 // status 0 = pending me
 // status 1 = pending others
 // status 2 = done
@@ -27,13 +45,14 @@ function mapQuilts(userQuilts) {
   return userQuilts.map(userQuilt => ({
     id: userQuilt.get('id'),
     theme: userQuilt.get('theme'),
-    status: userQuilt.get('UserQuilt').get('status') + userQuilt.get('status'),
+    // status: userQuilt.get('UserQuilt').get('status') + userQuilt.get('status'),
+    status: userQuilt.get('status'),
   })).reverse();
 }
 
 // options = {username: username}
-const getAllUserQuilts = (options) =>
-  getUser(options)
+const getAllUserQuilts = (username) =>
+  getUser({ username })
     .then(user => user.getQuilts())
     .then(mapQuilts)
     .catch(error => console.error('Error retrieving user\'s quilts: ', error));
@@ -92,5 +111,7 @@ export default {
   getAllUserQuilts,
   getQuilt,
   postQuilt,
+  updateUser,
   updateUserQuiltStatus,
+  verifyUser,
 }
