@@ -50,8 +50,8 @@ function reduceQuilts(userQuilts) {
 }
 
 // options = {username: username}
-const getAllUserQuilts = (options) =>
-  getUser(options)
+const getAllUserQuilts = (username) =>
+  getUser({ username })
     .then(user => user.getQuilts())
     .then(reduceQuilts)
     .catch(error => console.error('Error retrieving user\'s quilts: ', error));

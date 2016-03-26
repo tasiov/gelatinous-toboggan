@@ -131,6 +131,7 @@ function mapStateToProps(state) {
       id: creator.get('id'),
       username: creator.get('username'),
     },
+    token: creator.get('token'),
   };
 }
 

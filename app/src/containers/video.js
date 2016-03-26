@@ -20,7 +20,7 @@ class WatchVideo extends Component {
     this.onReject = this.onReject.bind(this);
 
     if (this.props.currentQuilt.status !== 'create') {
-      this.url = `http://${ip}:8000/api/quilt/${this.props.currentQuilt.id}`;
+      this.url = `http://${ip}:8000/api/quilt/${this.props.currentQuilt.id}?token=${this.props.token}`;
     } else {
       this.url = this.props.currentQuilt.file;
     }
@@ -49,12 +49,14 @@ class WatchVideo extends Component {
           this.props.postQuilt(Object.assign(this.props.currentQuilt, {
             creator: this.props.creator,
             video: data,
+            token: this.props.token
           }));
         } else {
           this.props.addToQuilt({
             quiltId: this.props.currentQuilt.id,
             creator: this.props.creator,
             video: data,
+            token: this.props.token
           });
         }
         this.props.navigator.replace({ name: 'home' });
@@ -116,6 +118,7 @@ function mapStateToProps(state) {
       id: user.get('id'),
       username: user.get('username'),
     },
+    token: user.get('token'),
   };
 }
 

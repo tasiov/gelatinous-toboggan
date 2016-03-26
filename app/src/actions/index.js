@@ -82,7 +82,7 @@ export function loginUser(usernameOrEmail, password) {
 export function updateUser(id, data) {
   return (dispatch) => {
     dispatch(requestUser());
-    return fetch(`http://${ip}:8000/api/auth?userId=${id}`, {
+    return fetch(`http://${ip}:8000/api/auth?userId=${id}&token=${data.token}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     })
@@ -111,7 +111,7 @@ const responsePostQuilt = (data) => ({
 export function postQuilt(data) {
   return (dispatch) => {
     dispatch(requestPostQuilt());
-    return fetch(`http://${ip}:8000/api/quilt`, {
+    return fetch(`http://${ip}:8000/api/quilt?token=${data.token}`, {
       method: 'POST',
       body: data.video,
       headers: {
@@ -148,7 +148,7 @@ const responseAddQuilt = () => ({
 export function postToExistingQuilt(data) {
   return (dispatch) => {
     dispatch(requestAddQuilt());
-    return fetch(`http://${ip}:8000/api/quilt/${data.quiltId}`, {
+    return fetch(`http://${ip}:8000/api/quilt/${data.quiltId}&token=${data.token}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -181,7 +181,9 @@ export function fetchFriends(options) {
     // todo: hook up appropriately with server
     // todo: catch errors
 
-    return fetch(`http://${ip}:8000/api/friends/${options.username}`)
+    return fetch(`http://${ip}:8000/api/friends/${options.username}?token=${options.token}`, {
+      method: 'GET',
+    })
       .then(response => response.json())
       .then(json => dispatch(receiveFriends(json))
       );
@@ -200,7 +202,7 @@ const receiveQuilts = (quilts) => ({
 export function fetchQuilts(options) {
   return (dispatch) => {
     dispatch(requestQuilts());
-    return fetch(`http://${ip}:8000/api/quilt?username=${options.username}`, {
+    return fetch(`http://${ip}:8000/api/quilt?username=${options.username}&token=${options.token}`, {
       headers: { authorization: options.token } })
       .then((response) => response.json())
       .then((data) => dispatch(receiveQuilts(data)))

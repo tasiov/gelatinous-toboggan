@@ -60,37 +60,12 @@ export default (app) => {
     })
   });
 
-  //
-  // app.get('/api/auth', (req, res) => {
-  //   // if request query object is empty, send 404
-  //   if (_.isEmpty(req.query)) {
-  //     res.status(400).send('Failed to retrieve query string');
-  //   } else {
-  //     controller.getUser(req.query)
-  //     .then((data) => {
-  //       // if user is not in db, then create user
-  //       if (!data) {
-  //         controller.createUser(req.query)
-  //           .then((user) => {
-  //              res.status(200).send({ id: user.id, username: user.username, token: Authentication.tokenForUser(user) })
-  //             //res.status(200).send({ token })
-  //           })
-  //           .catch((error) => res.status(500).send(`Failed request: ${error}`));
-  //       } else {
-  //          res.status(200).send({ id: data.id, username: data.username, token:Authentication.tokenForUser(data) });
-  //         // res.status(200).send({ token })
-  //       }
-  //     }).catch((error) => res.status(500).send(`Failed request: ${error}`)
-  //     );
-  //   }
-  // });
-
   app.get('/api/quilt', requireAuth, (req, res) => {
     // if request query object is empty, send 404
     if (_.isEmpty(req.query)) {
       res.status(400).send('Failed to retrieve query string');
     } else {
-      controller.getAllUserQuilts(req.query)
+      controller.getAllUserQuilts(req.query.username)
         .then(data => res.status(200).send(data))
         .catch(error => res.status(500).send(`Failed request: ${error}`));
     }
@@ -101,7 +76,8 @@ export default (app) => {
     writeVideoToDiskPipeline(req, res, data, true);
   });
 
-  // todo: verify auth
+  // note: due to limitations of react-native-video, this route
+  // expects the authentication token in the querystring
   app.get('/api/quilt/:id', requireAuth, (req, res) => {
     console.log(getQuiltFromId(req.params.id));
     res.sendFile(getQuiltFromId(req.params.id));
