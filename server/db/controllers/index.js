@@ -69,10 +69,29 @@ function mapQuilts(userQuilts) {
   })).reverse();
 }
 
+export const updateQuiltStatusToReady = (id) => {
+  console.log('test2');
+  db.Quilt.update({
+    status: 1
+  }, {
+    where: {
+      id: id,
+    },
+  })
+  .then((data) => console.log('test2: ', data))
+  .catch((err) => console.log('err1: ', err));
+}
+
 // options = {username: username}
 const getAllUserQuilts = (username) =>
   getUser({ username })
-    .then(user => user.getQuilts())
+    .then(user => user.getQuilts({
+      where: {
+        status: {
+          $gt: 0,
+        },
+      },
+    }))
     .then(mapQuilts)
     .catch(error => console.error(`Error retrieving user's quilts: ${error}`));
 
@@ -154,4 +173,5 @@ export default {
   updateUser,
   updateUserQuiltStatus,
   verifyUser,
+  updateQuiltStatusToReady,
 }
