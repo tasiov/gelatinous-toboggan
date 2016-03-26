@@ -7,6 +7,3 @@ RUN apt-get install -y nodejs npm
 
 # Copy entire project
 ADD / /
-
-RUN cd /app && npm install
-RUN cd ../server && npm install
