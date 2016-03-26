@@ -1,15 +1,15 @@
 FROM ubuntu:14.04
 
-# Install Nodejs and npm
+# Install Nodejs, npm and git
 
 RUN apt-get update
-RUN apt-get install -y nodejs npm
+RUN apt-get install -y nodejs npm git
 
 # Copy entire project
 ADD / /
 
-WORKDIR /app
+WORKDIR /server
 RUN npm install
 
-WORKDIR ../server
+WORKDIR ../app
 RUN npm install
