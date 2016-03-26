@@ -71,6 +71,8 @@ export async function writeVideoToDiskPipeline(req, res, data, firstFlag) {
       concatQueues[destinationLoc] = createAsyncQueue();
     }
     concatQueues[destinationLoc].enqueue(concatenateToQuilt, newExtension, destinationLoc, intermediateLoc);
+  } else {
+    controller.updateQuiltStatusToReady(quiltId);
   }
   // then send push notification to friends
   // unsure when exactly to send status code
