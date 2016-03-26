@@ -8,5 +8,8 @@ RUN apt-get install -y nodejs npm
 # Copy entire project
 ADD / /
 
-RUN cd app
+WORKDIR /app
+RUN npm install
+
+RUN cd /app
 RUN npm install
