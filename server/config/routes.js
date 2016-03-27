@@ -7,6 +7,8 @@ import { writeVideoToDiskPipeline, getQuiltFromId } from './utils';
 import Authentication from '../db/controllers/authentication';
 import passportService from '../db/services/passport';
 import passport from 'passport';
+import phone from 'phone';
+import async from 'async';
 
 const requireAuth = passport.authenticate('jwt', { session: false });
 
@@ -76,10 +78,27 @@ export default (app) => {
     writeVideoToDiskPipeline(req, res, data, true);
   });
 
+  // TODO: add required auth
+  // TODO: clean up and optimize
+  app.post('/api/cross', (req, res) => {
+    let data = '';
+    req.on('data', (chunk) => {
+      data += chunk;
+    }).on('end', () => {
+      data = JSON.parse(data);
+      async.map(data, (contact, callback) => {
+        controller.crossReference(contact.emails, contact.phoneNumbers)
+          .then(id => callback(null, Object.assign(contact, { id })));
+      }, (err, results) => {
+        console.log(results);
+        res.status(201).send(results.filter(contact => contact.id !== null));
+      });
+    })
+  });
+
   // note: due to limitations of react-native-video, this route
   // expects the authentication token in the querystring
   app.get('/api/quilt/:id', requireAuth, (req, res) => {
-    console.log(getQuiltFromId(req.params.id));
     res.sendFile(getQuiltFromId(req.params.id));
   });
 
@@ -90,7 +109,6 @@ export default (app) => {
   });
 
   app.get('/api/friends/:id', requireAuth, (req, res) => {
-    console.log('get friends:', req.params.id);
     if (_.isEmpty(req.params.id)) {
       res.status(400).send('Failed to retrieve user');
     } else {
@@ -103,4 +121,18 @@ export default (app) => {
       );
     }
   });
+
+  app.post('/api/friends/:id', (req, res) => {
+    const userId = req.params.id;
+    let data = '';
+    req.on('data', (chunk) => {
+      data += chunk;
+    }).on('end', () => {
+      const friends = JSON.parse(data).friends;
+      controller.addFriends(userId, friends)
+        .then(() => res.sendStatus(201))
+        .catch(() => res.sendStatus(500))
+    })
+  });
+
 };

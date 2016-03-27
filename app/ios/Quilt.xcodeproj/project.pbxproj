@@ -27,6 +27,7 @@
 		854221D91CA07C6300ADD139 /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 854221D81CA07C5800ADD139 /* libRNFS.a */; };
 		854222051CA0C04200ADD139 /* libRCTVideo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 854222011CA0C03200ADD139 /* libRCTVideo.a */; };
 		855B73AB1CA0E06A0015011A /* libReactNativeIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 855B73A91CA0E05C0015011A /* libReactNativeIcons.a */; };
+		85A40D621CA6320400B7925C /* libRCTContacts.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 85A40D611CA631F900B7925C /* libRCTContacts.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -142,6 +143,13 @@
 			remoteGlobalIDString = 2F5A3EB81ACDBF8000439386;
 			remoteInfo = ReactNativeIcons;
 		};
+		85A40D601CA631F900B7925C /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 85A40D5C1CA631F900B7925C /* RCTContacts.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 1441618E1BD0A79300FA4F59;
+			remoteInfo = RCTContacts;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -171,6 +179,7 @@
 		854221D31CA07C5800ADD139 /* RNFS.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNFS.xcodeproj; path = "../node_modules/react-native-fs/RNFS.xcodeproj"; sourceTree = "<group>"; };
 		854221F31CA0C03200ADD139 /* RCTVideo.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTVideo.xcodeproj; path = "../node_modules/react-native-video/RCTVideo.xcodeproj"; sourceTree = "<group>"; };
 		855B73981CA0E05C0015011A /* ReactNativeIcons.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeIcons.xcodeproj; path = "../node_modules/react-native-icons/ios/ReactNativeIcons.xcodeproj"; sourceTree = "<group>"; };
+		85A40D5C1CA631F900B7925C /* RCTContacts.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTContacts.xcodeproj; path = "../node_modules/react-native-contacts/ios/RCTContacts.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,6 +194,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85A40D621CA6320400B7925C /* libRCTContacts.a in Frameworks */,
 				15BED95B1CA3227A00730C1D /* libRCTMaterialKit.a in Frameworks */,
 				855B73AB1CA0E06A0015011A /* libReactNativeIcons.a in Frameworks */,
 				854222051CA0C04200ADD139 /* libRCTVideo.a in Frameworks */,
@@ -327,6 +337,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				85A40D5C1CA631F900B7925C /* RCTContacts.xcodeproj */,
 				15BED9471CA3226200730C1D /* RCTMaterialKit.xcodeproj */,
 				855B73981CA0E05C0015011A /* ReactNativeIcons.xcodeproj */,
 				854221F31CA0C03200ADD139 /* RCTVideo.xcodeproj */,
@@ -408,6 +419,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		85A40D5D1CA631F900B7925C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				85A40D611CA631F900B7925C /* libRCTContacts.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -453,7 +472,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = Facebook;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
@@ -484,6 +503,10 @@
 				{
 					ProductGroup = 854221C31CA07BBB00ADD139 /* Products */;
 					ProjectRef = 854221C21CA07BBB00ADD139 /* RCTCamera.xcodeproj */;
+				},
+				{
+					ProductGroup = 85A40D5D1CA631F900B7925C /* Products */;
+					ProjectRef = 85A40D5C1CA631F900B7925C /* RCTContacts.xcodeproj */;
 				},
 				{
 					ProductGroup = 00C302B61ABCB90400DB3ED1 /* Products */;
@@ -652,6 +675,13 @@
 			remoteRef = 855B73A81CA0E05C0015011A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		85A40D611CA631F900B7925C /* libRCTContacts.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTContacts.a;
+			remoteRef = 85A40D601CA631F900B7925C /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -734,6 +764,7 @@
 				INFOPLIST_FILE = QuiltTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Quilt.app/Quilt";
 			};
@@ -751,6 +782,7 @@
 				INFOPLIST_FILE = QuiltTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Quilt.app/Quilt";
 			};
@@ -821,6 +853,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;

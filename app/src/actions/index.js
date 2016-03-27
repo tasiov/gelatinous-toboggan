@@ -184,10 +184,32 @@ export function fetchFriends(options) {
     return fetch(`http://${ip}:8000/api/friends/${options.username}?token=${options.token}`, {
       method: 'GET',
     })
-      .then(response => response.json())
-      .then(json => dispatch(receiveFriends(json))
-      );
+    .then(response => response.json())
+    .then(json => dispatch(receiveFriends(json)));
   };
+}
+
+// TODO: add token
+// clean up implementation
+export function crossReferenceContacts(contacts) {
+  return (dispatch) => {
+    dispatch(requestFriends())
+    return fetch(`http://${ip}:8000/api/cross`, {
+      method: 'POST',
+      body: JSON.stringify(contacts),
+    })
+    .then(response => dispatch(receiveFriends(JSON.parse(response._bodyInit))));
+  };
+}
+
+// add authentication, dispatches
+export function postFriends(userId, ...friendsId) {
+  return (dispatch) => {
+    return fetch(`http://${ip}:8000/api/friends/${userId}`, {
+      method: 'POST',
+      body: JSON.stringify({ friends: friendsId }),
+    })
+  }
 }
 
 const requestQuilts = () => ({
