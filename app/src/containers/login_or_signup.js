@@ -5,6 +5,9 @@ import LoginOrSignup from '../components/login_or_signup';
 import { selectLoginOrSignup } from '../actions/index';
 import { bindActionCreators } from 'redux';
 
+import Contacts from 'react-native-contacts';
+import { crossReferenceContacts } from '../actions/index';
+
 class LoginOrSignupContainer extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +27,11 @@ class LoginOrSignupContainer extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ selectLoginOrSignup }, dispatch);
+  return {
+    selectLoginOrSignup: (selection) => {
+      return dispatch(selectLoginOrSignup(selection));
+    }
+  };
 }
 
 export default connect(null, mapDispatchToProps)(LoginOrSignupContainer);

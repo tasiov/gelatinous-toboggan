@@ -28,15 +28,25 @@ const getUser = (options) =>
     .catch((error) => console.error('Error retrieving user. ', error));
 
 const verifyUser = (usernameOrEmail, password) =>
-  db.User.find({
+  db.User.findOne({
     where: {
       $or: [
         { username: usernameOrEmail },
         { email: usernameOrEmail },
       ],
-    }
+    },
   })
   .then(user => user && user.verifyPassword(password) ? user : false)
+
+const crossReference = (emails, phoneNumbers) =>
+  db.User.find({
+    where: {
+      $or: [
+        { email: { $in: emails } },
+        { phoneNumber: { $in: phoneNumbers } },
+      ],
+    },
+  }).then(user => user ? user.get('id') : null)
 
 // status 0 = pending me
 // status 1 = pending others
@@ -60,6 +70,23 @@ const getQuilt = (options) => (
   db.Quilt.findOne({ where: options })
     .catch((error) => console.error('Error retrieving quilt: ', error))
 );
+
+const addFriends = (userId, friendIds) => {
+  let currentUser;
+  return db.User.findById(userId).then(user => {
+    currentUser = user;
+    return db.User.findAll({
+      where: {
+        id: {
+          $in: friendIds,
+        },
+      },
+    });
+  }).then(friends => {
+    // for some reason, sequelize isn't giving an addFriends method for user
+    return Sequelize.Promise.map(friends, friend => currentUser.addFriend(friend))
+  }).catch(err => console.log(err));
+}
 
 const postQuilt = (options) => {
   let newQuilt;
@@ -98,11 +125,12 @@ const getAllOtherUsers = (username) =>
       },
     },
   }).then((users) => users)
-    .catch((error) => console.error('Error retreiving users. ', error)
-    );
+    .catch((error) => console.error('Error retreiving users. ', error));
 
 export default {
+  addFriends,
   createUser,
+  crossReference,
   getAllUsers,
   getAllOtherUsers,
   getUser,

@@ -11,9 +11,10 @@ import ShowQuilts from './quilts';
 import ShowCamera from './camera';
 import WatchVideo from './video';
 import FriendsContainer from './friends';
-import LoginOrSignup from '../containers/login_or_signup';
-import PhoneNumber from '../containers/phoneNumber';
-import Username from '../containers/username';
+import LoginOrSignup from './login_or_signup';
+import PhoneNumber from './phoneNumber';
+import Username from './username';
+import ContactsContainer from './contacts';
 // import NavigationBar from 'react-native-navbar';
 
 const {
@@ -25,6 +26,7 @@ const {
 // todo: refactor into redux-based navigation system
 const ROUTES = {
   camera: ShowCamera,
+  contacts: ContactsContainer,
   create: CreateQuilt,
   friends: FriendsContainer,
   home: Home,

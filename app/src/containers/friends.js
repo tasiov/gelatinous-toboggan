@@ -33,7 +33,7 @@ class FriendsContainer extends Component {
     this.checkedFriends[id.toString()] = id;
     // log array of checked user id's
     const checkedIds = [];
-    for (const key in this.checkedFriends) {
+    for (let key in this.checkedFriends) {
       if (Number.isInteger(this.checkedFriends[key])) {
         checkedIds.push(this.checkedFriends[key]);
       }
@@ -44,7 +44,7 @@ class FriendsContainer extends Component {
     this.checkedFriends[id.toString()] = '';
     // log array of checked user id's
     const checkedIds = [];
-    for (const key in this.checkedFriends) {
+    for (let key in this.checkedFriends) {
       if (Number.isInteger(this.checkedFriends[key])) {
         checkedIds.push(this.checkedFriends[key]);
       }

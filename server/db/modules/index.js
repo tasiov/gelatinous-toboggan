@@ -52,7 +52,7 @@ const UserQuilt = sequelize.define('UserQuilt', {
 // user - user m-n relationship (friends)
 // create the self reference
 // TODO: add status field (cancel - 0, pending - 1, accepted - 2) to friends model
-User.belongsToMany(User, { as: 'friends', through: 'friends' });
+User.belongsToMany(User, { as: 'Friend', through: 'UserFriends' });
 
 // user - quilt m-n relationship (user-quilt)
 User.belongsToMany(Quilt, { through: 'UserQuilt' });

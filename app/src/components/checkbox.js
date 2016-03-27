@@ -33,10 +33,10 @@ class CheckBox extends Component {
   }
 
   render() {
-    let source = require('./cb_disabled.png');
+    let source = require('../assets/cb_disabled.png');
 
     if (this.state.check) {
-      source = require('./cb_enabled.png');
+      source = require('../assets/cb_enabled.png');
     }
 
     let container = (
