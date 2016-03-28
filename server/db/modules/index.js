@@ -49,6 +49,14 @@ const UserQuilt = sequelize.define('UserQuilt', {
   },
 });
 
+const Notification = sequelize.define('notification', {
+  message: Sequelize.STRING,
+  status: {
+    type: Sequelize.INTEGER,
+    values: [0, 1], // 0 - unread, 1 - read
+  },
+});
+
 // user - user m-n relationship (friends)
 // create the self reference
 // TODO: add status field (cancel - 0, pending - 1, accepted - 2) to friends model
@@ -58,7 +66,11 @@ User.belongsToMany(User, { as: 'friends', through: 'friends' });
 User.belongsToMany(Quilt, { through: 'UserQuilt' });
 Quilt.belongsToMany(User, { through: 'UserQuilt' });
 
+User.hasMany(Notification, {as: 'Notifs'});
+Quilt.hasMany(Notification, {as: 'Notifs'});
+
 module.exports = {
   User,
   Quilt,
+  Notification
 };

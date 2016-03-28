@@ -45,12 +45,11 @@ function mapQuilts(userQuilts) {
   return userQuilts.map(userQuilt => ({
     id: userQuilt.get('id'),
     theme: userQuilt.get('theme'),
-    // status: userQuilt.get('UserQuilt').get('status') + userQuilt.get('status'),
-    status: userQuilt.get('status'),
+    status: userQuilt.get('UserQuilt').get('status') + userQuilt.get('status'),
   })).reverse();
 }
 
-export const updateQuiltStatusToReady = (id) => {
+const updateQuiltStatusToReady = (id) => {
   console.log('test2');
   db.Quilt.update({
     status: 1
@@ -122,6 +121,25 @@ const getAllOtherUsers = (username) =>
     .catch((error) => console.error('Error retreiving users. ', error)
     );
 
+const createNotif = (userId, quiltId, quiltTheme, messageType, contribName) => {
+  let message;
+  switch(messageType) {
+    case 1:
+      message = `You have been invited to participate in ${quiltTheme}`;
+      break;
+    case 2:
+      message = `${contribName} has made a contribution to ${quiltTheme}`;
+      break;
+    case 3:
+      message = `The quilt is done`;
+      break;
+    default:
+      message = "Default message";
+  }
+  // status: 0 = unread, 1 = read
+  return db.Notification.create({ userId, quiltId, message, status: 0 });
+}
+
 export default {
   createUser,
   getAllUsers,
@@ -134,4 +152,5 @@ export default {
   updateUserQuiltStatus,
   verifyUser,
   updateQuiltStatusToReady,
+  createNotif,
 }
