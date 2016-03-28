@@ -81,7 +81,7 @@ function addedToQuiltNotif(contributorId, quiltId) {
     return Promise.all(
       [ data[0].getUsers({ where: { $not: { id: contributorId, }, }, }),
         data[0].theme,
-        data[1].username ])
+        _.capitalize(data[1].username) ])
   }).then((data) => {
     _.forEach(data[0], (user) => (
       controller.createNotif(user.id, quiltId, data[1], 2, data[2])
@@ -97,6 +97,17 @@ function doneQuiltNotif(quiltId) {
       controller.createNotif(user.id, quiltId, data[0], 3)
     ))
   }).catch(console.log);
+
+function newQuiltNotif(userId, quiltId) {
+  controller.getQuilt({ id: quiltId })
+  .then((quilt) => Promise.all(
+    [ quilt.theme, quilt.getUsers({ where: { $not: { id: userId, }, }, }) ]
+  )).then((data) => _.forEach(data[1], (user) =>
+    // data[0] = quilt theme, data[1] = users array
+    // notifType: 1 = invitation to quilt
+    // notifType: 2 = contribution made to quilt
+    controller.createNotif(user.id, quiltId, data[0], 1)
+  ));
 }
 
 export async function writeVideoToDiskPipeline(req, res, data, firstFlag) {
