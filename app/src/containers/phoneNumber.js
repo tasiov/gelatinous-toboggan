@@ -8,6 +8,7 @@ const {
   View,
 } = React;
 import Button from '../components/button';
+import PhoneInput from '../components/phone_input';
 import { updateUser } from '../actions/index';
 
 class PhoneNumber extends Component {
@@ -34,7 +35,7 @@ class PhoneNumber extends Component {
     return (
       <View style={styles.container}>
         <Text style={styles.label}>Enter Your Phone Number</Text>
-        <TextInput
+        <PhoneInput
           style={styles.input}
           value={this.state.phoneNumber}
           onChangeText={this.onType}

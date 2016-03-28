@@ -71,14 +71,12 @@ class Login extends Component {
   render() {
     return (
       <View style={login.container}>
-        <View style={login.containerHead}>
-          <Text style={login.title}>Quilt</Text>
-        </View>
         <View style={login.containerBody}>
           <EmailInput
             value={this.state.email}
             onChangeText={this.onTypeEmail}
             placeholder={this.props.loginOrSignup === 'login' ? "Username or Email" : "Email Address"}
+            autoFocus
           />
           <PasswordInput
             value={this.state.password}
