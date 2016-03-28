@@ -43,6 +43,9 @@ function concatenateToQuilt(src, dest, dest2, quiltId, contributorId) {
   return execPromise(`ffmpeg -i ${dest} -i ${src} -filter_complex concat=n=2:v=1:a=1 -f mp4 -y ${dest2}; mv ${dest2} ${dest}; rm ${src}`)
     .then(() => {
       addedToQuiltNotif(contributorId, quiltId, 2);
+      controller.isQuiltDone(quiltId).then((isDone) => {
+        if (isDone) doneQuiltNotif(quiltId);
+      })
     });
 }
 
@@ -58,23 +61,7 @@ function wrapStreamInPromise(stream) {
   });
 }
 
-export function addedToQuiltNotif(contributorId, quiltId) {
-  Promise.all(
-    [ controller.getQuilt({ id: quiltId }),
-      controller.getUser({ id: contributorId }) ])
-  .then((data) => {
-    return Promise.all(
-      [ data[0].getUsers({ where: { $not: { id: contributorId, }, }, }),
-        data[0].theme,
-        _.capitalize(data[1].username) ])
-  }).then((data) => {
-    _.forEach(data[0], (user) => (
-      controller.createNotif(user.id, quiltId, data[1], 2, data[2])
-    ))
-  }).catch(console.log);
-}
-
-export function newQuiltNotif(userId, quiltId) {
+function newQuiltNotif(userId, quiltId) {
   controller.getQuilt({ id: quiltId })
   .then((quilt) => Promise.all(
     [ quilt.theme, quilt.getUsers({ where: { $not: { id: userId, }, }, }) ]
@@ -84,6 +71,32 @@ export function newQuiltNotif(userId, quiltId) {
     // notifType: 2 = contribution made to quilt
     controller.createNotif(user.id, quiltId, data[0], 1)
   ));
+}
+
+function addedToQuiltNotif(contributorId, quiltId) {
+  Promise.all(
+    [ controller.getQuilt({ id: quiltId }),
+      controller.getUser({ id: contributorId }) ])
+  .then((data) => {
+    return Promise.all(
+      [ data[0].getUsers({ where: { $not: { id: contributorId, }, }, }),
+        data[0].theme,
+        data[1].username ])
+  }).then((data) => {
+    _.forEach(data[0], (user) => (
+      controller.createNotif(user.id, quiltId, data[1], 2, data[2])
+    ))
+  }).catch(console.log);
+}
+
+function doneQuiltNotif(quiltId) {
+  controller.getQuilt({ id: quiltId })
+  .then((quilt) => Promise.all([ quilt.theme, quilt.getUsers() ]))
+  .then((data) => {
+    _.forEach(data[1], (user) => (
+      controller.createNotif(user.id, quiltId, data[0], 3)
+    ))
+  }).catch(console.log);
 }
 
 export async function writeVideoToDiskPipeline(req, res, data, firstFlag) {
