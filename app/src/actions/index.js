@@ -191,10 +191,10 @@ export function fetchFriends(options) {
 
 // TODO: add token
 // clean up implementation
-export function crossReferenceContacts(contacts) {
+export function crossReferenceContacts(contacts, token) {
   return (dispatch) => {
     dispatch(requestFriends())
-    return fetch(`http://${ip}:8000/api/cross`, {
+    return fetch(`http://${ip}:8000/api/cross?token=${token}`, {
       method: 'POST',
       body: JSON.stringify(contacts),
     })
@@ -224,8 +224,7 @@ const receiveQuilts = (quilts) => ({
 export function fetchQuilts(options) {
   return (dispatch) => {
     dispatch(requestQuilts());
-    return fetch(`http://${ip}:8000/api/quilt?username=${options.username}&token=${options.token}`, {
-      headers: { authorization: options.token } })
+    return fetch(`http://${ip}:8000/api/quilt?username=${options.username}&token=${options.token}`)
       .then((response) => response.json())
       .then((data) => dispatch(receiveQuilts(data)))
       .catch((error) => console.error('Error in getting user\'s quilts', error));

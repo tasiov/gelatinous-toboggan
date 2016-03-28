@@ -42,7 +42,7 @@ class ContactsContainer extends Component {
           });
           return acc;
         }, []);
-        this.props.crossReferenceContacts(cleanContacts);
+        this.props.crossReferenceContacts(cleanContacts, this.props.token);
       }
     });
 
@@ -117,9 +117,11 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   const friends = state.get('friends');
   const userId = state.get('user').get('id');
+  const token = state.get('user').get('token');
   return {
     friends,
     userId,
+    token,
   };
 };
 
