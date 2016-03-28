@@ -17,6 +17,7 @@ import {
   WATCH_QUILT,
   LOGIN_OR_SIGNUP,
   RECEIVE_USER_ERROR,
+  INVITE_FRIENDS,
 } from '../constants/ActionTypes';
 
 import ip from '../config';
@@ -183,6 +184,7 @@ export function fetchFriends(options) {
 
     return fetch(`http://${ip}:8000/api/friends/${options.username}?token=${options.token}`, {
       method: 'GET',
+      headers: { authorization: options.token }
     })
     .then(response => response.json())
     .then(json => dispatch(receiveFriends(json)));
@@ -235,6 +237,13 @@ export function fetchQuilts(options) {
 export function selectWatchQuilt(data) {
   return {
     type: SELECT_WATCH_QUILT,
+    payload: data,
+  };
+}
+
+export function inviteFriends(data) {
+  return {
+    type: INVITE_FRIENDS,
     payload: data,
   };
 }
