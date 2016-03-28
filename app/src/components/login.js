@@ -1,7 +1,9 @@
 /* eslint-disable no-use-before-define */
 import React from 'react-native';
-import { MKButton, mdl } from 'react-native-material-kit';
+import { MKButton } from 'react-native-material-kit';
 import { login, colors } from '../assets/styles';
+import EmailInput from './email_input';
+import PasswordInput from './password_input';
 
 const {
   Component,
@@ -9,16 +11,6 @@ const {
   View,
   Text,
 } = React;
-
-const Textfield = mdl.Textfield.textfield()
-  .withAutoCorrect(false)
-  .withStyle(login.textfield)
-  .withUnderlineSize(2)
-  .withHighlightColor(colors.auburn)
-  .withTintColor(colors.auburn)
-  .withTextInputStyle(login.textInput)
-  .withPassword(true)
-  .build();
 
 const CustomButton = new MKButton.Builder()
   .withStyle(login.button)
@@ -83,12 +75,12 @@ class Login extends Component {
           <Text style={login.title}>Quilt</Text>
         </View>
         <View style={login.containerBody}>
-          <Textfield
+          <EmailInput
             value={this.state.email}
             onChangeText={this.onTypeEmail}
-            placeholder={"Email Address"}
+            placeholder={this.props.loginOrSignup === 'login' ? "Username or Email" : "Email Address"}
           />
-          <Textfield
+          <PasswordInput
             value={this.state.password}
             onChangeText={this.onTypePassword}
             placeholder={"Password"}
