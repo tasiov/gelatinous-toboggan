@@ -42,7 +42,7 @@ class ContactsContainer extends Component {
           });
           return acc;
         }, []);
-        this.props.crossReferenceContacts(cleanContacts, this.props.token);
+        this.props.crossReferenceContacts(cleanContacts, this.props.token, this.props.userId);
       }
     });
 
@@ -127,8 +127,8 @@ const mapStateToProps = (state) => {
 
 function mapDispatchToProps(dispatch) {
   return {
-    crossReferenceContacts: (contacts) => {
-      return dispatch(crossReferenceContacts(contacts));
+    crossReferenceContacts: (contacts, token, uid) => {
+      return dispatch(crossReferenceContacts(contacts, token, uid));
     },
     postFriends: (userId, friendIds) => {
       return dispatch(postFriends(userId, ...friendIds));

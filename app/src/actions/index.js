@@ -191,10 +191,11 @@ export function fetchFriends(options) {
 
 // TODO: add token
 // clean up implementation
-export function crossReferenceContacts(contacts, token) {
+export function crossReferenceContacts(contacts, token, userId) {
   return (dispatch) => {
+    console.log(token, userId);
     dispatch(requestFriends())
-    return fetch(`http://${ip}:8000/api/cross?token=${token}`, {
+    return fetch(`http://${ip}:8000/api/cross?userId=${userId}&token=${token}`, {
       method: 'POST',
       body: JSON.stringify(contacts),
     })

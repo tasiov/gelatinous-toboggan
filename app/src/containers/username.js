@@ -25,7 +25,7 @@ class Username extends Component {
   }
 
   onEnter() {
-    this.props.updateUser(this.props.userId, { username: this.state.username });
+    this.props.updateUser(this.props.userId, { username: this.state.username, token: this.props.token });
     this.props.navigator.push({ name: 'phone' })
   }
 
@@ -67,7 +67,10 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   const user = state.get('user');
-  return { userId: user.get('id') };
+  return {
+    userId: user.get('id'),
+    token: user.get('token'),
+  };
 }
 
 function mapDispatchToProps(dispatch) {

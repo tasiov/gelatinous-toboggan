@@ -26,7 +26,7 @@ class PhoneNumber extends Component {
   }
 
   onEnter() {
-    this.props.updateUser(this.props.userId, { phoneNumber: this.state.phoneNumber });
+    this.props.updateUser(this.props.userId, { phoneNumber: this.state.phoneNumber, token: this.props.token });
     this.props.navigator.push({ name: 'contacts' });
   }
 
@@ -68,7 +68,10 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   const user = state.get('user');
-  return { userId: user.get('id') };
+  return {
+    userId: user.get('id'),
+    token: user.get('token'),
+  };
 }
 
 function mapDispatchToProps(dispatch) {
