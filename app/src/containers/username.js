@@ -34,8 +34,14 @@ class Username extends Component {
     this.setState({ username });
   }
   onEnter() {
+<<<<<<< af57beb3477415511eea52037b46df4705f34fdf
     this.props.updateUser(this.props.userId,
       { username: this.state.username, token: this.props.token });
+=======
+    const usernameToLowercase = this.state.username.toLowerCase();
+    this.props.updateUser(this.props.userId, { username: usernameToLowercase, token: this.props.token });
+    this.props.navigator.push({ name: 'phone' })
+>>>>>>> Convert username and email to lowercase before user creation or sign in requests
   }
 
   render() {

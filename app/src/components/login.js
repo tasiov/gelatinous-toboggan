@@ -45,15 +45,17 @@ class Login extends Component {
   }
 
   onPress() {
+    const emailToLowercase = this.state.email.toLowerCase();
+
     if (this.props.loginOrSignup === 'login') {
-      this.props.loginUser(this.state.email, this.state.password)
+      this.props.loginUser(emailToLowercase, this.state.password)
         .then(() => {
           if (this.props.token) {
             this.props.navigator.resetTo({ name: 'home' })
           }
         });
     } else {
-      this.props.signupUser(this.state.email, this.state.password)
+      this.props.signupUser(emailToLowercase, this.state.password)
         .then(() => {
           if (this.props.token) {
             this.props.navigator.replace({ name: 'username' });
