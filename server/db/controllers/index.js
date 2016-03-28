@@ -128,16 +128,23 @@ const createNotif = (userId, quiltId, quiltTheme, messageType, contribName) => {
       message = `You have been invited to participate in ${quiltTheme}`;
       break;
     case 2:
-      message = `${contribName} has made a contribution to ${quiltTheme}`;
+      message = `${_.capitalize(contribName)} has made a contribution to ${quiltTheme}`;
       break;
     case 3:
-      message = `The quilt is done`;
+      message = `Quilt ${quiltTheme} is done!`;
       break;
     default:
       message = "Default message";
   }
   // status: 0 = unread, 1 = read
   return db.Notification.create({ userId, quiltId, message, status: 0 });
+}
+
+export function isQuiltDone(quiltId) {
+  return Promise.all(
+    [ db.UserQuilt.count({ where: { quiltId: quiltId } }),
+      db.UserQuilt.sum('status', { where: { quiltId: quiltId } })
+    ]).then((data) => data[0] === data[1])
 }
 
 export default {
@@ -153,4 +160,5 @@ export default {
   verifyUser,
   updateQuiltStatusToReady,
   createNotif,
+  isQuiltDone,
 }

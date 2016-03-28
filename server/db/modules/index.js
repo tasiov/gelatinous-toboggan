@@ -72,5 +72,6 @@ Quilt.hasMany(Notification, {as: 'Notifs'});
 module.exports = {
   User,
   Quilt,
-  Notification
+  UserQuilt,
+  Notification,
 };
