@@ -14,7 +14,7 @@ const QuiltEntry = ({ onClick, quilt }) => (
   <TouchableHighlight
     underlayColor={colors.gray}
     style={quiltEntry.highlight}
-    onPress={() => onClick(quilt.id)}
+    onPress={() => onClick(quilt.id, quilt.status)}
   >
     <View style={quiltEntry.row}>
       <Text style={quiltEntry.theme}>Theme: {quilt.theme}</Text>

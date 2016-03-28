@@ -39,6 +39,20 @@ export const login = StyleSheet.create({
   textInput: {
     color: colors.gray,
   },
+  signupButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 5,
+    backgroundColor: colors.eucalyptus,
+    height: 75,
+  },
+  loginButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 5,
+    backgroundColor: colors.blue,
+    height: 75,
+  },
   button: {
     marginTop: 30,
     width: 95,

@@ -27,8 +27,9 @@ const getUser = (options) =>
   db.User.findOne({ where: options })
     .catch((error) => console.error('Error retrieving user. ', error));
 
-const verifyUser = (usernameOrEmail, password) =>
-  db.User.findOne({
+const verifyUser = (usernameOrEmail, password) => {
+  let currentUser;
+  return db.User.findOne({
     where: {
       $or: [
         { username: usernameOrEmail },
@@ -36,7 +37,12 @@ const verifyUser = (usernameOrEmail, password) =>
       ],
     },
   })
-  .then(user => user && user.verifyPassword(password) ? user : false)
+  .then(user => {
+    currentUser = user;
+    return user && user.verifyPassword(password);
+  })
+  .then(isVerified => isVerified ? currentUser : false)
+}
 
 const crossReference = (emails, phoneNumbers) =>
   db.User.find({

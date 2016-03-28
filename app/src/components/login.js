@@ -1,7 +1,10 @@
 /* eslint-disable no-use-before-define */
 import React from 'react-native';
-import { MKButton, mdl } from 'react-native-material-kit';
+import { MKButton } from 'react-native-material-kit';
 import { login, colors } from '../assets/styles';
+import EmailInput from './email_input';
+import PasswordInput from './password_input';
+import NavBar from './navbar';
 
 const {
   Component,
@@ -9,15 +12,6 @@ const {
   View,
   Text,
 } = React;
-
-const Textfield = mdl.Textfield.textfield()
-  .withAutoCorrect(false)
-  .withStyle(login.textfield)
-  .withUnderlineSize(2)
-  .withHighlightColor(colors.auburn)
-  .withTintColor(colors.auburn)
-  .withTextInputStyle(login.textInput)
-  .build();
 
 const CustomButton = new MKButton.Builder()
   .withStyle(login.button)
@@ -33,6 +27,7 @@ class Login extends Component {
     };
 
     this.onPress = this.onPress.bind(this);
+    this.onBack = this.onBack.bind(this);
     this.onTypeEmail = this.onTypeEmail.bind(this);
     this.onTypePassword = this.onTypePassword.bind(this);
   }
@@ -60,11 +55,16 @@ class Login extends Component {
     } else {
       this.props.signupUser(this.state.email, this.state.password)
         .then(() => {
+          console.log('test');
           if (this.props.token) {
             this.props.navigator.replace({ name: 'username' });
           }
         });
     }
+  }
+
+  onBack() {
+    this.props.navigator.pop();
   }
 
   onTypeEmail(email) {
@@ -78,16 +78,15 @@ class Login extends Component {
   render() {
     return (
       <View style={login.container}>
-        <View style={login.containerHead}>
-          <Text style={login.title}>Quilt</Text>
-        </View>
+        <NavBar onPress={this.onBack} text={this.props.loginOrSignup === 'login' ? 'Login' : 'Sign Up'} />
         <View style={login.containerBody}>
-          <Textfield
+          <EmailInput
             value={this.state.email}
             onChangeText={this.onTypeEmail}
-            placeholder={"Email Address"}
+            placeholder={this.props.loginOrSignup === 'login' ? "Username or Email" : "Email Address"}
+            autoFocus
           />
-          <Textfield
+          <PasswordInput
             value={this.state.password}
             onChangeText={this.onTypePassword}
             placeholder={"Password"}

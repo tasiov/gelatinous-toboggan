@@ -52,7 +52,7 @@ export default (app) => {
       .catch(error => res.status(500).send(`Failed request: ${error}`));
   });
 
-  app.put('/api/auth', (req, res) => {
+  app.put('/api/auth', requireAuth, (req, res) => {
     let body = '';
     req.on('data', data => body += data);
     req.on('end', () => {
@@ -80,7 +80,9 @@ export default (app) => {
 
   // TODO: add required auth
   // TODO: clean up and optimize
-  app.post('/api/cross', (req, res) => {
+  app.post('/api/cross', requireAuth, (req, res) => {
+    const userId = req.query.userId;
+    console.log(userId);
     let data = '';
     req.on('data', (chunk) => {
       data += chunk;
@@ -90,8 +92,7 @@ export default (app) => {
         controller.crossReference(contact.emails, contact.phoneNumbers)
           .then(id => callback(null, Object.assign(contact, { id })));
       }, (err, results) => {
-        console.log(results);
-        res.status(201).send(results.filter(contact => contact.id !== null));
+        res.status(201).send(results.filter(contact => contact.id !== null && contact.id !== userId));
       });
     })
   });

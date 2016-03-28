@@ -2,13 +2,19 @@ import React from 'react-native';
 import { connect } from 'react-redux';
 const {
   Component,
-  StyleSheet,
   Text,
   TextInput,
   View,
 } = React;
 import Button from '../components/button';
+import PhoneInput from '../components/phone_input';
 import { updateUser } from '../actions/index';
+import { MKButton } from 'react-native-material-kit';
+import { login } from '../assets/styles';
+
+const CustomButton = new MKButton.Builder()
+  .withStyle(login.button)
+  .build();
 
 class PhoneNumber extends Component {
   constructor(props) {
@@ -26,49 +32,34 @@ class PhoneNumber extends Component {
   }
 
   onEnter() {
-    this.props.updateUser(this.props.userId, { phoneNumber: this.state.phoneNumber });
+    this.props.updateUser(this.props.userId, { phoneNumber: this.state.phoneNumber, token: this.props.token });
     this.props.navigator.push({ name: 'contacts' });
   }
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.label}>Enter Your Phone Number</Text>
-        <TextInput
-          style={styles.input}
-          value={this.state.phoneNumber}
-          onChangeText={this.onType}
-        />
-        <Button text="Enter" onPress={this.onEnter} />
+      <View style={login.container}>
+        <View style={login.containerBody}>
+          <Text>Please Enter Your Phone Number</Text>
+          <PhoneInput
+            value={this.state.phoneNumber}
+            onChangeText={this.onType}
+          />
+          <CustomButton onPress={this.onEnter}>
+            <Text style={login.buttonText}>{this.props.loginOrSignup}</Text>
+          </CustomButton>
+        </View>
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  input: {
-    padding: 4,
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
-    margin: 5,
-    width: 200,
-    alignSelf: 'center',
-  },
-  label: {
-    fontSize: 18,
-  },
-});
-
 function mapStateToProps(state) {
   const user = state.get('user');
-  return { userId: user.get('id') };
+  return {
+    userId: user.get('id'),
+    token: user.get('token'),
+  };
 }
 
 function mapDispatchToProps(dispatch) {
