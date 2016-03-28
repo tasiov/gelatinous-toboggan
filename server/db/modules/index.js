@@ -19,8 +19,10 @@ const User = sequelize.define('user', {
   email: Sequelize.STRING,
   password: Sequelize.STRING,
   phoneNumber: Sequelize.STRING,
-  username: Sequelize.STRING,
-}, {
+  username: {
+    type: Sequelize.STRING,
+    unique: true},
+  }, {
   instanceMethods: {
     setPassword: function(password) {
       return bcrypt.genSaltAsync(10)
