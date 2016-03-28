@@ -17,6 +17,7 @@ const Textfield = mdl.Textfield.textfield()
   .withHighlightColor(colors.auburn)
   .withTintColor(colors.auburn)
   .withTextInputStyle(login.textInput)
+  .withPassword(true)
   .build();
 
 const CustomButton = new MKButton.Builder()
