@@ -1,4 +1,6 @@
-console.log('yes');
-import { emitNewQuiltNotifs } from './utils';
+console.log('mock.js');
+import { newQuiltNotif, addedToQuiltNotif } from './utils';
+import db from '../db/controllers/index.js';
 
-emitNewQuiltNotifs(2);
+// emitNewQuiltNotif(4, 2);
+addedToQuiltNotif(4, 2);

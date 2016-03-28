@@ -4,6 +4,7 @@ import { exec } from 'child_process';
 import base64 from 'base64-stream';
 import { promisify } from 'bluebird';
 import controller from '../db/controllers/index';
+import _ from 'lodash';
 
 // this module can still be cleaned up very much
 const execPromise = promisify(exec);
@@ -38,8 +39,11 @@ function getTmpQuiltFromId(quiltId, userId) {
   return path.join(__dirname, `../videos/tmp/quilt_${quiltId}/quilt_${userId}.MOV`);
 }
 
-function concatenateToQuilt(src, dest, dest2) {
+function concatenateToQuilt(src, dest, dest2, quiltId, contributorId) {
   return execPromise(`ffmpeg -i ${dest} -i ${src} -filter_complex concat=n=2:v=1:a=1 -f mp4 -y ${dest2}; mv ${dest2} ${dest}; rm ${src}`)
+    .then(() => {
+      addedToQuiltNotif(contributorId, quiltId, 2);
+    });
 }
 
 function makeTmpDirectoryFromId(id) {
@@ -52,6 +56,34 @@ function wrapStreamInPromise(stream) {
     stream.on('finish', () => resolve());
     stream.on('error', reject);
   });
+}
+
+export function addedToQuiltNotif(contributorId, quiltId) {
+  Promise.all(
+    [ controller.getQuilt({ id: quiltId }),
+      controller.getUser({ id: contributorId }) ])
+  .then((data) => {
+    return Promise.all(
+      [ data[0].getUsers({ where: { $not: { id: contributorId, }, }, }),
+        data[0].theme,
+        _.capitalize(data[1].username) ])
+  }).then((data) => {
+    _.forEach(data[0], (user) => (
+      controller.createNotif(user.id, quiltId, data[1], 2, data[2])
+    ))
+  }).catch(console.log);
+}
+
+export function newQuiltNotif(userId, quiltId) {
+  controller.getQuilt({ id: quiltId })
+  .then((quilt) => Promise.all(
+    [ quilt.theme, quilt.getUsers({ where: { $not: { id: userId, }, }, }) ]
+  )).then((data) => _.forEach(data[1], (user) =>
+    // data[0] = quilt theme, data[1] = users array
+    // notifType: 1 = invitation to quilt
+    // notifType: 2 = contribution made to quilt
+    controller.createNotif(user.id, quiltId, data[0], 1)
+  ));
 }
 
 export async function writeVideoToDiskPipeline(req, res, data, firstFlag) {
@@ -70,9 +102,10 @@ export async function writeVideoToDiskPipeline(req, res, data, firstFlag) {
     if (!concatQueues[destinationLoc]) {
       concatQueues[destinationLoc] = createAsyncQueue();
     }
-    concatQueues[destinationLoc].enqueue(concatenateToQuilt, newExtension, destinationLoc, intermediateLoc);
+    concatQueues[destinationLoc].enqueue(concatenateToQuilt, newExtension, destinationLoc, intermediateLoc, quiltId, data.creator.id);
   } else {
     controller.updateQuiltStatusToReady(quiltId);
+    newQuiltNotif(quiltId, data.creator.id, 1);
   }
   // then send push notification to friends
   // unsure when exactly to send status code
