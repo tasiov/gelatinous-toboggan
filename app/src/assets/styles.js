@@ -44,14 +44,14 @@ export const login = StyleSheet.create({
     alignItems: 'center',
     padding: 5,
     backgroundColor: colors.eucalyptus,
-    height: 50,
+    height: 75,
   },
   loginButton: {
     justifyContent: 'center',
     alignItems: 'center',
     padding: 5,
     backgroundColor: colors.blue,
-    height: 50,
+    height: 75,
   },
   button: {
     marginTop: 30,

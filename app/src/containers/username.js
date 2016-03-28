@@ -2,13 +2,19 @@ import React from 'react-native';
 import { connect } from 'react-redux';
 const {
   Component,
-  StyleSheet,
   Text,
   TextInput,
   View,
 } = React;
 import { updateUser } from '../actions/index';
+import UsernameInput from '../components/username_input';
 import Button from '../components/button';
+import { login } from '../assets/styles';
+import { MKButton } from 'react-native-material-kit';
+
+const CustomButton = new MKButton.Builder()
+  .withStyle(login.button)
+  .build();
 
 class Username extends Component {
   constructor(props) {
@@ -31,39 +37,21 @@ class Username extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.label}>Select a Username</Text>
-        <TextInput
-          style={styles.input}
-          value={this.state.username}
-          onChangeText={this.onType}
-        />
-        <Button text="Enter" onPress={this.onEnter} />
+      <View style={login.container}>
+        <View style={login.containerBody}>
+          <Text>Select a Username</Text>
+          <UsernameInput
+            value={this.state.phoneNumber}
+            onChangeText={this.onType}
+          />
+          <CustomButton onPress={this.onEnter}>
+            <Text style={login.buttonText}>{this.props.loginOrSignup}</Text>
+          </CustomButton>
+        </View>
       </View>
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  input: {
-    padding: 4,
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
-    margin: 5,
-    width: 200,
-    alignSelf: 'center',
-  },
-  label: {
-    fontSize: 18,
-  },
-});
 
 function mapStateToProps(state) {
   const user = state.get('user');

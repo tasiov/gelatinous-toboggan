@@ -4,6 +4,7 @@ import { MKButton } from 'react-native-material-kit';
 import { login, colors } from '../assets/styles';
 import EmailInput from './email_input';
 import PasswordInput from './password_input';
+import NavBar from './navbar';
 
 const {
   Component,
@@ -26,6 +27,7 @@ class Login extends Component {
     };
 
     this.onPress = this.onPress.bind(this);
+    this.onBack = this.onBack.bind(this);
     this.onTypeEmail = this.onTypeEmail.bind(this);
     this.onTypePassword = this.onTypePassword.bind(this);
   }
@@ -53,11 +55,16 @@ class Login extends Component {
     } else {
       this.props.signupUser(this.state.email, this.state.password)
         .then(() => {
+          console.log('test');
           if (this.props.token) {
             this.props.navigator.replace({ name: 'username' });
           }
         });
     }
+  }
+
+  onBack() {
+    this.props.navigator.pop();
   }
 
   onTypeEmail(email) {
@@ -71,6 +78,7 @@ class Login extends Component {
   render() {
     return (
       <View style={login.container}>
+        <NavBar onPress={this.onBack} text={this.props.loginOrSignup === 'login' ? 'Login' : 'Sign Up'} />
         <View style={login.containerBody}>
           <EmailInput
             value={this.state.email}
