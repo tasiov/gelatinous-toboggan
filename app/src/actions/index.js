@@ -184,7 +184,6 @@ export function fetchFriends(options) {
 
     return fetch(`http://${ip}:8000/api/friends/${options.username}?token=${options.token}`, {
       method: 'GET',
-      headers: { authorization: options.token }
     })
     .then(response => response.json())
     .then(json => dispatch(receiveFriends(json)));

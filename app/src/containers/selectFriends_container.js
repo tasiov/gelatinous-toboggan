@@ -27,16 +27,19 @@ class SelectFriendsContainer extends Component {
     this.getDataSource = this.getDataSource.bind(this);
     this.onCheck = this.onCheck.bind(this);
     this.onRenderRow = this.onRenderRow.bind(this);
-    props.fetchFriends({ username: 'tasio' });
+    props.fetchFriends({
+      username: this.props.username,
+      token: this.props.token,
+    });
     this.checkedFriends = {};
     this.onInvitePress = this.onInvitePress.bind(this);
   }
 
   onCheck(id) {
-    if (this.checkedFriends[id.toString()]) {
-      delete this.checkedFriends[id.toString()];
+    if (this.checkedFriends[id]) {
+      delete this.checkedFriends[id];
     } else {
-      this.checkedFriends[id.toString()] = id;
+      this.checkedFriends[id] = id;
     }
   }
 
@@ -46,12 +49,7 @@ class SelectFriendsContainer extends Component {
   }
 
   onInvitePress() {
-    const checkedIds = [];
-    for (const key in this.checkedFriends) {
-      if (this.checkedFriends.hasOwnProperty(key)) {
-        checkedIds.push(this.checkedFriends[key]);
-      }
-    }
+    const checkedIds = Object.keys(this.checkedFriends).map(id => parseInt(id));
     this.props.inviteFriends(checkedIds);
     this.props.navigator.push({ name: 'camera' });
   }
@@ -108,8 +106,13 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   const friends = state.get('friends');
   const currentQuilt = state.get('currentQuilt');
-  // const testUsers = Immutable.List.of('griffin', 'tasio', 'joe', 'sally');
-  return { friends, currentQuilt };
+  const user = state.get('user');
+  return {
+    friends,
+    currentQuilt,
+    username: user.get('username'),
+    token: user.get('token'),
+  };
 };
 
 function mapDispatchToProps(dispatch) {
