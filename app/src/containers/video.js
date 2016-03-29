@@ -2,7 +2,7 @@
 import React, { Component } from 'react-native';
 import { connect } from 'react-redux';
 import Video from 'react-native-video';
-import { postQuilt, addToQuilt } from '../actions/index';
+import { postQuilt, postToExistingQuilt } from '../actions/index';
 import Button from '../components/button';
 import RNFS from 'react-native-fs';
 import ip from '../config';
@@ -19,7 +19,7 @@ class WatchVideo extends Component {
     this.onAccept = this.onAccept.bind(this);
     this.onReject = this.onReject.bind(this);
 
-    if (this.props.currentQuilt.status !== 'create') {
+    if (this.props.currentQuilt.status === 'watchAdd' || this.props.currentQuilt.status === 'watch') {
       this.url = `http://${ip}:8000/api/quilt/${this.props.currentQuilt.id}?token=${this.props.token}`;
     } else {
       this.url = this.props.currentQuilt.file;
@@ -27,15 +27,17 @@ class WatchVideo extends Component {
   }
 
   onAccept() {
-    if (this.props.currentQuilt.status !== 'watch') {
+    if (this.props.currentQuilt.status === 'add' || this.props.currentQuilt.status === 'create') {
       this._sendVideo();
+    } else if (this.props.currentQuilt.status === 'watchAdd') {
+      this.props.navigator.replace({ name: 'camera' });
     } else {
       this._replayVideo();
     }
   }
 
   onReject() {
-    if (this.props.currentQuilt.status !== 'watch') {
+    if (this.props.currentQuilt.status === 'add' || this.props.currentQuilt.status === 'create') {
       this.props.navigator.replace({ name: 'camera' });
     } else {
       this.props.navigator.pop();
@@ -52,7 +54,7 @@ class WatchVideo extends Component {
             token: this.props.token
           }));
         } else {
-          this.props.addToQuilt({
+          this.props.postToExistingQuilt({
             quiltId: this.props.currentQuilt.id,
             creator: this.props.creator,
             video: data,
@@ -68,9 +70,19 @@ class WatchVideo extends Component {
   }
 
   render() {
-    const acceptText = this.props.currentQuilt.status === 'watch' ? 'Replay' : 'Accept';
-    const rejectText = this.props.currentQuilt.status === 'watch' ? 'Back' : 'Reject';
-    const repeat = this.props.currentQuilt.status !== 'watch';
+    let acceptText, rejectText;
+    let repeat = true;
+    if (this.props.currentQuilt.status === 'watch') {
+      acceptText = 'Replay';
+      rejectText = 'Back';
+      repeat = false;
+    } else if (this.props.currentQuilt.status === 'watchAdd') {
+      acceptText = 'Contribute';
+      rejectText = 'Back'
+    } else {
+      acceptText = 'Accept';
+      rejectText = 'Reject';
+    }
     return (
       <View style={styles.container}>
         <Video
@@ -78,7 +90,6 @@ class WatchVideo extends Component {
           source={{ uri: this.url }}
           style={styles.backgroundVideo}
           repeat={repeat}
-          onEnd={this.onEnd}
         />
         <Button onPress={this.onAccept} text={acceptText} />
         <Button onPress={this.onReject} text={rejectText} />
@@ -127,8 +138,8 @@ function mapDispatchToProps(dispatch) {
     postQuilt: (data) => {
       dispatch(postQuilt(data));
     },
-    addToQuilt: (data) => {
-      dispatch(addToQuilt(data));
+    postToExistingQuilt: (data) => {
+      dispatch(postToExistingQuilt(data));
     },
   };
 }

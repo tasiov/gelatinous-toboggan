@@ -82,7 +82,6 @@ export default (app) => {
   // TODO: clean up and optimize
   app.post('/api/cross', requireAuth, (req, res) => {
     const userId = req.query.userId;
-    console.log(userId);
     let data = '';
     req.on('data', (chunk) => {
       data += chunk;

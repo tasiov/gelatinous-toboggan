@@ -149,7 +149,7 @@ const responseAddQuilt = () => ({
 export function postToExistingQuilt(data) {
   return (dispatch) => {
     dispatch(requestAddQuilt());
-    return fetch(`http://${ip}:8000/api/quilt/${data.quiltId}&token=${data.token}`, {
+    return fetch(`http://${ip}:8000/api/quilt/${data.quiltId}?token=${data.token}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

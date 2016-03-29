@@ -78,9 +78,8 @@ class SelectFriendsContainer extends Component {
       return <Text>Loading Friends...</Text>;
     }
     return (
-      <View>
+      <View style={styles.container}>
         <ListView
-          style={styles.container}
           dataSource={this.getDataSource()}
           renderRow={this.onRenderRow}
         />

@@ -13,7 +13,7 @@ const initialState = Map({
   theme: '',
   users: List(),
   file: null,
-  status: null, // create, add, watch
+  status: null, // create, add, watch, watchAdd
 });
 
 export default function currentQuilt(state = initialState, action) {

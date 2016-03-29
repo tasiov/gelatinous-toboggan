@@ -24,7 +24,6 @@ export default function (state = initialState, action) {
     case REQUEST_USER:
       return state.set('isFetching', true);
     case RECEIVE_USER:
-    console.log('receive user:', action.payload);
       return state.merge(Object.assign({ isFetching: false }, action.payload));
     case RECEIVE_USER_ERROR:
       return state.set('isFetching', false);
