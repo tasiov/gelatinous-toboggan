@@ -32,7 +32,8 @@ export default (app) => {
         } else {
           res.status(400).send('Invalid Login')
         }
-      });
+      })
+      .catch(error => res.status(500).send(`Failed verify user request: ${error}`));
   });
 
   // signup
@@ -49,7 +50,7 @@ export default (app) => {
           res.status(406).send('Email already exists');
         }
       })
-      .catch(error => res.status(500).send(`Failed request: ${error}`));
+      .catch(error => res.status(500).send(`Failed signup request: ${error}`));
   });
 
   app.put('/api/auth', requireAuth, (req, res) => {
@@ -65,7 +66,7 @@ export default (app) => {
           .then(() => res.status(204).send('Successfully updated'))
           .catch(error => res.status(500).send(`Failed to update user: ${error}`));
         }
-      }).catch(error => res.status(500).send(`Failed request: ${error}`));
+      }).catch(error => res.status(500).send(`Failed update user request: ${error}`));
     })
   });
 
@@ -76,7 +77,7 @@ export default (app) => {
     } else {
       controller.getAllUserQuilts(req.query.username)
         .then(data => res.status(200).send(data))
-        .catch(error => res.status(500).send(`Failed request: ${error}`));
+        .catch(error => res.status(500).send(`Failed get quilt request: ${error}`));
     }
   });
 
@@ -97,8 +98,12 @@ export default (app) => {
       async.map(data, (contact, callback) => {
         controller.crossReference(contact.emails, contact.phoneNumbers)
           .then(id => callback(null, Object.assign(contact, { id })));
-      }, (err, results) => {
-        res.status(201).send(results.filter(contact => contact.id !== null && contact.id !== userId));
+      }, (error, results) => {
+        if(error) {
+          res.status(500).send(`Failed post cross reference request: ${error}`);
+        } else {
+          res.status(201).send(results.filter(contact => contact.id !== null && contact.id !== userId));
+        }
       });
     })
   });
@@ -120,12 +125,8 @@ export default (app) => {
       res.status(400).send('Failed to retrieve user');
     } else {
       controller.getAllOtherUsers(req.params.id)
-      .then((data) => {
-        // let friends = Object.assign(data);
-        return res.status(200).send(data);
-      }
-      ).catch((error) => res.status(500).send(`Failed request: ${error}`)
-      );
+      .then(data =>  res.status(200).send(data))
+      .catch(error => res.status(500).send(`Failed get friends request: ${error}`))
     }
   });
 
@@ -138,7 +139,7 @@ export default (app) => {
       const friends = JSON.parse(data).friends;
       controller.addFriends(userId, friends)
         .then(() => res.sendStatus(201))
-        .catch(() => res.sendStatus(500))
+        .catch(error => res.status(500).send(`Failed add friends request: ${error}`))
     })
   });
 
@@ -148,7 +149,7 @@ export default (app) => {
     } else {
       controller.getUser(req.params)
       .then((data) => res.status(200).send(data || {}))
-      .catch((error) => res.status(500).send(`Failed request: ${error}`));
+      .catch((error) => res.status(500).send(`Failed get user request: ${error}`));
     }
   });
 

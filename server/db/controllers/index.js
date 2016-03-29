@@ -12,7 +12,7 @@ const createUser = (email, password) =>
     .spread((user, created) => {
       return created ? user.setPassword(password) : false;
     })
-    .catch((error) => console.log('Error creating user: ', error));
+    .catch((error) => console.log(`Error creating user: ${error}`));
 
 const updateUser = (id, data) =>
   db.User.update(data, { where: { id } })
@@ -20,12 +20,12 @@ const updateUser = (id, data) =>
 
 const getAllUsers = () =>
   db.User.findAll()
-    .catch((error) => console.error('Error retrieving all users: ', error));
+    .catch((error) => console.error(`Error retrieving all users: ${error}`));
 
 // options = {username: username}
 const getUser = (options) =>
   db.User.findOne({ where: options })
-    .catch((error) => console.error('Error retrieving user: ', error));
+    .catch((error) => console.error(`Error retrieving user: ${error}`));
 
 const verifyUser = (usernameOrEmail, password) => {
   let currentUser;
@@ -42,7 +42,7 @@ const verifyUser = (usernameOrEmail, password) => {
     return user && user.verifyPassword(password);
   })
   .then(isVerified => isVerified ? currentUser : false)
-  .catch(error => console.error('Error verifying user: ', error));
+  .catch(error => console.error(`Error verifying user: ${error}`));
 }
 
 const crossReference = (emails, phoneNumbers) =>
@@ -55,7 +55,7 @@ const crossReference = (emails, phoneNumbers) =>
     },
   })
   .then(user => user ? user.get('id') : null)
-  .catch(error => console.error('Error cross referencing user: ', error));
+  .catch(error => console.error(`Error cross referencing user: ${error}`));
 
 // status 0 = pending me
 // status 1 = pending others
@@ -73,11 +73,11 @@ const getAllUserQuilts = (username) =>
   getUser({ username })
     .then(user => user.getQuilts())
     .then(reduceQuilts)
-    .catch(error => console.error('Error retrieving user\'s quilts: ', error));
+    .catch(error => console.error(`Error retrieving user's quilts: ${error}`));
 
 const getQuilt = (options) => (
   db.Quilt.findOne({ where: options })
-    .catch(error => console.error('Error retrieving quilt: ', error))
+    .catch(error => console.error(`Error retrieving quilt: ${error}`))
 );
 
 const addFriends = (userId, friendIds) => {
@@ -94,7 +94,7 @@ const addFriends = (userId, friendIds) => {
   }).then(friends => {
     // for some reason, sequelize isn't giving an addFriends method for user
     return Sequelize.Promise.map(friends, friend => currentUser.addFriend(friend))
-  }).catch(error => console.log('Error adding friends: ', error));
+  }).catch(error => console.log(`Error adding friends: ${error}`));
 }
 
 const postQuilt = (options) => {
@@ -116,7 +116,7 @@ const postQuilt = (options) => {
     ))
     .then(users => newQuilt.addUsers(users, { status: 0 }))
     .then(() => newQuilt.id)
-    .catch((error) => console.error('Error posting a quilt: ', error))
+    .catch(error => console.error(`Error posting a quilt: ${error}`))
 };
 
 const updateUserQuiltStatus = (userId, quiltId) => {
@@ -125,7 +125,7 @@ const updateUserQuiltStatus = (userId, quiltId) => {
       .then(quilt => quilt.setUsers(user, { status: 1 }));
   })
   .then(() => quiltId)
-  .catch((error) => console.error('Error updating user quilt status: ', error))
+  .catch((error) => console.error(`Error updating user quilt status: ${error}`))
 };
 
 const getAllOtherUsers = (username) =>
@@ -137,7 +137,7 @@ const getAllOtherUsers = (username) =>
     },
   })
   .then((users) => users)
-  .catch((error) => console.error('Error retreiving all other users: ', error));
+  .catch((error) => console.error(`Error retreiving all other users: ${error}`));
 
 export default {
   addFriends,
