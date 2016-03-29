@@ -13,6 +13,8 @@ const rootReducer = combineReducers({
   notifs,
   quilts,
   user,
+  currentQuilt,
+  notifs,
 });
 
 export default rootReducer;

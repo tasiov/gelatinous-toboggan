@@ -43,7 +43,6 @@ const ROUTES = {
   username: Username,
   view: ShowQuilts,
   video: WatchVideo,
-  friends: FriendsContainer,
   findFriends: FindFriends,
   selectFriends: SelectFriendsContainer,
   notification: NotifContainer,

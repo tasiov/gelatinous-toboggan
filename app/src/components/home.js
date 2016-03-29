@@ -67,6 +67,11 @@ class Home extends Component {
             <Text style={home.buttonText}>Logout</Text>
           </CustomButton>
         </View>
+        <View style={home.buttonContainer}>
+          <CustomButton backgroundColor={colors.blue} onPress={() => this.onPressView('notification')}>
+            <Text style={home.buttonText}>View Notifications</Text>
+          </CustomButton>
+        </View>
       </View>
     );
   }

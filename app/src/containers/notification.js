@@ -7,7 +7,7 @@ react/prop-types
 import React, { Component } from 'react-native';
 import NotifEntry from '../components/notification_entry';
 import { connect } from 'react-redux';
-import Immutable from 'immutable';
+import Immutable from 'immutable'; // just for testing
 import { fetchNotifs } from '../actions/index';
 
 const {
