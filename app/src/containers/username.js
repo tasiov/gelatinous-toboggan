@@ -34,8 +34,9 @@ class Username extends Component {
     this.setState({ username });
   }
   onEnter() {
-    this.props.updateUser(this.props.userId,
-      { username: this.state.username, token: this.props.token });
+    const usernameToLowercase = this.state.username.toLowerCase();
+    this.props.updateUser(this.props.userId, { username: usernameToLowercase, token: this.props.token });
+    this.props.navigator.push({ name: 'phone' })
   }
 
   render() {
