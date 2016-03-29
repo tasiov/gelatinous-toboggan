@@ -160,32 +160,6 @@ const getAllOtherUsers = (username) =>
   .then((users) => users)
   .catch((error) => console.error(`Error retreiving all other users: ${error}`));
 
-const createNotif = (userId, quiltId, quiltTheme, messageType, contribName) => {
-  let message;
-  switch(messageType) {
-    case 1:
-      message = `You have been invited to participate in ${quiltTheme}`;
-      break;
-    case 2:
-      message = `${_.capitalize(contribName)} has made a contribution to ${quiltTheme}`;
-      break;
-    case 3:
-      message = `Quilt ${quiltTheme} is done!`;
-      break;
-    default:
-      message = "Default message";
-  }
-  // status: 0 = unread, 1 = read
-  return db.Notification.create({ userId, quiltId, message, status: 0 });
-}
-
-const isQuiltDone = (quiltId) => {
-  return Promise.all(
-    [ db.UserQuilt.count({ where: { quiltId: quiltId } }),
-      db.UserQuilt.sum('status', { where: { quiltId: quiltId } })
-    ]).then((data) => data[0] === data[1])
-}
-
 const getUsersNotifs = (userId) => (
   db.Notification.findAll({ where: { userId: userId } })
 )
@@ -224,10 +198,6 @@ const isQuiltDone = (quiltId) => {
       db.UserQuilt.sum('status', { where: { quiltId: quiltId } })
     ]).then((data) => data[0] === data[1])
 }
-
-const getUsersNotifs = (userId) => (
-  db.Notification.findAll({ where: { userId: userId } })
-)
 
 export default {
   addFriends,
