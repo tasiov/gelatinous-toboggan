@@ -25,6 +25,7 @@ class PhoneNumber extends Component {
     this.state = {
       phoneNumber: '',
     };
+
   }
 
   onType(phoneNumber) {

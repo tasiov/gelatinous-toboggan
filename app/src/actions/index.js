@@ -17,7 +17,11 @@ import {
   WATCH_QUILT,
   LOGIN_OR_SIGNUP,
   RECEIVE_USER_ERROR,
+<<<<<<< a4666a3d55554df0b8fc799b3726255819212f72
   INVITE_FRIENDS,
+=======
+  RECEIVE_USERNAME_EXIST_ERROR,
+>>>>>>> display error when choosing an existing username
 } from '../constants/ActionTypes';
 
 import ip from '../config';
@@ -54,6 +58,10 @@ const receiveUser = (user) => ({
 
 const receiveUserError = () => ({
   type: RECEIVE_USER_ERROR,
+});
+
+const receiveUsernameExistError = () => ({
+  type: RECEIVE_USERNAME_EXIST_ERROR,
 })
 
 export function signupUser(email, password) {
@@ -87,8 +95,16 @@ export function updateUser(id, data) {
       method: 'PUT',
       body: JSON.stringify(data),
     })
-    .then(() => dispatch(receiveUser(data)))
-    .catch(error => console.error('error', error));
+    .then(user => {
+      if(user._bodyInit) {
+        return dispatch(receiveUsernameExistError());
+      }
+      return dispatch(receiveUser(data));
+    })
+    .catch(error => {
+      console.error('error updating user:', error);
+      return dispatch(receiveUserError());
+    });
   }
 }
 

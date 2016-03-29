@@ -21,21 +21,38 @@ class Username extends Component {
     super(props);
     this.onType = this.onType.bind(this);
     this.onEnter = this.onEnter.bind(this);
-    this.state = {
-      username: '',
-    };
+    this.state = { username: '' };
   }
 
   onType(username) {
     this.setState({ username });
   }
 
+  componentWillReceiveProps(nextProps, nextState) {
+    if(!nextProps.duplicateUsername && nextProps.username){
+      nextProps.navigator.push({ name: 'phone' })
+    }
+  }
+
   onEnter() {
     this.props.updateUser(this.props.userId, { username: this.state.username, token: this.props.token });
-    this.props.navigator.push({ name: 'phone' })
   }
 
   render() {
+    if(this.props.duplicateUsername) {
+      return (
+        <View style={styles.container}>
+          <Text style={styles.errorMsg}>Username already exists!</Text>
+          <Text style={styles.label}>Select a Username</Text>
+          <TextInput
+            style={styles.input}
+            value={this.state.username}
+            onChangeText={this.onType}
+          />
+          <Button text="Enter" onPress={this.onEnter} />
+        </View>
+      )
+    }
     return (
       <View style={login.container}>
         <View style={login.containerBody}>
@@ -53,12 +70,38 @@ class Username extends Component {
   }
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  input: {
+    padding: 4,
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    margin: 5,
+    width: 200,
+    alignSelf: 'center',
+  },
+  label: {
+    fontSize: 18,
+  },
+  errorMsg: {
+    fontSize: 18,
+    color: 'red',
+  },
+});
+
 function mapStateToProps(state) {
   const user = state.get('user');
-  return {
-    userId: user.get('id'),
-    token: user.get('token'),
-  };
+  return { userId: user.get('id'),
+           duplicateUsername: user.get('duplicateUsername'),
+           username: user.get('username'),
+           token: user.get('token'),
+        };
 }
 
 function mapDispatchToProps(dispatch) {
