@@ -60,7 +60,7 @@ export default (app) => {
       controller.getUser(JSON.parse(body))
       .then((user) => {
         if(user){
-          res.status(409).send('username already exists');
+          res.status(409).send('already exists');
         } else {
           controller.updateUser(req.query.userId, JSON.parse(body))
           .then(() => res.status(204).send('Successfully updated'))
@@ -119,6 +119,22 @@ export default (app) => {
     data.quiltId = req.params.id;
     writeVideoToDiskPipeline(req, res, data, false);
   });
+
+  app.get('/api/users', (req, res) => {
+    const username = req.query.username;
+    controller.getUser({ username })
+      .then(user => {
+        console.log(user);
+        if (user) {
+          res.status(200).send({
+            id: user.get('id'),
+            username: user.get('username'),
+          });
+        } else {
+          res.sendStatus(400);
+        }
+      });
+  })
 
   app.get('/api/friends/:id', requireAuth, (req, res) => {
     if (_.isEmpty(req.params.id)) {

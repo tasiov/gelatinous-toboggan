@@ -18,6 +18,7 @@ import Username from './username';
 import ContactsContainer from './contacts';
 import NotifContainer from '../containers/notification';
 import Blank from '../components/blank';
+import FindFriends from './find_friends';
 import { connect } from 'react-redux';
 import { isLoggedIn } from '../actions/index';
 import ip from '../config';
@@ -41,6 +42,8 @@ const ROUTES = {
   username: Username,
   view: ShowQuilts,
   video: WatchVideo,
+  friends: FriendsContainer,
+  findFriends: FindFriends,
   selectFriends: SelectFriendsContainer,
   notification: NotifContainer,
 };
