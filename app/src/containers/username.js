@@ -34,8 +34,9 @@ class Username extends Component {
   }
 
   onCheckUsername(){
+    const usernameToLowercase = this.state.username.toLowerCase();
     this.props.checkUsername(this.props.userId,
-      { username: this.state.username, token: this.props.token });
+      { username: usernameToLowercase, token: this.props.token });
   }
   onType(username) {
     this.setState({ username });
