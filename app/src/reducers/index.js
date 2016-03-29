@@ -8,6 +8,7 @@ import notifs from './notifications_reducer';
 const rootReducer = combineReducers({
   user,
   friends,
+  contacts,
   quilts,
   currentQuilt,
   notifs,

@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import Immutable from 'immutable'; // just for testing
 import Button from '../components/button';
 import Contacts from 'react-native-contacts';
-import { crossReferenceContacts, findUser } from '../actions/index';
+import { crossReferenceContacts } from '../actions/index';
 import ip from '../config';
 import _ from 'lodash';
 
@@ -39,7 +39,7 @@ class FindFriends extends Component {
 
   onType(username) {
     this.setState({ username })
-    this.findUser(username)
+    this.findUser(username);
   }
 
   findUser(username) {
@@ -49,7 +49,11 @@ class FindFriends extends Component {
         if (response.ok) {
           this.setState({ db: JSON.parse(response._bodyInit) });
         }
-      })
+      });
+  }
+
+  findUserInContacts() {
+    
   }
 
   componentWillMount() {

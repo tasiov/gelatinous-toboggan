@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  const friends = state.get('friends');
+  const contacts = state.get('contacts');
   const userId = state.get('user').get('id');
   const token = state.get('user').get('token');
   return {

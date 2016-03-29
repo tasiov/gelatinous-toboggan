@@ -86,7 +86,6 @@ export default (app) => {
     writeVideoToDiskPipeline(req, res, data, true);
   });
 
-  // TODO: add required auth
   // TODO: clean up and optimize
   app.post('/api/cross', requireAuth, (req, res) => {
     const userId = req.query.userId;

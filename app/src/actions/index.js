@@ -22,6 +22,8 @@ import {
   INVITE_FRIENDS,
   RECEIVE_USERNAME_EXIST_ERROR,
   RECEIVE_USERNAME_NOT_EXIST,
+  REQUEST_CONTACTS,
+  RECEIEVE_CONTACTS,
 } from '../constants/ActionTypes';
 
 import ip from '../config';
@@ -244,17 +246,29 @@ export function fetchFriends(options) {
   };
 }
 
+const requestContacts = () => {
+  return {
+    type: REQUEST_CONTACTS,
+  }
+}
+
+const receiveContacts = (data) => {
+  return {
+    type: RECEIVE_CONTACTS,
+    payload: data,
+  }
+}
+
 // TODO: add token
 // clean up implementation
 export function crossReferenceContacts(contacts, token, userId) {
   return (dispatch) => {
-    console.log(token, userId);
-    dispatch(requestFriends());
+    dispatch(requestContacts());
     return fetch(`http://${ip}:8000/api/cross?userId=${userId}&token=${token}`, {
       method: 'POST',
       body: JSON.stringify(contacts),
     })
-    .then(response => dispatch(receiveFriends(JSON.parse(response._bodyInit))));
+    .then(response => dispatch(receiveContacts(JSON.parse(response._bodyInit))));
   };
 }
 

@@ -66,7 +66,7 @@ class App extends Component {
     return (
       <View style={{ flex: 1 }}>
         <Navigator
-          initialRoute={{ name: 'loginOrSignup' }}
+          initialRoute={{ name: 'findFriends' }}
           renderScene={this.renderScene}
           configureScene={this.configScene}
         />
