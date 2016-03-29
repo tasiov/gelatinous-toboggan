@@ -17,11 +17,8 @@ import {
   WATCH_QUILT,
   LOGIN_OR_SIGNUP,
   RECEIVE_USER_ERROR,
-<<<<<<< a4666a3d55554df0b8fc799b3726255819212f72
   INVITE_FRIENDS,
-=======
   RECEIVE_USERNAME_EXIST_ERROR,
->>>>>>> display error when choosing an existing username
 } from '../constants/ActionTypes';
 
 import ip from '../config';
@@ -89,11 +86,13 @@ export function loginUser(usernameOrEmail, password) {
 }
 
 export function updateUser(id, data) {
+  let query = Object.assign({}, data);
+  delete query.token;
   return (dispatch) => {
     dispatch(requestUser());
     return fetch(`http://${ip}:8000/api/auth?userId=${id}&token=${data.token}`, {
       method: 'PUT',
-      body: JSON.stringify(data),
+      body: JSON.stringify(query),
     })
     .then(user => {
       if(user._bodyInit) {

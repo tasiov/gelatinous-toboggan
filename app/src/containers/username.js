@@ -5,6 +5,7 @@ const {
   Text,
   TextInput,
   View,
+  StyleSheet,
 } = React;
 import { updateUser } from '../actions/index';
 import UsernameInput from '../components/username_input';
@@ -41,15 +42,18 @@ class Username extends Component {
   render() {
     if(this.props.duplicateUsername) {
       return (
-        <View style={styles.container}>
-          <Text style={styles.errorMsg}>Username already exists!</Text>
-          <Text style={styles.label}>Select a Username</Text>
-          <TextInput
-            style={styles.input}
-            value={this.state.username}
-            onChangeText={this.onType}
-          />
-          <Button text="Enter" onPress={this.onEnter} />
+        <View style={login.container}>
+          <View style={login.containerBody}>
+            <Text style={styles.errorMsg}>Username already exists!</Text>
+            <Text>Select a Username</Text>
+            <UsernameInput
+              value={this.state.username}
+              onChangeText={this.onType}
+            />
+            <CustomButton onPress={this.onEnter}>
+              <Text style={login.buttonText}>{this.props.loginOrSignup}</Text>
+            </CustomButton>
+          </View>
         </View>
       )
     }
@@ -58,7 +62,7 @@ class Username extends Component {
         <View style={login.containerBody}>
           <Text>Select a Username</Text>
           <UsernameInput
-            value={this.state.phoneNumber}
+            value={this.state.username}
             onChangeText={this.onType}
           />
           <CustomButton onPress={this.onEnter}>
