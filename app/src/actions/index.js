@@ -19,6 +19,7 @@ import {
   RECEIVE_USER_ERROR,
   INVITE_FRIENDS,
   RECEIVE_USERNAME_EXIST_ERROR,
+  RECEIVE_USERNAME_NOT_EXIST,
 } from '../constants/ActionTypes';
 
 import ip from '../config';
@@ -61,6 +62,10 @@ const receiveUsernameExistError = () => ({
   type: RECEIVE_USERNAME_EXIST_ERROR,
 });
 
+const receiveUsernameNotExist = () => ({
+  type: RECEIVE_USERNAME_NOT_EXIST,
+});
+
 export function signupUser(email, password) {
   return (dispatch) => {
     dispatch(requestUser());
@@ -96,12 +101,34 @@ export function updateUser(id, data) {
     })
     .then(user => {
       if (user._bodyInit) {
+        console.log('user exist');
         return dispatch(receiveUsernameExistError());
       }
       return dispatch(receiveUser(data));
     })
     .catch(error => {
       console.error('error updating user:', error);
+      return dispatch(receiveUserError());
+    });
+  };
+}
+
+export function checkUsername(id, data) {
+  console.log('checkUsername');
+  const query = Object.assign({}, data);
+  delete query.token;
+  return (dispatch) => {
+    dispatch(requestUser());
+    return fetch(`http://${ip}:8000/api/user/${query.username}`)
+    .then(response => response.json())
+    .then(user => {
+      if(user.username){
+        return dispatch(receiveUsernameExistError());
+      }
+      return dispatch(receiveUsernameNotExist());
+    })
+    .catch(error => {
+      console.error('error retreiving user:', error);
       return dispatch(receiveUserError());
     });
   };
