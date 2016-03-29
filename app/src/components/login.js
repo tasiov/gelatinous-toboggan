@@ -5,6 +5,7 @@ import { login, colors } from '../assets/styles';
 import EmailInput from './email_input';
 import PasswordInput from './password_input';
 import NavBar from './navbar';
+import Validator from 'email-validator';
 
 const {
   Component,
@@ -46,7 +47,6 @@ class Login extends Component {
 
   onPress() {
     const emailToLowercase = this.state.email.toLowerCase();
-
     if (this.props.loginOrSignup === 'login') {
       this.props.loginUser(emailToLowercase, this.state.password)
         .then(() => {
@@ -55,12 +55,16 @@ class Login extends Component {
           }
         });
     } else {
-      this.props.signupUser(emailToLowercase, this.state.password)
+      if (!Validator.validate(this.state.email)) {
+        console.log(this.state.email, ' is invalid, please try again.');
+      } else {
+        this.props.signupUser(emailToLowercase, this.state.password)
         .then(() => {
           if (this.props.token) {
             this.props.navigator.replace({ name: 'username' });
           }
         });
+      }
     }
   }
 
