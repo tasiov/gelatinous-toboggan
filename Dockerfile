@@ -12,7 +12,6 @@ RUN ln -s `which nodejs` /usr/bin/node
 # Copy entire project
 ADD / /server
 
-WORKDIR server
 RUN npm install --production
 
 EXPOSE 8000
