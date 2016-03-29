@@ -37,3 +37,4 @@ videos/
 
 # Config File
 config/config.js
+config/mock.js
