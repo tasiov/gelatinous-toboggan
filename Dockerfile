@@ -10,12 +10,9 @@ RUN apt-get upgrade
 RUN ln -s `which nodejs` /usr/bin/node
 
 # Copy entire project
-ADD / /
+ADD / /server
 
-WORKDIR /app
-RUN npm install --production
-
-WORKDIR ../server
+WORKDIR server
 RUN npm install --production
 
 EXPOSE 8000

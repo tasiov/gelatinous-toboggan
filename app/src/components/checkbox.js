@@ -25,11 +25,7 @@ class CheckBox extends Component {
 
   onChange() {
     this.setState({ check: !this.state.check });
-    if (this.state.check) {
-      this.props.onCheck(this.props.id);
-    } else {
-      this.props.onCheck(this.props.id);
-    }
+    this.props.onCheck(this.props.id);
   }
 
   render() {

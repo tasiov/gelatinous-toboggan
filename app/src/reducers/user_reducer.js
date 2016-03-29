@@ -7,10 +7,12 @@ import {
   SET_USERNAME,
   SET_PHONE_NUMBER,
   RECEIVE_USER_ERROR,
+  RECEIVE_USERNAME_EXIST_ERROR,
 } from '../constants/ActionTypes';
 
 const initialState = Map({
   isFetching: false,
+  duplicateUsername: false,
   id: null,
   username: null,
   token: null,
@@ -22,7 +24,7 @@ const initialState = Map({
 export default function (state = initialState, action) {
   switch (action.type) {
     case REQUEST_USER:
-      return state.set('isFetching', true);
+      return state.merge({ isFetching: true, duplicateUsername: false });
     case RECEIVE_USER:
       return state.merge(Object.assign({ isFetching: false }, action.payload));
     case RECEIVE_USER_ERROR:
@@ -30,9 +32,14 @@ export default function (state = initialState, action) {
     case LOGIN_OR_SIGNUP:
       return state.set('loginOrSignup', action.payload);
     case SET_USERNAME:
-      return  state.set('username', action.payload);
+      return state.set('username', action.payload);
     case SET_PHONE_NUMBER:
-      return state.set('phoneNumber', action.payload)
+      return state.set('phoneNumber', action.payload);
+    case RECEIVE_USERNAME_EXIST_ERROR:
+      return state.merge({
+        isFetching: false,
+        duplicateUsername: true,
+      });
     default:
       return state;
   }

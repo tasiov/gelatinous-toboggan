@@ -56,9 +56,16 @@ export default (app) => {
     let body = '';
     req.on('data', data => body += data);
     req.on('end', () => {
-      controller.updateUser(req.query.userId, JSON.parse(body))
-      .then(() => res.status(204).send('Successfully updated'))
-      .catch(error => res.status(500).send(`Failed request: ${error}`));
+      controller.getUser(JSON.parse(body))
+      .then((user) => {
+        if(user){
+          res.status(409).send('username already exists');
+        } else {
+          controller.updateUser(req.query.userId, JSON.parse(body))
+          .then(() => res.status(204).send('Successfully updated'))
+          .catch(error => res.status(500).send(`Failed to update user: ${error}`));
+        }
+      }).catch(error => res.status(500).send(`Failed request: ${error}`));
     })
   });
 

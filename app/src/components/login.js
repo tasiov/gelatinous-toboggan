@@ -55,7 +55,6 @@ class Login extends Component {
     } else {
       this.props.signupUser(this.state.email, this.state.password)
         .then(() => {
-          console.log('test');
           if (this.props.token) {
             this.props.navigator.replace({ name: 'username' });
           }
