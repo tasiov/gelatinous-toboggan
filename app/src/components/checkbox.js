@@ -47,20 +47,6 @@ class CheckBox extends Component {
       </View>
     );
 
-    if (this.props.labelBefore) {
-      container = (
-        <View style={styles.container}>
-          <View style={styles.labelContainer}>
-            <Text style={[styles.label, this.props.labelStyle]}>{this.props.label}</Text>
-          </View>
-          <Image
-            style={styles.checkbox}
-            source={source}
-          />
-        </View>
-      );
-    }
-
     return (
       <TouchableHighlight onPress={this.onChange} underlayColor="white">
         {container}
@@ -75,13 +61,11 @@ CheckBox.propTypes = {
   checked: PropTypes.bool,
   onChange: PropTypes.func,
   id: PropTypes.number,
-  labelBefore: PropTypes.string,
   onCheck: PropTypes.func,
 };
 
 CheckBox.getDefaultProps = {
   label: 'Label',
-  labelBefore: false,
   checked: false,
 };
 
