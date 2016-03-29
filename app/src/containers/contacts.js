@@ -25,11 +25,11 @@ class ContactsContainer extends Component {
   constructor(props) {
     super(props);
     this.getDataSource = this.getDataSource.bind(this);
-    this.onCheckboxCheck = this.onCheckboxCheck.bind(this);
-    this.onCheckboxUncheck = this.onCheckboxUncheck.bind(this);
+    this.onCheck = this.onCheck.bind(this);
     this.onRenderRow = this.onRenderRow.bind(this);
     this.onSubmitClick = this.onSubmitClick.bind(this);
 
+    // TODO: consider move to action creator
     Contacts.getAll((err, contacts) => {
       if (err) {
         console.log('error', err);
@@ -51,17 +51,16 @@ class ContactsContainer extends Component {
     };
   }
 
-  onCheckboxCheck(id) {
+  onCheck(id) {
     const newChecked = this.state.checkedFriends;
-    newChecked[id] = true;
-    this.setState({ checkedFriends: newChecked });
+    if (newChecked[id]) {
+      delete newChecked[id];
+    } else {
+      newChecked[id] = true;
+    }
+    this.setState({checkedFriends: newChecked});
   }
 
-  onCheckboxUncheck(id) {
-    const newChecked = this.state.checkedFriends;
-    delete newChecked[id];
-    this.setState({ checkedFriends: newChecked });
-  }
 
   onSubmitClick() {
     const friends = Object.keys(this.state.checkedFriends).map(id => parseInt(id));
@@ -73,8 +72,7 @@ class ContactsContainer extends Component {
     return (
       <FriendEntry
         user={{id: rowData.id, username: rowData.fullName}}
-        onCheckboxCheck={this.onCheckboxCheck}
-        onCheckboxUncheck={this.onCheckboxUncheck}
+        onCheck={this.onCheck}
         key={rowData.id}
       />
     );
