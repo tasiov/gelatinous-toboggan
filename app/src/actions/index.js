@@ -26,7 +26,7 @@ import ip from '../config';
 export const selectLoginOrSignup = (selection) => ({
   type: LOGIN_OR_SIGNUP,
   payload: selection,
-})
+});
 
 export const createQuilt = (data) => ({
   type: CREATE_QUILT,
@@ -59,7 +59,7 @@ const receiveUserError = () => ({
 
 const receiveUsernameExistError = () => ({
   type: RECEIVE_USERNAME_EXIST_ERROR,
-})
+});
 
 export function signupUser(email, password) {
   return (dispatch) => {
@@ -70,7 +70,7 @@ export function signupUser(email, password) {
     .then(response => response.json())
     .then(user => dispatch(receiveUser(user)))
     .catch(error => console.error('error', error));
-  }
+  };
 }
 
 export function loginUser(usernameOrEmail, password) {
@@ -82,11 +82,11 @@ export function loginUser(usernameOrEmail, password) {
     .then(response => response.json())
     .then(user => dispatch(receiveUser(user)))
     .catch(error => dispatch(receiveUserError()));
-  }
+  };
 }
 
 export function updateUser(id, data) {
-  let query = Object.assign({}, data);
+  const query = Object.assign({}, data);
   delete query.token;
   return (dispatch) => {
     dispatch(requestUser());
@@ -95,7 +95,7 @@ export function updateUser(id, data) {
       body: JSON.stringify(query),
     })
     .then(user => {
-      if(user._bodyInit) {
+      if (user._bodyInit) {
         return dispatch(receiveUsernameExistError());
       }
       return dispatch(receiveUser(data));
@@ -104,7 +104,7 @@ export function updateUser(id, data) {
       console.error('error updating user:', error);
       return dispatch(receiveUserError());
     });
-  }
+  };
 }
 
 export const reviewQuilt = (file) => ({
@@ -199,6 +199,7 @@ export function fetchFriends(options) {
 
     return fetch(`http://${ip}:8000/api/friends/${options.username}?token=${options.token}`, {
       method: 'GET',
+      headers: { authorization: options.token },
     })
     .then(response => response.json())
     .then(json => dispatch(receiveFriends(json)));
@@ -210,7 +211,7 @@ export function fetchFriends(options) {
 export function crossReferenceContacts(contacts, token, userId) {
   return (dispatch) => {
     console.log(token, userId);
-    dispatch(requestFriends())
+    dispatch(requestFriends());
     return fetch(`http://${ip}:8000/api/cross?userId=${userId}&token=${token}`, {
       method: 'POST',
       body: JSON.stringify(contacts),
@@ -221,12 +222,10 @@ export function crossReferenceContacts(contacts, token, userId) {
 
 // add authentication, dispatches
 export function postFriends(userId, ...friendsId) {
-  return (dispatch) => {
-    return fetch(`http://${ip}:8000/api/friends/${userId}`, {
-      method: 'POST',
-      body: JSON.stringify({ friends: friendsId }),
-    })
-  }
+  return (dispatch) => fetch(`http://${ip}:8000/api/friends/${userId}`, {
+    method: 'POST',
+    body: JSON.stringify({ friends: friendsId }),
+  });
 }
 
 const requestQuilts = () => ({

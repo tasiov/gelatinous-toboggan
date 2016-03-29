@@ -1,15 +1,15 @@
+/* eslint-disable no-use-before-define */
 import React from 'react-native';
 import { connect } from 'react-redux';
 const {
   Component,
   Text,
-  TextInput,
   View,
   StyleSheet,
+  PropTypes,
 } = React;
 import { updateUser } from '../actions/index';
 import UsernameInput from '../components/username_input';
-import Button from '../components/button';
 import { login } from '../assets/styles';
 import { MKButton } from 'react-native-material-kit';
 
@@ -25,22 +25,21 @@ class Username extends Component {
     this.state = { username: '' };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.duplicateUsername && nextProps.username) {
+      nextProps.navigator.push({ name: 'phone' });
+    }
+  }
   onType(username) {
     this.setState({ username });
   }
-
-  componentWillReceiveProps(nextProps, nextState) {
-    if(!nextProps.duplicateUsername && nextProps.username){
-      nextProps.navigator.push({ name: 'phone' })
-    }
-  }
-
   onEnter() {
-    this.props.updateUser(this.props.userId, { username: this.state.username, token: this.props.token });
+    this.props.updateUser(this.props.userId,
+      { username: this.state.username, token: this.props.token });
   }
 
   render() {
-    if(this.props.duplicateUsername) {
+    if (this.props.duplicateUsername) {
       return (
         <View style={login.container}>
           <View style={login.containerBody}>
@@ -55,7 +54,7 @@ class Username extends Component {
             </CustomButton>
           </View>
         </View>
-      )
+      );
     }
     return (
       <View style={login.container}>
@@ -70,7 +69,7 @@ class Username extends Component {
           </CustomButton>
         </View>
       </View>
-    )
+    );
   }
 }
 
@@ -99,6 +98,15 @@ const styles = StyleSheet.create({
   },
 });
 
+Username.propTypes = {
+  navigator: PropTypes.object,
+  updateUser: PropTypes.func,
+  userId: PropTypes.object,
+  token: PropTypes.object,
+  duplicateUsername: PropTypes.bool,
+  loginOrSignup: PropTypes.func,
+};
+
 function mapStateToProps(state) {
   const user = state.get('user');
   return { userId: user.get('id'),
@@ -112,8 +120,8 @@ function mapDispatchToProps(dispatch) {
   return {
     updateUser: (id, data) => {
       dispatch(updateUser(id, data));
-    }
-  }
+    },
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Username);

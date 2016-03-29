@@ -24,7 +24,7 @@ const initialState = Map({
 export default function (state = initialState, action) {
   switch (action.type) {
     case REQUEST_USER:
-      return state.merge({isFetching: true, duplicateUsername: false});
+      return state.merge({ isFetching: true, duplicateUsername: false });
     case RECEIVE_USER:
       return state.merge(Object.assign({ isFetching: false }, action.payload));
     case RECEIVE_USER_ERROR:
@@ -32,8 +32,7 @@ export default function (state = initialState, action) {
     case LOGIN_OR_SIGNUP:
       return state.set('loginOrSignup', action.payload);
     case SET_USERNAME:
-      console.log('username set');
-      return  state.set('username', action.payload);
+      return state.set('username', action.payload);
     case SET_PHONE_NUMBER:
       return state.set('phoneNumber', action.payload);
     case RECEIVE_USERNAME_EXIST_ERROR:
