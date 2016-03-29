@@ -4,6 +4,8 @@ import React from 'react-native';
 import { MKButton } from 'react-native-material-kit';
 import { home, colors } from '../assets/styles';
 import NavBar from './navbar';
+import Keychain from 'react-native-keychain';
+import ip from '../config';
 
 const {
   Component,
@@ -21,10 +23,16 @@ class Home extends Component {
   constructor(props) {
     super(props);
     this.onPressView = this.onPressView.bind(this);
+    this.onLogout = this.onLogout.bind(this);
   }
 
   onPressView(targetView) {
     this.props.navigator.push({ name: targetView });
+  }
+
+  onLogout() {
+    Keychain.resetInternetCredentials(ip)
+      .then(() => this.props.navigator.resetTo({ name: 'loginOrSignup' }));
   }
 
   render() {
@@ -52,6 +60,11 @@ class Home extends Component {
         <View style={home.buttonContainer}>
           <CustomButton backgroundColor={colors.blue} onPress={() => this.onPressView('notification')}>
             <Text style={home.buttonText}>View Notifications</Text>
+          </CustomButton>
+        </View>
+        <View style={home.buttonContainer}>
+          <CustomButton backgroundColor={colors.blue} onPress={() => this.onLogout()}>
+            <Text style={home.buttonText}>Logout</Text>
           </CustomButton>
         </View>
       </View>

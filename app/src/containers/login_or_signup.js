@@ -14,6 +14,12 @@ class LoginOrSignupContainer extends Component {
     this.onSelect = this.onSelect.bind(this);
   }
 
+  componentWillReceiveProps(newProps) {
+    if (newProps.token) {
+      this.props.navigator.resetTo({ name: 'home' })
+    }
+  }
+
   onSelect(selection) {
     this.props.selectLoginOrSignup(selection);
     this.props.navigator.push({ name: 'login' });
@@ -34,4 +40,11 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(null, mapDispatchToProps)(LoginOrSignupContainer);
+function mapStateToProps(state) {
+  return {
+    username: state.get('user').get('username'),
+    token: state.get('user').get('token'),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginOrSignupContainer);

@@ -25,6 +25,7 @@ import {
 } from '../constants/ActionTypes';
 
 import ip from '../config';
+import Keychain from 'react-native-keychain';
 
 export const selectLoginOrSignup = (selection) => ({
   type: LOGIN_OR_SIGNUP,
@@ -90,6 +91,15 @@ export function loginUser(usernameOrEmail, password) {
     .then(user => dispatch(receiveUser(user)))
     .catch(error => dispatch(receiveUserError()));
   };
+}
+
+export function isLoggedIn() {
+  return (dispatch) => {
+    dispatch(requestUser());
+    return Keychain.getInternetCredentials(`${ip}`)
+      .then(credentials => dispatch(receiveUser({ username: credentials.username, token: credentials.password})))
+      .catch(err => dispatch(receiveUser()));
+  }
 }
 
 export function updateUser(id, data) {

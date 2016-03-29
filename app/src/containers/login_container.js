@@ -19,6 +19,7 @@ function mapStateToProps(state) {
     loginOrSignup: user.get('loginOrSignup'),
     isFetching: user.get('isFetching'),
     token: user.get('token'),
+    username: user.get('username'),
   };
 }
 
