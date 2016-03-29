@@ -2,7 +2,7 @@
 import React from 'react-native';
 import Camera from 'react-native-camera';
 import { connect } from 'react-redux';
-import { reviewQuilt } from '../actions/index';
+import { reviewQuilt, selectWatchQuilt } from '../actions/index';
 import Button from '../components/button';
 
 const {
@@ -48,6 +48,9 @@ class ShowCamera extends Component {
 
     this.camera.capture()
       .then(file => {
+        if (this.props.currentQuilt.status === 'watchAdd') {
+          this.props.selectWatchQuilt({ status: 'add' });
+        }
         this.props.reviewQuilt(file);
         this.props.navigator.replace({ name: 'video' });
       });
@@ -139,6 +142,9 @@ function mapDispatchToProps(dispatch) {
   return {
     reviewQuilt: (file) => {
       dispatch(reviewQuilt(file));
+    },
+    selectWatchQuilt: (data) => {
+      dispatch(selectWatchQuilt(data));
     },
   };
 }

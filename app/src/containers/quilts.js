@@ -32,7 +32,7 @@ class ShowQuilts extends Component {
     if (status === 1) {
       currentStatus = 'watch';
     } else {
-      currentStatus = 'add';
+      currentStatus = 'watchAdd';
     }
     this.props.selectWatchQuilt({
       status: currentStatus,
