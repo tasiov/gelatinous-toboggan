@@ -14,6 +14,7 @@ import FriendsContainer from './friends';
 import LoginOrSignup from '../containers/login_or_signup';
 import PhoneNumber from '../containers/phoneNumber';
 import Username from '../containers/username';
+import NotifContainer from '../containers/notification';
 // import NavigationBar from 'react-native-navbar';
 
 const {
@@ -34,6 +35,7 @@ const ROUTES = {
   username: Username,
   view: ShowQuilts,
   video: WatchVideo,
+  notification: NotifContainer,
 };
 
 class App extends Component {

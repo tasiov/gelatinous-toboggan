@@ -140,12 +140,16 @@ const createNotif = (userId, quiltId, quiltTheme, messageType, contribName) => {
   return db.Notification.create({ userId, quiltId, message, status: 0 });
 }
 
-export function isQuiltDone(quiltId) {
+const isQuiltDone = (quiltId) => {
   return Promise.all(
     [ db.UserQuilt.count({ where: { quiltId: quiltId } }),
       db.UserQuilt.sum('status', { where: { quiltId: quiltId } })
     ]).then((data) => data[0] === data[1])
 }
+
+const getUsersNotifs = (userId) => (
+  db.Notification.findAll({ where: { userId: userId } })
+)
 
 export default {
   createUser,
@@ -161,4 +165,5 @@ export default {
   updateQuiltStatusToReady,
   createNotif,
   isQuiltDone,
+  getUsersNotifs,
 }
