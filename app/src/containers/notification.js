@@ -7,7 +7,7 @@ react/prop-types
 import React, { Component } from 'react-native';
 import NotifEntry from '../components/notification_entry';
 import { connect } from 'react-redux';
-import Immutable from 'immutable'; // just for testing
+import Immutable from 'immutable';
 import { fetchNotifs } from '../actions/index';
 
 const {
@@ -23,7 +23,7 @@ class NotifContainer extends Component {
     super(props);
     this.getDataSource = this.getDataSource.bind(this);
     this.onRenderRow = this.onRenderRow.bind(this);
-    this.props.fetchNotifs(2);
+    this.props.fetchNotifs(this.props.user.get('id'));
   }
 
   onRenderRow(rowData) {
@@ -56,7 +56,8 @@ class NotifContainer extends Component {
 
 function mapStateToProps(state) {
   const notifs = state.get('notifs');
-  return { notifs };
+  const user = state.get('user');
+  return { notifs, user };
 }
 
 function mapDispatchToProps(dispatch) {
