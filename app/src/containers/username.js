@@ -101,8 +101,8 @@ const styles = StyleSheet.create({
 Username.propTypes = {
   navigator: PropTypes.object,
   updateUser: PropTypes.func,
-  userId: PropTypes.object,
-  token: PropTypes.object,
+  userId: PropTypes.number,
+  token: PropTypes.string,
   duplicateUsername: PropTypes.bool,
   loginOrSignup: PropTypes.func,
 };
