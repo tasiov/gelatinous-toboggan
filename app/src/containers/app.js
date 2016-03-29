@@ -12,18 +12,11 @@ import ShowQuilts from './quilts';
 import ShowCamera from './camera';
 import WatchVideo from './video';
 import FriendsContainer from './friends';
-<<<<<<< 48e3f48e2f41138710e82af32b9ba49840fe797f
 import LoginOrSignup from './login_or_signup';
 import PhoneNumber from './phoneNumber';
 import Username from './username';
 import ContactsContainer from './contacts';
-=======
-import LoginOrSignup from '../containers/login_or_signup';
-import PhoneNumber from '../containers/phoneNumber';
-import Username from '../containers/username';
 import NotifContainer from '../containers/notification';
->>>>>>> implements initial notification functionality
-// import NavigationBar from 'react-native-navbar';
 
 const {
   Component,
