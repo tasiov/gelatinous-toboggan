@@ -118,8 +118,8 @@ const mapStateToProps = (state) => {
   const token = state.get('user').get('token');
   return {
     friends,
-    userId,
     token,
+    userId,
   };
 };
 

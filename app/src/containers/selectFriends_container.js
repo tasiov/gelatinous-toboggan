@@ -31,16 +31,21 @@ class SelectFriendsContainer extends Component {
       username: this.props.username,
       token: this.props.token,
     });
-    this.checkedFriends = {};
     this.onInvitePress = this.onInvitePress.bind(this);
+
+    this.state = {
+      checkedFriends: {},
+    };
   }
 
   onCheck(id) {
-    if (this.checkedFriends[id]) {
-      delete this.checkedFriends[id];
+    const newChecked = this.state.checkedFriends;
+    if (newChecked[id]) {
+      delete newChecked[id];
     } else {
-      this.checkedFriends[id] = id;
+      newChecked[id] = true;
     }
+    this.setState({checkedFriends: newChecked});
   }
 
   onSubmitClick(quiltId, navigator) {
@@ -49,7 +54,7 @@ class SelectFriendsContainer extends Component {
   }
 
   onInvitePress() {
-    const checkedIds = Object.keys(this.checkedFriends).map(id => parseInt(id));
+    const checkedIds = Object.keys(this.state.checkedFriends).map(id => parseInt(id));
     this.props.inviteFriends(checkedIds);
     this.props.navigator.push({ name: 'camera' });
   }
