@@ -8,10 +8,11 @@ const {
   StyleSheet,
   PropTypes,
 } = React;
-import { updateUser } from '../actions/index';
+import { updateUser, checkUsername } from '../actions/index';
 import UsernameInput from '../components/username_input';
 import { login } from '../assets/styles';
 import { MKButton } from 'react-native-material-kit';
+import _ from 'lodash';
 
 const CustomButton = new MKButton.Builder()
   .withStyle(login.button)
@@ -22,6 +23,7 @@ class Username extends Component {
     super(props);
     this.onType = this.onType.bind(this);
     this.onEnter = this.onEnter.bind(this);
+    this.onCheckUsername = this.onCheckUsername.bind(this);
     this.state = { username: '' };
   }
 
@@ -30,8 +32,15 @@ class Username extends Component {
       nextProps.navigator.push({ name: 'phone' });
     }
   }
+
+  onCheckUsername(){
+    this.props.checkUsername(this.props.userId,
+      { username: this.state.username, token: this.props.token });
+  }
   onType(username) {
     this.setState({ username });
+    const context = this;
+    _.debounce(this.onCheckUsername, 500)();
   }
   onEnter() {
     const usernameToLowercase = this.state.username.toLowerCase();
@@ -50,7 +59,7 @@ class Username extends Component {
               value={this.state.username}
               onChangeText={this.onType}
             />
-            <CustomButton onPress={this.onEnter}>
+            <CustomButton onPress={() => {if(!this.props.duplicateUsername){this.onEnter()}}}>
               <Text style={login.buttonText}>{this.props.loginOrSignup}</Text>
             </CustomButton>
           </View>
@@ -65,7 +74,7 @@ class Username extends Component {
             value={this.state.username}
             onChangeText={this.onType}
           />
-          <CustomButton onPress={this.onEnter}>
+          <CustomButton onPress={() => {if(!this.props.duplicateUsername){this.onEnter()}}}>
             <Text style={login.buttonText}>{this.props.loginOrSignup}</Text>
           </CustomButton>
         </View>
@@ -121,6 +130,9 @@ function mapDispatchToProps(dispatch) {
   return {
     updateUser: (id, data) => {
       dispatch(updateUser(id, data));
+    },
+    checkUsername: (id, data) => {
+      dispatch(checkUsername(id, data));
     },
   };
 }

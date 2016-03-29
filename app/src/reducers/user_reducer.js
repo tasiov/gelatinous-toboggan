@@ -8,6 +8,7 @@ import {
   SET_PHONE_NUMBER,
   RECEIVE_USER_ERROR,
   RECEIVE_USERNAME_EXIST_ERROR,
+  RECEIVE_USERNAME_NOT_EXIST,
 } from '../constants/ActionTypes';
 
 const initialState = Map({
@@ -39,6 +40,11 @@ export default function (state = initialState, action) {
       return state.merge({
         isFetching: false,
         duplicateUsername: true,
+      });
+    case RECEIVE_USERNAME_NOT_EXIST:
+      return state.merge({
+        isFetching: false,
+        duplicateUsername: false,
       });
     default:
       return state;
