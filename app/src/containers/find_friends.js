@@ -51,7 +51,7 @@ class FindFriends extends Component {
   }
 
   findUser(username) {
-    fetch(`http://${ip}:8000/api/users?username=${this.state.username}`)
+    fetch(`http://${ip}:8000/api/users?username=${this.state.username}&token=${this.props.token}`)
       .then(response => {
         if (response.ok) {
           this.setState({ db: JSON.parse(response._bodyInit) });
@@ -86,7 +86,7 @@ class FindFriends extends Component {
   }
 
   onFriend(id) {
-    this.props.postFriends(this.props.userId, id);
+    this.props.postFriends(this.props.userId, this.props.token, id);
   }
 
   render() {
@@ -152,8 +152,8 @@ function mapDispatchToProps(dispatch) {
     getUserContacts: (token, uid) => {
       return dispatch(getUserContacts(token, uid));
     },
-    postFriends: (userId, friendIds) => {
-      return dispatch(postFriends(userId, friendIds));
+    postFriends: (userId, token, friendIds) => {
+      return dispatch(postFriends(userId, token, friendIds));
     },
   };
 }

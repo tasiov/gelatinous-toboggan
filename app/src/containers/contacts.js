@@ -48,7 +48,7 @@ class ContactsContainer extends Component {
 
   onSubmitClick() {
     const friends = Object.keys(this.state.checkedFriends).map(id => parseInt(id));
-    this.props.postFriends(this.props.userId, friends);
+    this.props.postFriends(this.props.userId, this.props.token, friends);
     this.props.navigator.push({ name: 'home' });
   }
 
@@ -113,7 +113,7 @@ function mapDispatchToProps(dispatch) {
       return dispatch(getUserContacts(token, uid));
     },
     postFriends: (userId, friendIds) => {
-      return dispatch(postFriends(userId, ...friendIds));
+      return dispatch(postFriends(userId, token, ...friendIds));
     },
   };
 }

@@ -284,8 +284,8 @@ export function getUserContacts(token, userId) {
 }
 
 // add authentication, dispatches
-export function postFriends(userId, ...friendsId) {
-  return (dispatch) => fetch(`http://${ip}:8000/api/friends/${userId}`, {
+export function postFriends(userId, token, ...friendsId) {
+  return (dispatch) => fetch(`http://${ip}:8000/api/friends/${userId}?token=${token}`, {
     method: 'POST',
     body: JSON.stringify({ friends: friendsId }),
   });
