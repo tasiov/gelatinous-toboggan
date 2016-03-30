@@ -116,7 +116,6 @@ export function updateUser(id, data) {
 }
 
 export function checkUsername(id, data) {
-  console.log('checkUsername');
   const query = Object.assign({}, data);
   delete query.token;
   return (dispatch) => {

@@ -34,9 +34,11 @@ class Username extends Component {
   }
 
   onCheckUsername(){
-    const usernameToLowercase = this.state.username.toLowerCase();
-    this.props.checkUsername(this.props.userId,
-      { username: usernameToLowercase, token: this.props.token });
+    if(this.state.username){
+      const usernameToLowercase = this.state.username.toLowerCase();
+      this.props.checkUsername(this.props.userId,
+        { username: usernameToLowercase, token: this.props.token });
+    }
   }
   onType(username) {
     this.setState({ username });
@@ -49,26 +51,14 @@ class Username extends Component {
   }
 
   render() {
-    if (this.props.duplicateUsername) {
-      return (
-        <View style={login.container}>
-          <View style={login.containerBody}>
-            <Text style={styles.errorMsg}>Username already exists!</Text>
-            <Text>Select a Username</Text>
-            <UsernameInput
-              value={this.state.username}
-              onChangeText={this.onType}
-            />
-            <CustomButton onPress={() => {if(!this.props.duplicateUsername){this.onEnter()}}}>
-              <Text style={login.buttonText}>{this.props.loginOrSignup}</Text>
-            </CustomButton>
-          </View>
-        </View>
-      );
+    let duplicateUsernameMessage = <Text />;
+    if (this.props.duplicateUsername && this.state.username) {
+      duplicateUsernameMessage = <Text style={styles.errorMsg}>Username already exists!</Text>;
     }
     return (
       <View style={login.container}>
         <View style={login.containerBody}>
+          {duplicateUsernameMessage}
           <Text>Select a Username</Text>
           <UsernameInput
             value={this.state.username}
