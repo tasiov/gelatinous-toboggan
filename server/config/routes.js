@@ -102,8 +102,8 @@ export default (app) => {
             return callback(null, Object.assign(contact, { id, username }));
           })
       }, (err, results) => {
-        if (error) {
-          res.status(500).send(`Failed post cross reference request: ${error}`))
+        if (err) {
+          res.status(500).send(`Failed post cross reference request: ${err}`);
         } else {
           res.status(201).send(results.filter(contact => contact.id !== null && contact.id !== userId));
         }
@@ -143,8 +143,8 @@ export default (app) => {
       res.status(400).send('Failed to retrieve user');
     } else {
       controller.getFriends(req.params.id)
-      .then(data => res.status(200).send(data.get('Friend')))
-      .catch(error => res.status(500).send(`Failed get friends request: ${error}`));
+        .then(data => res.status(200).send(data.get('Friend')))
+        .catch(error => res.status(500).send(`Failed get friends request: ${error}`));
     }
   });
 

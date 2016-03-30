@@ -36,7 +36,7 @@ class Login extends Component {
       maxLength: 128,
       minLength: 6,
       minPhraseLength: 10,
-      minOptionalTestsToPass: 4,
+      minOptionalTestsToPass: 3,
     });
 
     this.onPress = this.onPress.bind(this);
