@@ -87,7 +87,7 @@ export default (app) => {
   });
 
   // TODO: clean up and optimize
-  app.post('/api/cross', requireAuth, (req, res) => {
+  app.post('/api/cross', (req, res) => {
     const userId = req.query.userId;
     let data = '';
     req.on('data', (chunk) => {
@@ -96,10 +96,14 @@ export default (app) => {
       data = JSON.parse(data);
       async.map(data, (contact, callback) => {
         controller.crossReference(contact.emails, contact.phoneNumbers)
-          .then(id => callback(null, Object.assign(contact, { id })));
-      }, (error, results) => {
-        if(error) {
-          res.status(500).send(`Failed post cross reference request: ${error}`);
+          .then(user => {
+            const id = user ? user.get('id') : null;
+            const username = user ? user.get('username') : null;
+            return callback(null, Object.assign(contact, { id, username }));
+          })
+      }, (err, results) => {
+        if (error) {
+          res.status(500).send(`Failed post cross reference request: ${error}`))
         } else {
           res.status(201).send(results.filter(contact => contact.id !== null && contact.id !== userId));
         }

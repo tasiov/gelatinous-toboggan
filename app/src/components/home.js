@@ -15,9 +15,9 @@ const {
 } = React;
 
 const CustomButton = new MKButton.Builder()
-.withStyle(home.button)
-.withTextStyle(home.buttonText)
-.build();
+  .withStyle(home.button)
+  .withTextStyle(home.buttonText)
+  .build();
 
 class Home extends Component {
   constructor(props) {
@@ -53,7 +53,7 @@ class Home extends Component {
           </CustomButton>
         </View>
         <View style={home.buttonContainer}>
-          <CustomButton backgroundColor={colors.blue} onPress={() => this.onPressView('friends')}>
+          <CustomButton backgroundColor={colors.blue} onPress={() => this.onPressView('findFriends')}>
             <Text style={home.buttonText}>View Friends</Text>
           </CustomButton>
         </View>

@@ -9,7 +9,7 @@ import FriendEntry from '../components/friend_entry';
 import { connect } from 'react-redux';
 import Immutable from 'immutable'; // just for testing
 import Contacts from 'react-native-contacts';
-import { crossReferenceContacts, postFriends } from '../actions/index';
+import { getUserContacts, postFriends } from '../actions/index';
 import Button from '../components/button';
 
 const {
@@ -28,23 +28,7 @@ class ContactsContainer extends Component {
     this.onCheck = this.onCheck.bind(this);
     this.onRenderRow = this.onRenderRow.bind(this);
     this.onSubmitClick = this.onSubmitClick.bind(this);
-
-    // TODO: consider move to action creator
-    Contacts.getAll((err, contacts) => {
-      if (err) {
-        console.log('error', err);
-      } else {
-        const cleanContacts = contacts.reduce((acc, nxt) => {
-          acc.push({
-            fullName: `${nxt.givenName || ''} ${nxt.familyName || ''}`,
-            emails: nxt.emailAddresses.map(obj => obj.email),
-            phoneNumbers: nxt.phoneNumbers.map(obj => obj.number),
-          });
-          return acc;
-        }, []);
-        this.props.crossReferenceContacts(cleanContacts, this.props.token, this.props.userId);
-      }
-    });
+    this.props.getUserContacts(this.props.token, this.props.userId);
 
     this.state = {
       checkedFriends: {},
@@ -58,7 +42,7 @@ class ContactsContainer extends Component {
     } else {
       newChecked[id] = true;
     }
-    this.setState({checkedFriends: newChecked});
+    this.setState({ checkedFriends: newChecked });
   }
 
 
@@ -80,11 +64,11 @@ class ContactsContainer extends Component {
 
   getDataSource() {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => !Immutable.is(r1, r2) });
-    return ds.cloneWithRows(this.props.friends.get('friendsList').toArray());
+    return ds.cloneWithRows(this.props.contacts.get('contactList').toArray());
   }
 
   render() {
-    if (this.props.friends.get('isFetching')) {
+    if (this.props.contacts.get('isFetching')) {
       return <Text>Loading Friends...</Text>;
     }
     return (
@@ -117,7 +101,7 @@ const mapStateToProps = (state) => {
   const userId = state.get('user').get('id');
   const token = state.get('user').get('token');
   return {
-    friends,
+    contacts,
     token,
     userId,
   };
@@ -125,8 +109,8 @@ const mapStateToProps = (state) => {
 
 function mapDispatchToProps(dispatch) {
   return {
-    crossReferenceContacts: (contacts, token, uid) => {
-      return dispatch(crossReferenceContacts(contacts, token, uid));
+    getUserContacts: (token, uid) => {
+      return dispatch(getUserContacts(token, uid));
     },
     postFriends: (userId, friendIds) => {
       return dispatch(postFriends(userId, ...friendIds));

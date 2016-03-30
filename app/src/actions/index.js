@@ -23,11 +23,12 @@ import {
   RECEIVE_USERNAME_EXIST_ERROR,
   RECEIVE_USERNAME_NOT_EXIST,
   REQUEST_CONTACTS,
-  RECEIEVE_CONTACTS,
+  RECEIVE_CONTACTS,
 } from '../constants/ActionTypes';
 
 import ip from '../config';
 import Keychain from 'react-native-keychain';
+import Contacts from 'react-native-contacts';
 
 export const selectLoginOrSignup = (selection) => ({
   type: LOGIN_OR_SIGNUP,
@@ -259,17 +260,30 @@ const receiveContacts = (data) => {
   }
 }
 
-// TODO: add token
-// clean up implementation
-export function crossReferenceContacts(contacts, token, userId) {
+// TODO: clean up
+export function getUserContacts(token, userId) {
   return (dispatch) => {
     dispatch(requestContacts());
-    return fetch(`http://${ip}:8000/api/cross?userId=${userId}&token=${token}`, {
-      method: 'POST',
-      body: JSON.stringify(contacts),
-    })
-    .then(response => dispatch(receiveContacts(JSON.parse(response._bodyInit))));
-  };
+    return Contacts.getAll((err, contacts) => {
+      if (err) {
+        console.log('error', err);
+      } else {
+        const cleanContacts = contacts.reduce((acc, nxt) => {
+          acc.push({
+            fullName: `${nxt.givenName || ''} ${nxt.familyName || ''}`,
+            emails: nxt.emailAddresses.map(obj => obj.email),
+            phoneNumbers: nxt.phoneNumbers.map(obj => obj.number),
+          });
+          return acc;
+        }, []);
+
+        return fetch(`http://${ip}:8000/api/cross?userId=${userId}&token=${token}`, {
+          method: 'POST',
+          body: JSON.stringify(cleanContacts),
+        })
+        .then(response => dispatch(receiveContacts(JSON.parse(response._bodyInit))));      }
+    });
+  }
 }
 
 // add authentication, dispatches

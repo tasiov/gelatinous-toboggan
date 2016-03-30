@@ -10,7 +10,8 @@ import { connect } from 'react-redux';
 import Immutable from 'immutable'; // just for testing
 import Button from '../components/button';
 import Contacts from 'react-native-contacts';
-import { crossReferenceContacts } from '../actions/index';
+import { getUserContacts, postFriends } from '../actions/index';
+import NavBar from '../components/navbar';
 import ip from '../config';
 import _ from 'lodash';
 
@@ -30,10 +31,17 @@ class FindFriends extends Component {
     super(props);
     this.findUser = _.debounce(this.findUser.bind(this), 500);
     this.onType = this.onType.bind(this);
+    this.getDataSource = this.getDataSource.bind(this);
+    this.onRenderRow = this.onRenderRow.bind(this);
+    this.onBack = this.onBack.bind(this);
+    this.onFriend = this.onFriend.bind(this);
+
+    this.props.getUserContacts(this.props.token, this.props.userId);
+
     this.state = {
       username: '',
       db: null,
-      contacts: [],
+      filteredContacts: [],
     };
   }
 
@@ -43,53 +51,61 @@ class FindFriends extends Component {
   }
 
   findUser(username) {
-    return fetch(`http://${ip}:8000/api/users?username=${this.state.username}`)
+    fetch(`http://${ip}:8000/api/users?username=${this.state.username}`)
       .then(response => {
-        console.log(response);
         if (response.ok) {
           this.setState({ db: JSON.parse(response._bodyInit) });
         }
-      });
-  }
+      }).catch(err => console.log(err))
 
-  findUserInContacts() {
-    
-  }
-
-  componentWillMount() {
-    Contacts.getAll((err, contacts) => {
-      if (err) {
-        console.log('error', err);
-      } else {
-        const cleanContacts = contacts.reduce((acc, nxt) => {
-          acc.push({
-            fullName: `${nxt.givenName || ''} ${nxt.familyName || ''}`,
-            emails: nxt.emailAddresses.map(obj => obj.email),
-            phoneNumbers: nxt.phoneNumbers.map(obj => obj.number),
-          });
-          return acc;
-        }, []);
-        this.props.crossReferenceContacts(cleanContacts, this.props.token, this.props.userId);
-      }
+    this.setState({
+      filteredContacts: this.props.contacts.filter(elem => elem.username.search(this.state.username) !== -1)
     });
+
+  }
+
+  getDataSource() {
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => !Immutable.is(r1, r2) });
+    return ds.cloneWithRows(this.state.filteredContacts);
+  }
+
+  onRenderRow(rowData) {
+    // TODO: pass down onFriend method to send friend request immediately on click
+    return (
+        <FriendEntry
+          user={rowData}
+          onCheck={this.onCheck}
+          checked
+          key={rowData.id}
+        />
+    );
+  }
+
+  onBack() {
+    this.props.navigator.pop();
+  }
+
+  onFriend(id) {
+    this.props.postFriends(this.props.userId, id);
   }
 
   render() {
     let foundUser;
     if (this.state.db) {
       foundUser = (
-        <TouchableHighlight>
+        <View>
           <Text>Username</Text>
-          <Text>{this.state.db.username}</Text>
-        </TouchableHighlight>
+          <Button text={this.state.db.username} onPress={() => onFriend(this.state.db.id)} />
+        </View>
       );
     } else {
       foundUser = (
         <Text>Find Your Friends</Text>
-      )
+      );
     }
     return (
       <View style={styles.container}>
+        <NavBar onPress={this.onBack} />
         <TextInput
           style={{height: 40, borderColor: 'gray', borderWidth: 1}}
           placeholder="Search"
@@ -97,7 +113,11 @@ class FindFriends extends Component {
           onChangeText={this.onType}
         />
         {foundUser}
-        <Button text={'Invite!'} onPress={this.onInvitePress} />
+        <Text>Contacts</Text>
+        <ListView
+          dataSource={this.getDataSource()}
+          renderRow={this.onRenderRow}
+        />
       </View>
     );
   }
@@ -117,10 +137,11 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  const friends = state.get('friends');
+  const contacts = state.get('contacts').get('contactList').toArray();
   const user = state.get('user');
   return {
-    friends,
+    contacts,
+    userId: user.get('id'),
     username: user.get('username'),
     token: user.get('token'),
   };
@@ -128,8 +149,11 @@ const mapStateToProps = (state) => {
 
 function mapDispatchToProps(dispatch) {
   return {
-    crossReferenceContacts: (contacts, token, uid) => {
-      dispatch(crossReferenceContacts(contacts, token, uid));
+    getUserContacts: (token, uid) => {
+      return dispatch(getUserContacts(token, uid));
+    },
+    postFriends: (userId, friendIds) => {
+      return dispatch(postFriends(userId, friendIds));
     },
   };
 }

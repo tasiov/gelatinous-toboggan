@@ -54,7 +54,7 @@ const crossReference = (emails, phoneNumbers) =>
       ],
     },
   })
-  .then(user => user ? user.get('id') : null)
+  .then(user => user ? user : null)
   .catch(error => console.error(`Error cross referencing user: ${error}`));
 
 // status 0 = pending me
