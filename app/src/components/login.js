@@ -6,6 +6,7 @@ import EmailInput from './email_input';
 import PasswordInput from './password_input';
 import NavBar from './navbar';
 import Validator from 'email-validator';
+import owasp from 'owasp-password-strength-test';
 
 const {
   Component,
@@ -25,7 +26,16 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
+      strongPassword: false,
     };
+
+    owasp.config({
+      allowPassphrases: true,
+      maxLength: 128,
+      minLength: 6,
+      minPhraseLength: 10,
+      minOptionalTestsToPass: 4,
+    });
 
     this.onPress = this.onPress.bind(this);
     this.onBack = this.onBack.bind(this);
@@ -51,7 +61,7 @@ class Login extends Component {
       this.props.loginUser(emailToLowercase, this.state.password)
         .then(() => {
           if (this.props.token) {
-            this.props.navigator.resetTo({ name: 'home' })
+            this.props.navigator.resetTo({ name: 'home' });
           }
         });
     } else {
@@ -77,10 +87,15 @@ class Login extends Component {
   }
 
   onTypePassword(password) {
-    return this.setState({ password });
+    const result = owasp.test(password);
+    this.setState({ password, strongPassword: result.strong });
   }
 
   render() {
+    let strongPasswordMessage = <Text />;
+    if (!this.state.strongPassword && this.state.password) {
+      strongPasswordMessage = <Text>Weak Password!</Text>;
+    }
     return (
       <View style={login.container}>
         <NavBar onPress={this.onBack} text={this.props.loginOrSignup === 'login' ? 'Login' : 'Sign Up'} />
@@ -88,14 +103,15 @@ class Login extends Component {
           <EmailInput
             value={this.state.email}
             onChangeText={this.onTypeEmail}
-            placeholder={this.props.loginOrSignup === 'login' ? "Username or Email" : "Email Address"}
+            placeholder={this.props.loginOrSignup === 'login' ? 'Username or Email' : 'Email Address'}
             autoFocus
           />
           <PasswordInput
             value={this.state.password}
             onChangeText={this.onTypePassword}
-            placeholder={"Password"}
+            placeholder={'Password'}
           />
+          {strongPasswordMessage}
           <CustomButton onPress={this.onPress}>
             <Text style={login.buttonText}>{this.props.loginOrSignup}</Text>
           </CustomButton>
@@ -109,6 +125,11 @@ class Login extends Component {
 Login.propTypes = {
   navigator: PropTypes.object,
   fetchUser: PropTypes.func,
+  isFetching: PropTypes.bool,
+  token: PropTypes.string,
+  loginOrSignup: PropTypes.string,
+  loginUser: PropTypes.func,
+  signupUser: PropTypes.func,
 };
 
 
