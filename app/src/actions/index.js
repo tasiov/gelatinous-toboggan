@@ -29,6 +29,7 @@ import {
 import ip from '../config';
 import Keychain from 'react-native-keychain';
 import Contacts from 'react-native-contacts';
+import _ from 'lodash';
 
 export const selectLoginOrSignup = (selection) => ({
   type: LOGIN_OR_SIGNUP,
@@ -278,7 +279,11 @@ export function getUserContacts(token, userId) {
           method: 'POST',
           body: JSON.stringify(cleanContacts),
         })
-        .then(response => dispatch(receiveContacts(JSON.parse(response._bodyInit))));      }
+        .then(response => {
+          const usersInContacts = _.uniq(JSON.parse(response._bodyInit), 'username');
+          dispatch(receiveContacts(usersInContacts))
+        });
+      }
     });
   }
 }
