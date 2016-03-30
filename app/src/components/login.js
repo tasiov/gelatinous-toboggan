@@ -89,7 +89,7 @@ class Login extends Component {
 
   render() {
     let strongPasswordMessage = <Text />;
-    if (!this.state.strongPassword && this.state.password) {
+    if (!this.state.strongPassword && this.state.password && this.props.loginOrSignup !== 'login') {
       strongPasswordMessage = <Text>Weak Password!</Text>;
     }
     return (
