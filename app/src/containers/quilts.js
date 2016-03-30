@@ -78,6 +78,7 @@ ShowQuilts.propTypes = {
 
 function mapStateToProps(state) {
   const user = state.get('user');
+  console.log(user);
   return {
     quilts: state.get('quilts'),
     username: user.get('username'),

@@ -74,7 +74,7 @@ class FindFriends extends Component {
     return (
         <FriendEntry
           user={rowData}
-          onCheck={this.onCheck}
+          onCheck={this.onFriend}
           checked
           key={rowData.id}
         />
@@ -95,7 +95,7 @@ class FindFriends extends Component {
       foundUser = (
         <View>
           <Text>Username</Text>
-          <Button text={this.state.db.username} onPress={() => onFriend(this.state.db.id)} />
+          <Button text={this.state.db.username} onPress={() => this.onFriend(this.state.db.id)} />
         </View>
       );
     } else {

@@ -234,13 +234,10 @@ const receiveFriends = (friends) => ({
 export function fetchFriends(options) {
   return (dispatch) => {
     dispatch(requestFriends());
-
-    // todo: hook up appropriately with server
     // todo: catch errors
 
-    return fetch(`http://${ip}:8000/api/friends/${options.username}?token=${options.token}`, {
+    return fetch(`http://${ip}:8000/api/friends/${options.id}?token=${options.token}`, {
       method: 'GET',
-      headers: { authorization: options.token },
     })
     .then(response => response.json())
     .then(json => dispatch(receiveFriends(json)));

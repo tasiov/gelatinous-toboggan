@@ -28,7 +28,7 @@ class SelectFriendsContainer extends Component {
     this.onCheck = this.onCheck.bind(this);
     this.onRenderRow = this.onRenderRow.bind(this);
     props.fetchFriends({
-      username: this.props.username,
+      id: this.props.userId,
       token: this.props.token,
     });
     this.onInvitePress = this.onInvitePress.bind(this);
@@ -116,6 +116,7 @@ const mapStateToProps = (state) => {
     currentQuilt,
     username: user.get('username'),
     token: user.get('token'),
+    userId: user.get('id'),
   };
 };
 

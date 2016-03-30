@@ -87,7 +87,7 @@ export default (app) => {
   });
 
   // TODO: clean up and optimize
-  app.post('/api/cross', (req, res) => {
+  app.post('/api/cross', requireAuth, (req, res) => {
     const userId = req.query.userId;
     let data = '';
     req.on('data', (chunk) => {
@@ -123,7 +123,7 @@ export default (app) => {
     writeVideoToDiskPipeline(req, res, data, false);
   });
 
-  app.get('/api/users', (req, res) => {
+  app.get('/api/users', requireAuth, (req, res) => {
     const username = req.query.username;
     controller.getUser({ username })
       .then(user => {
@@ -143,13 +143,13 @@ export default (app) => {
     if (_.isEmpty(req.params.id)) {
       res.status(400).send('Failed to retrieve user');
     } else {
-      controller.getAllOtherUsers(req.params.id)
-      .then(data =>  res.status(200).send(data))
-      .catch(error => res.status(500).send(`Failed get friends request: ${error}`))
+      controller.getFriends(req.params.id)
+      .then(data => res.status(200).send(data.get('Friend')))
+      .catch(error => res.status(500).send(`Failed get friends request: ${error}`));
     }
   });
 
-  app.post('/api/friends/:id', (req, res) => {
+  app.post('/api/friends/:id', requireAuth, (req, res) => {
     const userId = req.params.id;
     let data = '';
     req.on('data', (chunk) => {

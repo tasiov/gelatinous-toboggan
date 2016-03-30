@@ -190,8 +190,18 @@ const getUsersNotifs = (userId) => (
   db.Notification.findAll({ where: { userId: userId } })
 )
 
+const getFriends = (id) =>
+  db.User.find({
+    where: { id },
+    include: [
+      { model: db.User, as: 'Friend'},
+    ],
+  })
+
+
 export default {
   addFriends,
+  getFriends,
   createUser,
   crossReference,
   getAllUsers,
