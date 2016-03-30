@@ -304,9 +304,9 @@ export function fetchQuilts(options) {
   return (dispatch) => {
     dispatch(requestQuilts());
     return fetch(`http://${ip}:8000/api/quilt?username=${options.username}&token=${options.token}`)
-      .then((response) => response.json())
-      .then((data) => dispatch(receiveQuilts(data)))
-      .catch((error) => console.error('Error in getting user\'s quilts', error));
+      .then(response => response.json())
+      .then(data => dispatch(receiveQuilts(data)))
+      .catch(error => console.error('Error in getting user\'s quilts', error));
   };
 }
 
