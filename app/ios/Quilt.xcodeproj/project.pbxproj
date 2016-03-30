@@ -841,7 +841,7 @@
 				INFOPLIST_FILE = Quilt/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Quilty;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Quilt;
 				PRODUCT_NAME = Quilt;
 				PROVISIONING_PROFILE = "";
 				USER_HEADER_SEARCH_PATHS = "";
@@ -863,7 +863,7 @@
 				INFOPLIST_FILE = Quilt/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Quilty;
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.Quilt;
 				PRODUCT_NAME = Quilt;
 				PROVISIONING_PROFILE = "";
 				USER_HEADER_SEARCH_PATHS = "";
