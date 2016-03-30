@@ -127,7 +127,6 @@ export default (app) => {
     const username = req.query.username;
     controller.getUser({ username })
       .then(user => {
-        console.log(user);
         if (user) {
           res.status(200).send({
             id: user.get('id'),
