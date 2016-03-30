@@ -100,7 +100,7 @@ export function isLoggedIn() {
   return (dispatch) => {
     dispatch(requestUser());
     return Keychain.getInternetCredentials(`${ip}`)
-      .then(credentials => dispatch(receiveUser({ username: credentials.username, token: credentials.password})))
+      .then(credentials => dispatch(receiveUser(JSON.parse(credentials.username))))
       .catch(err => dispatch(receiveUser()));
   }
 }

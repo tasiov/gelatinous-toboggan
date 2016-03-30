@@ -51,7 +51,7 @@ class Login extends Component {
       this.props.loginUser(emailToLowercase, this.state.password)
         .then(() => {
           if (this.props.token) {
-            Keychain.setInternetCredentials(`${ip}`, this.props.username, this.props.token)
+            Keychain.setInternetCredentials(`${ip}`, JSON.stringify(this.props.user), '')
               .then(() => {
                 this.props.navigator.resetTo({ name: 'home' })
               });
