@@ -112,7 +112,7 @@ function mapDispatchToProps(dispatch) {
     getUserContacts: (token, uid) => {
       return dispatch(getUserContacts(token, uid));
     },
-    postFriends: (userId, friendIds) => {
+    postFriends: (userId, token, friendIds) => {
       return dispatch(postFriends(userId, token, ...friendIds));
     },
   };
