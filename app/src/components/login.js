@@ -15,6 +15,7 @@ const {
   PropTypes,
   View,
   Text,
+  ActivityIndicatorIOS,
 } = React;
 
 const CustomButton = new MKButton.Builder()
@@ -111,6 +112,11 @@ class Login extends Component {
           <CustomButton onPress={this.onPress}>
             <Text style={login.buttonText}>{this.props.loginOrSignup}</Text>
           </CustomButton>
+          <ActivityIndicatorIOS
+            animating={this.props.isFetching}
+            style={{height: 80}}
+            size="large"
+          />
         </View>
       </View>
     );
