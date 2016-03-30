@@ -60,7 +60,7 @@ export default (app) => {
       controller.getUser(JSON.parse(body))
       .then((user) => {
         if(user){
-          res.status(409).send('username already exists');
+          res.status(409).send('already exists');
         } else {
           controller.updateUser(req.query.userId, JSON.parse(body))
           .then(() => res.status(204).send('Successfully updated'))
@@ -86,7 +86,6 @@ export default (app) => {
     writeVideoToDiskPipeline(req, res, data, true);
   });
 
-  // TODO: add required auth
   // TODO: clean up and optimize
   app.post('/api/cross', requireAuth, (req, res) => {
     const userId = req.query.userId;
@@ -97,10 +96,14 @@ export default (app) => {
       data = JSON.parse(data);
       async.map(data, (contact, callback) => {
         controller.crossReference(contact.emails, contact.phoneNumbers)
-          .then(id => callback(null, Object.assign(contact, { id })));
-      }, (error, results) => {
-        if(error) {
-          res.status(500).send(`Failed post cross reference request: ${error}`);
+          .then(user => {
+            const id = user ? user.get('id') : null;
+            const username = user ? user.get('username') : null;
+            return callback(null, Object.assign(contact, { id, username }));
+          })
+      }, (err, results) => {
+        if (err) {
+          res.status(500).send(`Failed post cross reference request: ${err}`);
         } else {
           res.status(201).send(results.filter(contact => contact.id !== null && contact.id !== userId));
         }
@@ -120,17 +123,32 @@ export default (app) => {
     writeVideoToDiskPipeline(req, res, data, false);
   });
 
+  app.get('/api/users', requireAuth, (req, res) => {
+    const username = req.query.username;
+    controller.getUser({ username })
+      .then(user => {
+        if (user) {
+          res.status(200).send({
+            id: user.get('id'),
+            username: user.get('username'),
+          });
+        } else {
+          res.sendStatus(400);
+        }
+      });
+  })
+
   app.get('/api/friends/:id', requireAuth, (req, res) => {
     if (_.isEmpty(req.params.id)) {
       res.status(400).send('Failed to retrieve user');
     } else {
-      controller.getAllOtherUsers(req.params.id)
-      .then(data =>  res.status(200).send(data))
-      .catch(error => res.status(500).send(`Failed get friends request: ${error}`))
+      controller.getFriends(req.params.id)
+        .then(data => res.status(200).send(data.get('Friend')))
+        .catch(error => res.status(500).send(`Failed get friends request: ${error}`));
     }
   });
 
-  app.post('/api/friends/:id', (req, res) => {
+  app.post('/api/friends/:id', requireAuth, (req, res) => {
     const userId = req.params.id;
     let data = '';
     req.on('data', (chunk) => {

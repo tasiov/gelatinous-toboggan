@@ -22,9 +22,14 @@ import {
   INVITE_FRIENDS,
   RECEIVE_USERNAME_EXIST_ERROR,
   RECEIVE_USERNAME_NOT_EXIST,
+  REQUEST_CONTACTS,
+  RECEIVE_CONTACTS,
 } from '../constants/ActionTypes';
 
 import ip from '../config';
+import Keychain from 'react-native-keychain';
+import Contacts from 'react-native-contacts';
+import _ from 'lodash';
 
 export const selectLoginOrSignup = (selection) => ({
   type: LOGIN_OR_SIGNUP,
@@ -90,6 +95,15 @@ export function loginUser(usernameOrEmail, password) {
     .then(user => dispatch(receiveUser(user)))
     .catch(error => dispatch(receiveUserError()));
   };
+}
+
+export function isLoggedIn() {
+  return (dispatch) => {
+    dispatch(requestUser());
+    return Keychain.getInternetCredentials(`${ip}`)
+      .then(credentials => dispatch(receiveUser(JSON.parse(credentials.username))))
+      .catch(err => dispatch(receiveUser()));
+  }
 }
 
 export function updateUser(id, data) {
@@ -221,36 +235,62 @@ const receiveFriends = (friends) => ({
 export function fetchFriends(options) {
   return (dispatch) => {
     dispatch(requestFriends());
-
-    // todo: hook up appropriately with server
     // todo: catch errors
 
-    return fetch(`http://${ip}:8000/api/friends/${options.username}?token=${options.token}`, {
+    return fetch(`http://${ip}:8000/api/friends/${options.id}?token=${options.token}`, {
       method: 'GET',
-      headers: { authorization: options.token },
     })
     .then(response => response.json())
     .then(json => dispatch(receiveFriends(json)));
   };
 }
 
-// TODO: add token
-// clean up implementation
-export function crossReferenceContacts(contacts, token, userId) {
+const requestContacts = () => {
+  return {
+    type: REQUEST_CONTACTS,
+  }
+}
+
+const receiveContacts = (data) => {
+  return {
+    type: RECEIVE_CONTACTS,
+    payload: data,
+  }
+}
+
+// TODO: clean up
+export function getUserContacts(token, userId) {
   return (dispatch) => {
-    console.log(token, userId);
-    dispatch(requestFriends());
-    return fetch(`http://${ip}:8000/api/cross?userId=${userId}&token=${token}`, {
-      method: 'POST',
-      body: JSON.stringify(contacts),
-    })
-    .then(response => dispatch(receiveFriends(JSON.parse(response._bodyInit))));
-  };
+    dispatch(requestContacts());
+    return Contacts.getAll((err, contacts) => {
+      if (err) {
+        console.log('error', err);
+      } else {
+        const cleanContacts = contacts.reduce((acc, nxt) => {
+          acc.push({
+            fullName: `${nxt.givenName || ''} ${nxt.familyName || ''}`,
+            emails: nxt.emailAddresses.map(obj => obj.email),
+            phoneNumbers: nxt.phoneNumbers.map(obj => obj.number),
+          });
+          return acc;
+        }, []);
+
+        return fetch(`http://${ip}:8000/api/cross?userId=${userId}&token=${token}`, {
+          method: 'POST',
+          body: JSON.stringify(cleanContacts),
+        })
+        .then(response => {
+          const usersInContacts = _.uniq(JSON.parse(response._bodyInit), 'username');
+          dispatch(receiveContacts(usersInContacts))
+        });
+      }
+    });
+  }
 }
 
 // add authentication, dispatches
-export function postFriends(userId, ...friendsId) {
-  return (dispatch) => fetch(`http://${ip}:8000/api/friends/${userId}`, {
+export function postFriends(userId, token, ...friendsId) {
+  return (dispatch) => fetch(`http://${ip}:8000/api/friends/${userId}?token=${token}`, {
     method: 'POST',
     body: JSON.stringify({ friends: friendsId }),
   });
@@ -269,9 +309,9 @@ export function fetchQuilts(options) {
   return (dispatch) => {
     dispatch(requestQuilts());
     return fetch(`http://${ip}:8000/api/quilt?username=${options.username}&token=${options.token}`)
-      .then((response) => response.json())
-      .then((data) => dispatch(receiveQuilts(data)))
-      .catch((error) => console.error('Error in getting user\'s quilts', error));
+      .then(response => response.json())
+      .then(data => dispatch(receiveQuilts(data)))
+      .catch(error => console.error('Error in getting user\'s quilts', error));
   };
 }
 

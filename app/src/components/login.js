@@ -7,6 +7,8 @@ import PasswordInput from './password_input';
 import NavBar from './navbar';
 import Validator from 'email-validator';
 import owasp from 'owasp-password-strength-test';
+import Keychain from 'react-native-keychain';
+import ip from '../config';
 
 const {
   Component,
@@ -34,7 +36,7 @@ class Login extends Component {
       maxLength: 128,
       minLength: 6,
       minPhraseLength: 10,
-      minOptionalTestsToPass: 4,
+      minOptionalTestsToPass: 3,
     });
 
     this.onPress = this.onPress.bind(this);
@@ -43,25 +45,16 @@ class Login extends Component {
     this.onTypePassword = this.onTypePassword.bind(this);
   }
 
-  onNavigate() {
-    if (!this.props.isFetching && this.props.token) {
-      if (this.props.loginOrSignup === 'login') {
-        this.props.navigator.resetTo({ name: 'home' });
-      } else {
-        this.props.navigator.replace({ name: 'username' });
-      }
-    } else if (this.props.isFetching) {
-      console.log('spinner!');
-    }
-  }
-
   onPress() {
     const emailToLowercase = this.state.email.toLowerCase();
     if (this.props.loginOrSignup === 'login') {
       this.props.loginUser(emailToLowercase, this.state.password)
         .then(() => {
           if (this.props.token) {
-            this.props.navigator.resetTo({ name: 'home' });
+            Keychain.setInternetCredentials(`${ip}`, JSON.stringify(this.props.user), '')
+              .then(() => {
+                this.props.navigator.resetTo({ name: 'home' })
+              });
           }
         });
     } else {
@@ -71,7 +64,10 @@ class Login extends Component {
         this.props.signupUser(emailToLowercase, this.state.password)
         .then(() => {
           if (this.props.token) {
-            this.props.navigator.replace({ name: 'username' });
+            Keychain.setInternetCredentials(`${ip}:8000`, this.props.username, this.props.token)
+              .then(() => {
+                this.props.navigator.replace({ name: 'username' });
+              });
           }
         });
       }
@@ -93,7 +89,7 @@ class Login extends Component {
 
   render() {
     let strongPasswordMessage = <Text />;
-    if (!this.state.strongPassword && this.state.password) {
+    if (!this.state.strongPassword && this.state.password && this.props.loginOrSignup !== 'login') {
       strongPasswordMessage = <Text>Weak Password!</Text>;
     }
     return (
