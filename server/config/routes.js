@@ -182,4 +182,16 @@ export default (app) => {
       .catch((error) => res.status(500).send(`Failed request: ${error}`));
     }
   });
+
+  app.get('/api/notifications/:id', (req, res) => {
+    if (_.isEmpty(req.params.id)) {
+      res.status(400).send('Failed to retrieve user');
+    } else {
+      controller.getUsersNotifs(req.params.id)
+      .then((data) => {
+        return res.status(200).send(data);
+      })
+      .catch((error) => res.status(500).send(`Failed request: ${error}`));
+    }
+  });
 };

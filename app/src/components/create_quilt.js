@@ -1,9 +1,9 @@
 /* eslint-disable no-use-before-define, react/prefer-stateless-function */
 import React, { Component } from 'react-native';
 import { connect } from 'react-redux';
-import { create } from '../assets/styles';
+import { create, colors } from '../assets/styles';
 import { createQuilt } from '../actions/index';
-import { MKButton } from 'react-native-material-kit';
+import { MKButton, mdl } from 'react-native-material-kit';
 import NavBar from './navbar';
 
 const {
@@ -15,6 +15,16 @@ const CustomButton = new MKButton.Builder()
 .withText('Create Quilt')
 .withStyle(create.button)
 .withTextStyle(create.buttonText)
+.build();
+
+const ThemeInput = mdl.Textfield.textfield()
+.withAutoCorrect(false)
+.withPlaceholder('Title')
+.withStyle(create.textfield)
+.withUnderlineSize(2)
+.withHighlightColor(colors.auburn)
+.withTintColor(colors.auburn)
+.withTextInputStyle(create.textInput)
 .build();
 
 class CreateQuilt extends Component {
@@ -34,6 +44,7 @@ class CreateQuilt extends Component {
       <View style={create.container}>
         <NavBar onPress={this.props.navigator.pop} />
         <View style={create.buttonContainer}>
+          <ThemeInput />
           <CustomButton onPress={this.onCreatePress} />
         </View>
       </View>

@@ -1,6 +1,13 @@
 /* eslint-disable no-use-before-define */
 import React from 'react-native';
 import { connect } from 'react-redux';
+import { updateUser, checkUsername } from '../actions/index';
+import UsernameInput from '../components/username_input';
+import { login, username } from '../assets/styles';
+import { MKButton } from 'react-native-material-kit';
+import _ from 'lodash';
+import NavBar from '../components/navbar';
+
 const {
   Component,
   Text,
@@ -8,11 +15,6 @@ const {
   StyleSheet,
   PropTypes,
 } = React;
-import { updateUser, checkUsername } from '../actions/index';
-import UsernameInput from '../components/username_input';
-import { login } from '../assets/styles';
-import { MKButton } from 'react-native-material-kit';
-import _ from 'lodash';
 
 const CustomButton = new MKButton.Builder()
   .withStyle(login.button)
@@ -59,15 +61,16 @@ class Username extends Component {
     }
     return (
       <View style={login.container}>
+        <NavBar onPress={this.props.navigator.pop} text={'Username'} />
         <View style={login.containerBody}>
+          <Text style={username.text}>Select a Username</Text>
           {duplicateUsernameMessage}
-          <Text>Select a Username</Text>
           <UsernameInput
             value={this.state.username}
             onChangeText={this.onType}
           />
           <CustomButton onPress={() => {if(!this.props.duplicateUsername){this.onEnter()}}}>
-            <Text style={login.buttonText}>{this.props.loginOrSignup}</Text>
+            <Text style={login.buttonText}>Submit</Text>
           </CustomButton>
         </View>
       </View>

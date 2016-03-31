@@ -9,6 +9,7 @@ import NotifEntry from '../components/notification_entry';
 import { connect } from 'react-redux';
 import Immutable from 'immutable';
 import { fetchNotifs } from '../actions/index';
+import NavBar from '../components/navbar';
 
 const {
   ListView,
@@ -50,11 +51,14 @@ class NotifContainer extends Component {
       />;
     }
     return (
-      <ListView
+      <View>
+        <NavBar onPress={this.props.navigator.pop} />
+        <ListView
         style={{flex: 1}}
         dataSource={this.getDataSource()}
         renderRow={this.onRenderRow}
-      />
+        />
+      </View>
     )
   }
 }

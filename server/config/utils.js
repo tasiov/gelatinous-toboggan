@@ -97,6 +97,15 @@ function doneQuiltNotif(quiltId) {
       controller.createNotif(user.id, quiltId, data[0], 3)
     ))
   }).catch(console.log);
+
+function newQuiltNotif(userId, quiltId) {
+  controller.getQuilt({ id: quiltId })
+  .then((quilt) => Promise.all([ quilt.theme, quilt.getUsers() ]))
+  .then((data) => {
+    _.forEach(data[1], (user) => (
+      controller.createNotif(user.id, quiltId, data[0], 3)
+    ))
+  }).catch(console.log);
 }
 
 export async function writeVideoToDiskPipeline(req, res, data, firstFlag) {
@@ -123,7 +132,6 @@ export async function writeVideoToDiskPipeline(req, res, data, firstFlag) {
   // then send push notification to friends
   // unsure when exactly to send status code
   res.sendStatus(201);
-
 }
 // todo: catch errors
 

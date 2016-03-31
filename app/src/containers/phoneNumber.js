@@ -10,7 +10,8 @@ import Button from '../components/button';
 import PhoneInput from '../components/phone_input';
 import { updateUser } from '../actions/index';
 import { MKButton } from 'react-native-material-kit';
-import { login } from '../assets/styles';
+import { login, username } from '../assets/styles';
+import NavBar from '../components/navbar';
 
 const CustomButton = new MKButton.Builder()
   .withStyle(login.button)
@@ -40,14 +41,15 @@ class PhoneNumber extends Component {
   render() {
     return (
       <View style={login.container}>
+        <NavBar onPress={this.props.navigator.pop} text={'Phone Number'} />
         <View style={login.containerBody}>
-          <Text>Please Enter Your Phone Number</Text>
+          <Text style={username.text}>Enter Your Phone Number</Text>
           <PhoneInput
             value={this.state.phoneNumber}
             onChangeText={this.onType}
           />
           <CustomButton onPress={this.onEnter}>
-            <Text style={login.buttonText}>{this.props.loginOrSignup}</Text>
+            <Text style={login.buttonText}>Submit</Text>
           </CustomButton>
         </View>
       </View>

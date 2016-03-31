@@ -12,10 +12,10 @@ import ShowQuilts from './quilts';
 import ShowCamera from './camera';
 import WatchVideo from './video';
 import FriendsContainer from './friends';
-import LoginOrSignup from './login_or_signup';
-import PhoneNumber from './phoneNumber';
-import Username from './username';
 import ContactsContainer from './contacts';
+import LoginOrSignup from '../containers/login_or_signup';
+import PhoneNumber from '../containers/phoneNumber';
+import Username from '../containers/username';
 import NotifContainer from '../containers/notification';
 import Blank from './blank';
 import FindFriends from './find_friends';
@@ -46,7 +46,6 @@ const ROUTES = {
   username: Username,
   view: ShowQuilts,
   video: WatchVideo,
-  friends: FriendsContainer,
   findFriends: FindFriends,
   selectFriends: SelectFriendsContainer,
   notification: NotifContainer,

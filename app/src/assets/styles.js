@@ -174,4 +174,23 @@ export const create = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 20,
   },
+  textfield: {
+    marginBottom: 20,
+    height: 35,
+    width: 170,
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+  },
+  textInput: {
+    color: colors.gray,
+  },
+});
+
+export const username = StyleSheet.create({
+  text: {
+    color: colors.gray,
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 20,
+  },
 });

@@ -85,13 +85,7 @@ const updateQuiltStatusToReady = (id) => {
 // options = {username: username}
 const getAllUserQuilts = (username) =>
   getUser({ username })
-    .then(user => user.getQuilts({
-      where: {
-        status: {
-          $gt: 0,
-        },
-      },
-    }))
+    .then(user => user.getQuilts({ where: { status: { $gt: 0 } } }))
     .then(mapQuilts)
     .catch(error => console.error(`Error retrieving user's quilts: ${error}`));
 
@@ -160,6 +154,19 @@ const getAllOtherUsers = (username) =>
   .then((users) => users)
   .catch((error) => console.error(`Error retreiving all other users: ${error}`));
 
+const getUsersNotifs = (userId) => (
+  db.Notification.findAll({ where: { userId: userId } })
+)
+
+const getFriends = (id) =>
+  db.User.find({
+    where: { id },
+    include: [
+      { model: db.User, as: 'Friend'},
+    ],
+  })
+
+
 const createNotif = (userId, quiltId, quiltTheme, messageType, contribName) => {
   let message;
   switch(messageType) {
@@ -185,19 +192,6 @@ const isQuiltDone = (quiltId) => {
       db.UserQuilt.sum('status', { where: { quiltId: quiltId } })
     ]).then((data) => data[0] === data[1])
 }
-
-const getUsersNotifs = (userId) => (
-  db.Notification.findAll({ where: { userId: userId } })
-)
-
-const getFriends = (id) =>
-  db.User.find({
-    where: { id },
-    include: [
-      { model: db.User, as: 'Friend'},
-    ],
-  })
-
 
 export default {
   addFriends,

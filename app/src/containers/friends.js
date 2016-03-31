@@ -9,6 +9,7 @@ import FriendEntry from '../components/friend_entry';
 import { connect } from 'react-redux';
 import Immutable from 'immutable'; // just for testing
 import { fetchFriends } from '../actions/index';
+import NavBar from '../components/navbar';
 
 const {
   ListView,
@@ -16,6 +17,7 @@ const {
   StyleSheet,
   Text,
   ActivityIndicatorIOS,
+  View,
 } = React;
 
 // todo: consider factoring out view rendering into own component
@@ -59,18 +61,26 @@ class FriendsContainer extends Component {
 
   render() {
     if (this.props.friends.get('isFetching')) {
-      return <ActivityIndicatorIOS
-        animating={true}
-        style={{height: 80}}
-        size="large"
-      />;
+      return (
+        <View>
+          <NavBar onPress={this.props.navigator.pop} />
+          <ActivityIndicatorIOS
+            animating={true}
+            style={{height: 80}}
+            size="large"
+          />
+        </View>
+      )
     }
     return (
-      <ListView
+      <View>
+        <NavBar onPress={this.props.navigator.pop} />
+        <ListView
         style={styles.container}
         dataSource={this.getDataSource()}
         renderRow={this.onRenderRow}
-      />
+        />
+      </View>
     );
   }
 }
