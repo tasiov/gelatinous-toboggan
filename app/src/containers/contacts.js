@@ -9,7 +9,7 @@ import FriendEntry from '../components/friend_entry';
 import { connect } from 'react-redux';
 import Immutable from 'immutable'; // just for testing
 import Contacts from 'react-native-contacts';
-import { crossReferenceContacts, postFriends } from '../actions/index';
+import { getUserContacts, postFriends } from '../actions/index';
 import Button from '../components/button';
 
 const {
@@ -25,47 +25,30 @@ class ContactsContainer extends Component {
   constructor(props) {
     super(props);
     this.getDataSource = this.getDataSource.bind(this);
-    this.onCheckboxCheck = this.onCheckboxCheck.bind(this);
-    this.onCheckboxUncheck = this.onCheckboxUncheck.bind(this);
+    this.onCheck = this.onCheck.bind(this);
     this.onRenderRow = this.onRenderRow.bind(this);
     this.onSubmitClick = this.onSubmitClick.bind(this);
-
-    Contacts.getAll((err, contacts) => {
-      if (err) {
-        console.log('error', err);
-      } else {
-        const cleanContacts = contacts.reduce((acc, nxt) => {
-          acc.push({
-            fullName: `${nxt.givenName || ''} ${nxt.familyName || ''}`,
-            emails: nxt.emailAddresses.map(obj => obj.email),
-            phoneNumbers: nxt.phoneNumbers.map(obj => obj.number),
-          });
-          return acc;
-        }, []);
-        this.props.crossReferenceContacts(cleanContacts, this.props.token, this.props.userId);
-      }
-    });
+    this.props.getUserContacts(this.props.token, this.props.userId);
 
     this.state = {
       checkedFriends: {},
     };
   }
 
-  onCheckboxCheck(id) {
+  onCheck(id) {
     const newChecked = this.state.checkedFriends;
-    newChecked[id] = true;
+    if (newChecked[id]) {
+      delete newChecked[id];
+    } else {
+      newChecked[id] = true;
+    }
     this.setState({ checkedFriends: newChecked });
   }
 
-  onCheckboxUncheck(id) {
-    const newChecked = this.state.checkedFriends;
-    delete newChecked[id];
-    this.setState({ checkedFriends: newChecked });
-  }
 
   onSubmitClick() {
     const friends = Object.keys(this.state.checkedFriends).map(id => parseInt(id));
-    this.props.postFriends(this.props.userId, friends);
+    this.props.postFriends(this.props.userId, this.props.token, friends);
     this.props.navigator.push({ name: 'home' });
   }
 
@@ -73,8 +56,7 @@ class ContactsContainer extends Component {
     return (
       <FriendEntry
         user={{id: rowData.id, username: rowData.fullName}}
-        onCheckboxCheck={this.onCheckboxCheck}
-        onCheckboxUncheck={this.onCheckboxUncheck}
+        onCheck={this.onCheck}
         key={rowData.id}
       />
     );
@@ -82,11 +64,11 @@ class ContactsContainer extends Component {
 
   getDataSource() {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => !Immutable.is(r1, r2) });
-    return ds.cloneWithRows(this.props.friends.get('friendsList').toArray());
+    return ds.cloneWithRows(this.props.contacts.get('contactList').toArray());
   }
 
   render() {
-    if (this.props.friends.get('isFetching')) {
+    if (this.props.contacts.get('isFetching')) {
       return <Text>Loading Friends...</Text>;
     }
     return (
@@ -115,23 +97,23 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  const friends = state.get('friends');
+  const contacts = state.get('contacts');
   const userId = state.get('user').get('id');
   const token = state.get('user').get('token');
   return {
-    friends,
-    userId,
+    contacts,
     token,
+    userId,
   };
 };
 
 function mapDispatchToProps(dispatch) {
   return {
-    crossReferenceContacts: (contacts, token, uid) => {
-      return dispatch(crossReferenceContacts(contacts, token, uid));
+    getUserContacts: (token, uid) => {
+      return dispatch(getUserContacts(token, uid));
     },
-    postFriends: (userId, friendIds) => {
-      return dispatch(postFriends(userId, ...friendIds));
+    postFriends: (userId, token, friendIds) => {
+      return dispatch(postFriends(userId, token, ...friendIds));
     },
   };
 }

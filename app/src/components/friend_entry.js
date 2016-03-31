@@ -15,7 +15,7 @@ const FriendEntry = ({ user, onCheck, checked }) => (
       label={user.username}
       id={user.id}
       checked={checked}
-      onCheck={onCheck}
+      onCheck={() => onCheck(user.id)}
     />
   </TouchableOpacity>
 );

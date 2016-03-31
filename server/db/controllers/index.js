@@ -54,7 +54,7 @@ const crossReference = (emails, phoneNumbers) =>
       ],
     },
   })
-  .then(user => user ? user.get('id') : null)
+  .then(user => user ? user : null)
   .catch(error => console.error(`Error cross referencing user: ${error}`));
 
 // status 0 = pending me
@@ -154,6 +154,19 @@ const getAllOtherUsers = (username) =>
   .then((users) => users)
   .catch((error) => console.error(`Error retreiving all other users: ${error}`));
 
+const getUsersNotifs = (userId) => (
+  db.Notification.findAll({ where: { userId: userId } })
+)
+
+const getFriends = (id) =>
+  db.User.find({
+    where: { id },
+    include: [
+      { model: db.User, as: 'Friend'},
+    ],
+  })
+
+
 const createNotif = (userId, quiltId, quiltTheme, messageType, contribName) => {
   let message;
   switch(messageType) {
@@ -180,12 +193,9 @@ const isQuiltDone = (quiltId) => {
     ]).then((data) => data[0] === data[1])
 }
 
-const getUsersNotifs = (userId) => (
-  db.Notification.findAll({ where: { userId: userId } })
-)
-
 export default {
   addFriends,
+  getFriends,
   createUser,
   crossReference,
   getAllUsers,

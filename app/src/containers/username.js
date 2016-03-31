@@ -36,44 +36,35 @@ class Username extends Component {
   }
 
   onCheckUsername(){
-    const usernameToLowercase = this.state.username.toLowerCase();
-    this.props.checkUsername(this.props.userId,
-      { username: usernameToLowercase, token: this.props.token });
+    if(this.state.username){
+      const usernameToLowercase = this.state.username.toLowerCase();
+      this.props.checkUsername(this.props.userId,
+        { username: usernameToLowercase, token: this.props.token });
+    }
   }
+
   onType(username) {
     this.setState({ username });
     const context = this;
     _.debounce(this.onCheckUsername, 500)();
   }
+
   onEnter() {
     const usernameToLowercase = this.state.username.toLowerCase();
     this.props.updateUser(this.props.userId, { username: usernameToLowercase, token: this.props.token });
   }
 
   render() {
-    if (this.props.duplicateUsername) {
-      return (
-        <View style={login.container}>
-          <NavBar onPress={this.props.navigator.pop} text={'Username'} />
-          <View style={login.containerBody}>
-            <Text style={styles.errorMsg}>Username already exists!</Text>
-            <Text style={username.text}>Select a Username</Text>
-            <UsernameInput
-              value={this.state.username}
-              onChangeText={this.onType}
-            />
-            <CustomButton onPress={() => {if(!this.props.duplicateUsername){this.onEnter()}}}>
-              <Text style={login.buttonText}>Submit</Text>
-            </CustomButton>
-          </View>
-        </View>
-      );
+    let duplicateUsernameMessage = <Text />;
+    if (this.props.duplicateUsername && this.state.username) {
+      duplicateUsernameMessage = <Text style={styles.errorMsg}>Username already exists!</Text>;
     }
     return (
       <View style={login.container}>
         <NavBar onPress={this.props.navigator.pop} text={'Username'} />
         <View style={login.containerBody}>
           <Text style={username.text}>Select a Username</Text>
+          {duplicateUsernameMessage}
           <UsernameInput
             value={this.state.username}
             onChangeText={this.onType}

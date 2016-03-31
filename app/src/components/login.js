@@ -6,6 +6,9 @@ import EmailInput from './email_input';
 import PasswordInput from './password_input';
 import NavBar from './navbar';
 import Validator from 'email-validator';
+import owasp from 'owasp-password-strength-test';
+import Keychain from 'react-native-keychain';
+import ip from '../config';
 
 const {
   Component,
@@ -25,24 +28,21 @@ class Login extends Component {
     this.state = {
       email: '',
       password: '',
+      strongPassword: false,
     };
+
+    owasp.config({
+      allowPassphrases: true,
+      maxLength: 128,
+      minLength: 6,
+      minPhraseLength: 10,
+      minOptionalTestsToPass: 3,
+    });
 
     this.onPress = this.onPress.bind(this);
     this.onBack = this.onBack.bind(this);
     this.onTypeEmail = this.onTypeEmail.bind(this);
     this.onTypePassword = this.onTypePassword.bind(this);
-  }
-
-  onNavigate() {
-    if (!this.props.isFetching && this.props.token) {
-      if (this.props.loginOrSignup === 'login') {
-        this.props.navigator.resetTo({ name: 'home' });
-      } else {
-        this.props.navigator.replace({ name: 'username' });
-      }
-    } else if (this.props.isFetching) {
-      console.log('spinner!');
-    }
   }
 
   onPress() {
@@ -51,7 +51,10 @@ class Login extends Component {
       this.props.loginUser(emailToLowercase, this.state.password)
         .then(() => {
           if (this.props.token) {
-            this.props.navigator.resetTo({ name: 'home' })
+            Keychain.setInternetCredentials(ip, JSON.stringify(this.props.user), '')
+              .then(() => {
+                this.props.navigator.resetTo({ name: 'home' })
+              });
           }
         });
     } else {
@@ -60,8 +63,12 @@ class Login extends Component {
       } else {
         this.props.signupUser(emailToLowercase, this.state.password)
         .then(() => {
+          // TODO: move setting sign up credentials to final phase of signup
           if (this.props.token) {
-            this.props.navigator.replace({ name: 'username' });
+            Keychain.setInternetCredentials(ip, JSON.stringify(this.props.user), '')
+              .then(() => {
+                this.props.navigator.replace({ name: 'username' });
+              });
           }
         });
       }
@@ -77,10 +84,15 @@ class Login extends Component {
   }
 
   onTypePassword(password) {
-    return this.setState({ password });
+    const result = owasp.test(password);
+    this.setState({ password, strongPassword: result.strong });
   }
 
   render() {
+    let strongPasswordMessage = <Text />;
+    if (!this.state.strongPassword && this.state.password && this.props.loginOrSignup !== 'login') {
+      strongPasswordMessage = <Text>Weak Password!</Text>;
+    }
     return (
       <View style={login.container}>
         <NavBar onPress={this.onBack} text={this.props.loginOrSignup === 'login' ? 'Login' : 'Sign Up'} />
@@ -88,14 +100,15 @@ class Login extends Component {
           <EmailInput
             value={this.state.email}
             onChangeText={this.onTypeEmail}
-            placeholder={this.props.loginOrSignup === 'login' ? "Username or Email" : "Email Address"}
+            placeholder={this.props.loginOrSignup === 'login' ? 'Username or Email' : 'Email Address'}
             autoFocus
           />
           <PasswordInput
             value={this.state.password}
             onChangeText={this.onTypePassword}
-            placeholder={"Password"}
+            placeholder={'Password'}
           />
+          {strongPasswordMessage}
           <CustomButton onPress={this.onPress}>
             <Text style={login.buttonText}>{this.props.loginOrSignup}</Text>
           </CustomButton>
@@ -109,6 +122,11 @@ class Login extends Component {
 Login.propTypes = {
   navigator: PropTypes.object,
   fetchUser: PropTypes.func,
+  isFetching: PropTypes.bool,
+  token: PropTypes.string,
+  loginOrSignup: PropTypes.string,
+  loginUser: PropTypes.func,
+  signupUser: PropTypes.func,
 };
 
 

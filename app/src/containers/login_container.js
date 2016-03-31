@@ -16,9 +16,11 @@ class LoginContainer extends Component {
 function mapStateToProps(state) {
   const user = state.get('user');
   return {
+    user: user.toObject(),
     loginOrSignup: user.get('loginOrSignup'),
     isFetching: user.get('isFetching'),
     token: user.get('token'),
+    username: user.get('username'),
   };
 }
 
