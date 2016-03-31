@@ -62,9 +62,10 @@ class FindFriends extends Component {
       }).catch(err => console.log(err))
 
     this.setState({
-      filteredContacts: this.props.contacts.filter(elem => this.state.username !== '' && elem.username.search(this.state.username) !== -1)
+      filteredContacts: this.props.contacts.filter(elem => {
+        return this.state.username !== '' && !!elem.username && elem.username.search(this.state.username) !== -1;
+      }),
     });
-
   }
 
   getDataSource() {
