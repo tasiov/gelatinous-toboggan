@@ -125,10 +125,18 @@ export const quiltEntry = StyleSheet.create({
   highlight: {
     height: 80,
     padding: 5,
-    margin: 2,
+    margin: 5,
     borderColor: 'gray',
     borderWidth: 2,
     borderRadius: 4,
+    borderStyle: 'dashed',
+    backgroundColor: 'white',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.7,
+    shadowColor: 'black',
+    borderRadius: 8,
+    borderColor: colors.auburn,
+    borderWidth: 3,
   },
   row: {
     flex: 1,
@@ -154,8 +162,17 @@ export const create = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.beige,
   },
-  buttonContainer: {
+  innerContainerA: {
     flex: 1,
+    alignItems: 'center',
+  },
+  innerContainerB: {
+    flex: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonContainer: {
+    flex: 2,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -177,12 +194,18 @@ export const create = StyleSheet.create({
   textfield: {
     marginBottom: 20,
     height: 35,
-    width: 170,
+    width: 250,
     flexDirection: 'column',
     alignItems: 'flex-start',
   },
   textInput: {
     color: colors.gray,
+  },
+  text: {
+    color: colors.auburn,
+    fontSize: 40,
+    fontWeight: 'bold',
+    marginTop: 20,
   },
 });
 
@@ -192,5 +215,26 @@ export const username = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginTop: 20,
+  },
+});
+
+export const images = StyleSheet.create({
+  machine: {
+    marginBottom: 50,
+    height: 250,
+    width: 280,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
+});
+
+export const camera = StyleSheet.create({
+  icon: {
+    color: colors.auburn,
+  },
+  iconContainer: {
+    backgroundColor: 'white',
+    padding: 15,
+    borderRadius: 30,
   },
 });

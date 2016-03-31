@@ -59,7 +59,7 @@ class ShowQuilts extends Component {
       dataSource={this.getDataSource()}
       renderRow={this.onRenderRow}
     />;
-    
+
     if (this.props.quilts.get('isFetching')) {
       quiltsListView = <ActivityIndicatorIOS
         animating={true}

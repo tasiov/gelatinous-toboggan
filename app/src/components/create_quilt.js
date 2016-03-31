@@ -1,7 +1,7 @@
 /* eslint-disable no-use-before-define, react/prefer-stateless-function */
 import React, { Component } from 'react-native';
 import { connect } from 'react-redux';
-import { create, colors } from '../assets/styles';
+import { create, colors, images } from '../assets/styles';
 import { createQuilt } from '../actions/index';
 import { MKButton, mdl } from 'react-native-material-kit';
 import NavBar from './navbar';
@@ -9,10 +9,12 @@ import NavBar from './navbar';
 const {
   PropTypes,
   View,
+  Image,
+  Text,
 } = React;
 
 const CustomButton = new MKButton.Builder()
-.withText('Create Quilt')
+.withText('Add Title')
 .withStyle(create.button)
 .withTextStyle(create.buttonText)
 .build();
@@ -43,9 +45,18 @@ class CreateQuilt extends Component {
     return (
       <View style={create.container}>
         <NavBar onPress={this.props.navigator.pop} />
+        <View style={create.innerContainerA}>
+          <Text style={create.text}>Create A Quilt!</Text>
+        </View>
         <View style={create.buttonContainer}>
           <ThemeInput />
           <CustomButton onPress={this.onCreatePress} />
+        </View>
+        <View style={create.innerContainerB}>
+          <Image
+          style={images.machine}
+          source={require('../assets/sewingMachine.png')}
+          />
         </View>
       </View>
     );

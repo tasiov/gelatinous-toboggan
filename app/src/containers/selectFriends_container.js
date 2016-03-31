@@ -83,13 +83,13 @@ class SelectFriendsContainer extends Component {
   }
 
   render() {
-    if (this.props.friends.get('isFetching')) {
-      return <ActivityIndicatorIOS
-        animating={true}
-        style={{height: 80}}
-        size="large"
-      />;
-    }
+    // if (this.props.friends.get('isFetching')) {
+    //   return <ActivityIndicatorIOS
+    //     animating={true}
+    //     style={{height: 80}}
+    //     size="large"
+    //   />;
+    // }
     return (
       <View style={styles.container}>
         <ListView

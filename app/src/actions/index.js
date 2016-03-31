@@ -241,7 +241,10 @@ export function fetchFriends(options) {
       method: 'GET',
     })
     .then(response => response.json())
-    .then(json => dispatch(receiveFriends(json)));
+    .then(json => {
+      console.log('friends: ', json);
+      return dispatch(receiveFriends(json));
+    });
   };
 }
 
@@ -312,25 +315,6 @@ export function fetchQuilts(options) {
       .then(response => response.json())
       .then(data => dispatch(receiveQuilts(data)))
       .catch(error => console.error('Error in getting user\'s quilts', error));
-  };
-}
-
-const requestNotifs = () => ({
-  type: REQUEST_NOTIFS,
-});
-
-const receiveNotifs = (notifs) => ({
-  type: RECEIVE_NOTIFS,
-  payload: notifs,
-});
-
-export function fetchNotifs(userId) {
-  return (dispatch) => {
-    dispatch(requestNotifs());
-    return fetch(`http://${ip}:8000/api/notifications/${userId}`)
-      .then((response) => response.json())
-      .then((data) => dispatch(receiveNotifs(data)))
-      .catch((error) => console.error('Error in getting user\'s notifications', error));
   };
 }
 

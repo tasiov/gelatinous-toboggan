@@ -4,6 +4,8 @@ import Camera from 'react-native-camera';
 import { connect } from 'react-redux';
 import { reviewQuilt, selectWatchQuilt } from '../actions/index';
 import Button from '../components/button';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { camera } from '../assets/styles';
 
 const {
   Component,
@@ -83,9 +85,9 @@ class ShowCamera extends Component {
           captureQuality={Camera.constants.CaptureQuality.medium}
           type={this.state.type}
         >
-          <Text style={styles.capture} onPress={this.onCapturePress}>
-            [CAPTURE]
-          </Text>
+          <View style={camera.iconContainer}>
+            <Icon name="camera" size={50} style={camera.icon} onPress={this.onCapturePress}/>
+          </View>
           <Button text="SELFIE!" onPress={this.reverseCamera} />
         </Camera>
       </View>
@@ -110,14 +112,14 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height,
     width: Dimensions.get('window').width,
   },
-  capture: {
-    flex: 0,
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    color: '#000',
-    padding: 10,
-    margin: 40,
-  },
+  // capture: {
+  //   flex: 0,
+  //   backgroundColor: '#fff',
+  //   borderRadius: 5,
+  //   color: '#000',
+  //   padding: 10,
+  //   margin: 40,
+  // },
 });
 
 // get the state of the current quilt

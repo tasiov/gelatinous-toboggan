@@ -97,6 +97,7 @@ function doneQuiltNotif(quiltId) {
       controller.createNotif(user.id, quiltId, data[0], 3)
     ))
   }).catch(console.log);
+}
 
 function newQuiltNotif(userId, quiltId) {
   controller.getQuilt({ id: quiltId })
