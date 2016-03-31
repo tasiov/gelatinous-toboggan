@@ -27,15 +27,18 @@ class SelectFriendsContainer extends Component {
     this.getDataSource = this.getDataSource.bind(this);
     this.onCheck = this.onCheck.bind(this);
     this.onRenderRow = this.onRenderRow.bind(this);
-    props.fetchFriends({
-      id: this.props.userId,
-      token: this.props.token,
-    });
     this.onInvitePress = this.onInvitePress.bind(this);
 
     this.state = {
       checkedFriends: {},
     };
+  }
+
+  componentWillMount() {
+    this.props.fetchFriends({
+      id: this.props.userId,
+      token: this.props.token,
+    });
   }
 
   onCheck(id) {

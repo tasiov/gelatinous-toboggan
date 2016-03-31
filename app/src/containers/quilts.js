@@ -21,6 +21,9 @@ class ShowQuilts extends Component {
     this.getDataSource = this.getDataSource.bind(this);
     this.onRenderRow = this.onRenderRow.bind(this);
     this.onQuiltClick = this.onQuiltClick.bind(this);
+  }
+
+  componentWillMount() {
     this.props.fetchQuilts({
       username: this.props.username,
       token: this.props.token,

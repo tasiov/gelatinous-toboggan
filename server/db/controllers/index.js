@@ -65,7 +65,7 @@ function mapQuilts(userQuilts) {
     id: userQuilt.get('id'),
     theme: userQuilt.get('theme'),
     // status: userQuilt.get('UserQuilt').get('status') + userQuilt.get('status'),
-    status: userQuilt.get('status'),
+    status: userQuilt.get('UserQuilt').get('status'),
   })).reverse();
 }
 

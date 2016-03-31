@@ -28,11 +28,14 @@ class ContactsContainer extends Component {
     this.onCheck = this.onCheck.bind(this);
     this.onRenderRow = this.onRenderRow.bind(this);
     this.onSubmitClick = this.onSubmitClick.bind(this);
-    this.props.getUserContacts(this.props.token, this.props.userId);
 
     this.state = {
       checkedFriends: {},
     };
+  }
+
+  componentWillMount() {
+    this.props.getUserContacts(this.props.token, this.props.userId);
   }
 
   onCheck(id) {

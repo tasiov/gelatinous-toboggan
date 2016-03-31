@@ -23,6 +23,9 @@ import { connect } from 'react-redux';
 import { isLoggedIn } from '../actions/index';
 import ip from '../config';
 
+
+import Keychain from 'react-native-keychain';
+
 const {
   Component,
   Navigator,

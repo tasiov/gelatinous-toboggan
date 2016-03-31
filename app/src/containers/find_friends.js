@@ -36,13 +36,16 @@ class FindFriends extends Component {
     this.onBack = this.onBack.bind(this);
     this.onFriend = this.onFriend.bind(this);
 
-    this.props.getUserContacts(this.props.token, this.props.userId);
 
     this.state = {
       username: '',
       db: null,
       filteredContacts: [],
     };
+  }
+
+  componentWillMount() {
+    this.props.getUserContacts(this.props.token, this.props.userId);
   }
 
   onType(username) {
@@ -59,9 +62,10 @@ class FindFriends extends Component {
       }).catch(err => console.log(err))
 
     this.setState({
-      filteredContacts: this.props.contacts.filter(elem => this.state.username !== '' && elem.username.search(this.state.username) !== -1)
+      filteredContacts: this.props.contacts.filter(elem => {
+        return this.state.username !== '' && !!elem.username && elem.username.search(this.state.username) !== -1;
+      }),
     });
-
   }
 
   getDataSource() {
