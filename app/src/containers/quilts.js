@@ -12,6 +12,7 @@ const {
   PropTypes,
   Text,
   View,
+  ActivityIndicatorIOS,
 } = React;
 
 // todo: consider factoring out view rendering into own component
@@ -54,16 +55,23 @@ class ShowQuilts extends Component {
   }
 
   render() {
+    let quiltsListView = <ListView
+      dataSource={this.getDataSource()}
+      renderRow={this.onRenderRow}
+    />;
+    
     if (this.props.quilts.get('isFetching')) {
-      return <Text>Loading Quilts...</Text>;
+      quiltsListView = <ActivityIndicatorIOS
+        animating={true}
+        style={{height: 80}}
+        size="large"
+      />;
     }
+
     return (
       <View style={viewQuilts.container}>
         <NavBar onPress={this.props.navigator.pop} />
-        <ListView
-          dataSource={this.getDataSource()}
-          renderRow={this.onRenderRow}
-        />
+        {quiltsListView}
       </View>
     );
   }
