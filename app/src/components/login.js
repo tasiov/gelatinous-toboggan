@@ -9,6 +9,7 @@ import Validator from 'email-validator';
 import owasp from 'owasp-password-strength-test';
 import Keychain from 'react-native-keychain';
 import ip from '../config';
+import _ from 'lodash';
 
 const {
   Component,
@@ -50,6 +51,7 @@ class Login extends Component {
     if (this.props.loginOrSignup === 'login') {
       this.props.loginUser(emailToLowercase, this.state.password)
         .then(() => {
+          console.log(this.props.token);
           if (this.props.token) {
             Keychain.setInternetCredentials(ip, JSON.stringify(this.props.user), '')
               .then(() => {
@@ -62,15 +64,17 @@ class Login extends Component {
         console.log(this.state.email, ' is invalid, please try again.');
       } else {
         this.props.signupUser(emailToLowercase, this.state.password)
-        .then(() => {
-          // TODO: move setting sign up credentials to final phase of signup
-          if (this.props.token) {
-            Keychain.setInternetCredentials(ip, JSON.stringify(this.props.user), '')
-              .then(() => {
-                this.props.navigator.replace({ name: 'username' });
-              });
-          }
-        });
+          .then(() => {
+            console.log(this.props.token);
+            
+            // TODO: move setting sign up credentials to final phase of signup
+            if (this.props.token) {
+              Keychain.setInternetCredentials(ip, JSON.stringify(this.props.user), '')
+                .then(() => {
+                  this.props.navigator.replace({ name: 'username' });
+                });
+            }
+          });
       }
     }
   }
