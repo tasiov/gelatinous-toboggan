@@ -1,0 +1,3 @@
+rootProject.name = 'Quilt'
+
+include ':app'

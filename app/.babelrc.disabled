@@ -1,0 +1,10 @@
+{
+  "retainLines": true,
+  "compact": true,
+  "comments": false,
+  "presets": [
+    "airbnb",
+    "react-native"
+  ],
+  "sourceMaps": false
+}
