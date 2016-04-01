@@ -77,12 +77,12 @@ class WatchVideo extends Component {
     let acceptButton, rejectButton;
     let repeat = true;
     if (this.props.currentQuilt.status === 'watch') {
-      acceptButton = 'Replay';
-      rejectButton = 'Back';
+      acceptButton = <Icon name="play" style={video.check} size={40} />;
+      rejectButton = <Icon name="undo" style={video.check} size={40} />;
       repeat = false;
     } else if (this.props.currentQuilt.status === 'watchAdd') {
-      acceptButton = 'Contribute';
-      rejectButton = 'Back'
+      acceptButton = <Icon name="check" style={video.check} size={40} />;
+      rejectButton = <Icon name="check" style={video.check} size={40} />;
     } else {
       acceptButton = <Icon name="check" style={video.check} size={40} />;
       rejectButton = <Icon name="close" style={video.close} size={40} />;

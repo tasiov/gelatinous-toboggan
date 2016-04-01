@@ -53,10 +53,10 @@ class CreateQuilt extends Component {
           <CustomButton onPress={this.onCreatePress} />
         </View>
         <View style={create.innerContainerB}>
-          <Image
+          {/*<Image
           style={images.machine}
           source={require('../assets/sewingMachine.png')}
-          />
+          />*/}
         </View>
       </View>
     );

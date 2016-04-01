@@ -11,6 +11,10 @@ import Immutable from 'immutable'; // just for testing
 import { fetchFriends } from '../actions/index';
 import Button from '../components/button';
 import { inviteFriends } from '../actions/index';
+import { selectFriends } from '../assets/styles';
+import NavBar from '../components/navbar';
+import BottomButton from '../components/button_bottom';
+import { login } from '../assets/styles';
 
 const {
   ListView,
@@ -83,20 +87,21 @@ class SelectFriendsContainer extends Component {
   }
 
   render() {
-    // if (this.props.friends.get('isFetching')) {
-    //   return <ActivityIndicatorIOS
-    //     animating={true}
-    //     style={{height: 80}}
-    //     size="large"
-    //   />;
-    // }
+    if (this.props.friends.get('isFetching')) {
+      return <ActivityIndicatorIOS
+        animating={true}
+        style={{height: 80}}
+        size="large"
+      />;
+    }
     return (
-      <View style={styles.container}>
+      <View style={selectFriends.container}>
+        <NavBar onPress={this.props.navigator.pop} />
         <ListView
           dataSource={this.getDataSource()}
           renderRow={this.onRenderRow}
         />
-        <Button text={'Invite!'} onPress={this.onInvitePress} />
+        <BottomButton buttonTextStyle={login.buttonText} buttonStyle={login.loginButton} text="Invite" onPress={this.onInvitePress} />
       </View>
     );
   }

@@ -322,3 +322,10 @@ export const video = StyleSheet.create({
     color: 'white',
   },
 });
+
+export const selectFriends = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.beige,
+  },
+});

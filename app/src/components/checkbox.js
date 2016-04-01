@@ -3,6 +3,7 @@
 // Source: https://github.com/sconxu/react-native-checkbox
 
 import React, { Component } from 'react-native';
+import _ from 'lodash';
 
 const {
   StyleSheet,
@@ -42,7 +43,7 @@ class CheckBox extends Component {
           source={source}
         />
         <View style={styles.labelContainer}>
-          <Text style={[styles.label, this.props.labelStyle]}>{this.props.label}</Text>
+          <Text style={[styles.label, this.props.labelStyle]}>{_.capitalize(this.props.label)}</Text>
         </View>
       </View>
     );
@@ -71,22 +72,29 @@ CheckBox.getDefaultProps = {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    height: 50,
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 5,
+    margin: 5,
+    borderRadius: 2,
+    backgroundColor: 'white',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.7,
+    shadowColor: 'black',
+    borderRadius: 3,
   },
   checkbox: {
-    width: 26,
-    height: 26,
+    width: 35,
+    height: 35,
+    margin: 5
   },
   labelContainer: {
     marginLeft: 10,
     marginRight: 10,
   },
   label: {
-    fontSize: 15,
-    lineHeight: 15,
-    color: 'grey',
+    fontSize: 18,
   },
 });
 
