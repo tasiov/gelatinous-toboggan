@@ -67,7 +67,7 @@ class Login extends Component {
         this.props.signupUser(emailToLowercase, this.state.password)
           .then(() => {
             console.log(this.props.token);
-            
+
             // TODO: move setting sign up credentials to final phase of signup
             if (this.props.token) {
               Keychain.setInternetCredentials(ip, JSON.stringify(this.props.user), '')

@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 export const colors = {
   beige: '#FCF3F0',
@@ -110,7 +110,7 @@ export const home = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     fontSize: 20,
-    fontFamily: 'Pacifico',
+    // fontFamily: 'Pacifico',
   },
 });
 
@@ -229,12 +229,96 @@ export const images = StyleSheet.create({
 });
 
 export const camera = StyleSheet.create({
-  icon: {
-    color: colors.auburn,
+  preview: {
+    flex: 1,
   },
-  iconContainer: {
+  containerA: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-end',
+  },
+  containerB: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  iconContainerA: {
+    height: 60,
+    width: 60,
     backgroundColor: 'white',
-    padding: 15,
-    borderRadius: 30,
+    padding: 10,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 20,
+    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.7,
+    shadowColor: 'black',
+  },
+  iconContainerB: {
+    height: 70,
+    width: 70,
+    backgroundColor: 'white',
+    padding: 12,
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 20,
+    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.7,
+    shadowColor: 'black',
+  },
+});
+
+export const video = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.beige,
+  },
+  backgroundVideo: {
+    flex: 11,
+    marginBottom: 26,
+  },
+  buttonContainer: {
+    flex: 2,
+    flexDirection: 'row',
+  },
+  iconContainerA: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.eucalyptus,
+    padding: 10,
+    borderRadius: 100,
+    marginBottom: 26,
+    marginLeft: 10,
+    marginRight: 10,
+    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.7,
+    shadowColor: 'black',
+  },
+  iconContainerB: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.auburn,
+    padding: 10,
+    borderRadius: 100,
+    marginBottom: 26,
+    marginLeft: 10,
+    marginRight: 10,
+    shadowRadius: 2,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.7,
+    shadowColor: 'black',
+  },
+  check: {
+    color: 'white',
+  },
+  close: {
+    color: 'white',
   },
 });

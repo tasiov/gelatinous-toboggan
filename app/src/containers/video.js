@@ -6,11 +6,15 @@ import { postQuilt, postToExistingQuilt } from '../actions/index';
 import Button from '../components/button';
 import RNFS from 'react-native-fs';
 import ip from '../config';
+import { video } from '../assets/styles';
+import NavBar from '../components/navbar';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const {
   View,
   StyleSheet,
   PropTypes,
+  TouchableHighlight
 } = React;
 
 class WatchVideo extends Component {
@@ -70,29 +74,36 @@ class WatchVideo extends Component {
   }
 
   render() {
-    let acceptText, rejectText;
+    let acceptButton, rejectButton;
     let repeat = true;
     if (this.props.currentQuilt.status === 'watch') {
-      acceptText = 'Replay';
-      rejectText = 'Back';
+      acceptButton = 'Replay';
+      rejectButton = 'Back';
       repeat = false;
     } else if (this.props.currentQuilt.status === 'watchAdd') {
-      acceptText = 'Contribute';
-      rejectText = 'Back'
+      acceptButton = 'Contribute';
+      rejectButton = 'Back'
     } else {
-      acceptText = 'Accept';
-      rejectText = 'Reject';
+      acceptButton = <Icon name="check" style={video.check} size={40} />;
+      rejectButton = <Icon name="close" style={video.close} size={40} />;
     }
     return (
-      <View style={styles.container}>
+      <View style={video.container}>
+        <NavBar onPress={this.props.navigator.pop} />
         <Video
           ref="video"
           source={{ uri: this.url }}
-          style={styles.backgroundVideo}
+          style={video.backgroundVideo}
           repeat={repeat}
         />
-        <Button onPress={this.onAccept} text={acceptText} />
-        <Button onPress={this.onReject} text={rejectText} />
+        <View style={video.buttonContainer}>
+          <TouchableHighlight style={video.iconContainerA} onPress={this.onAccept}>
+            {acceptButton}
+          </TouchableHighlight>
+          <TouchableHighlight style={video.iconContainerB} onPress={this.onReject}>
+            {rejectButton}
+          </TouchableHighlight>
+        </View>
       </View>
     );
   }
@@ -106,19 +117,6 @@ WatchVideo.propTypes = {
   postQuilt: PropTypes.func,
   watchQuiltId: PropTypes.number,
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  backgroundVideo: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-  },
-});
 
 function mapStateToProps(state) {
   const user = state.get('user');
