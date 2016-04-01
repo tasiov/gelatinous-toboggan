@@ -32,13 +32,23 @@ const ThemeInput = mdl.Textfield.textfield()
 class CreateQuilt extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      theme: '',
+    };
+
+    this.onTypeTheme = this.onTypeTheme.bind(this);
     this.onCreatePress = this.onCreatePress.bind(this);
   }
 
   onCreatePress() {
     // todo: add users arguement
-    this.props.createQuilt();
+    this.props.createQuilt(this.state);
     this.props.navigator.push({ name: 'selectFriends' });
+  }
+
+  onTypeTheme(theme) {
+    return this.setState({ theme });
   }
 
   render() {
@@ -49,7 +59,7 @@ class CreateQuilt extends Component {
           <Text style={create.text}>Create A Quilt!</Text>
         </View>
         <View style={create.buttonContainer}>
-          <ThemeInput />
+          <ThemeInput value={this.state.theme} onChangeText={this.onTypeTheme}/>
           <CustomButton onPress={this.onCreatePress} />
         </View>
         <View style={create.innerContainerB}>
@@ -69,8 +79,8 @@ CreateQuilt.propTypes = {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  createQuilt: () => {
-    dispatch(createQuilt());
+  createQuilt: (data) => {
+    dispatch(createQuilt(data));
   },
 });
 
